@@ -1,0 +1,188 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+private: 
+    int length(ListNode *head){
+        int len = 0;
+        while(head){
+            len++;
+            head = head->next;
+        }
+        return len;
+    }
+
+    ListNode* solve(ListNode* more1,ListNode* less1)
+    {
+        ListNode* more = more1; 
+        ListNode* less = less1; 
+
+        while(more != NULL)
+        {
+            less = less1; 
+            while(less != NULL)
+            {
+                if(less == more ) return less; 
+                less = less -> next; 
+            }
+            more = more -> next; 
+        }
+
+        return NULL; 
+    }
+
+    ListNode* getIntersectionPointer(ListNode* first,ListNode* second,int a,int b)
+    {
+        if(a == 0 || b == 0)
+        {
+            return NULL; 
+        }
+        if(a > b) return getIntersectionPointer(first -> next, second,a-1,b); 
+        else if(a < b) return getIntersectionPointer(first,second->next,a,b-1); 
+        else if(a == b && first == second) return first; 
+        else return getIntersectionPointer(first -> next,second->next, a-1,b-1);  
+    }
+
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        // if(!headA || !headB) return NULL;
+        // int l1 = 0; 
+        // int l2 = 0;
+        // ListNode* first = headA; 
+        // ListNode* second = headB; 
+        // ListNode*  ans = NULL; 
+
+        // while(first != NULL)
+        // {
+        //     l1 ++; 
+        //     first = first -> next; 
+        // }
+
+        // while(second != NULL)
+        // {
+        //     l2 ++; 
+        //     second = second -> next; 
+        // }
+        // first = headA; 
+        // second = headB; 
+
+        // if(l1 > l2){
+        //     while(l1 > l2)
+        //     {
+        //         first = first -> next; 
+        //         l1 --; 
+        //     }
+        // }
+        // else if(l2 > l1)
+        // {
+        //     while(l2 > l1)
+        //     {
+        //         second = second -> next; 
+        //         l2 --; 
+        //     }
+        // }
+
+
+
+        // while(first && second)
+        // {
+        //     if(first == second) 
+        //     {
+        //         return first;
+        //     }
+        //     first = first -> next; 
+        //     second = second -> next; 
+        // }
+        // return NULL;
+    
+        // approach 2: O(N^2)
+        // if(headA == headB) return headA; 
+        // if((headA -> next == headB)) return headB;  
+        // if((headB -> next == headA)) return headA; 
+        // int len1 = length(headA); 
+        // int len2 = length(headB); 
+        // ListNode*  first = NULL; 
+        // ListNode* third  = NULL;
+        // if(len1 > len2)
+        // {
+        //      first = headA; 
+        //      third = headB; 
+        // } 
+        // else
+        // {
+        //     first = headB; 
+        //     third = headA; 
+        // }
+
+        // // third -> less
+        // // first -> more
+        // ListNode* ans = solve(first,third); 
+        // return ans;    
+
+
+        // approach 3: using data structures: 
+        // time complexity: O(N) 
+        // space complexity: O(N) 
+        
+        // unordered_map<ListNode* , int> visited; 
+        // ListNode* first = headA; 
+        // ListNode* second = headB; 
+        
+        // while(first != NULL)
+        // {
+        //     visited[first] = 1; 
+        //     first = first -> next; 
+        // }
+
+        // while(second != NULL)
+        // {
+        //     if(visited[second] == 0) visited[second] = 1; 
+        //     else return second; 
+        //     second = second -> next; 
+        // }
+        // return NULL; 
+
+        // approach 4: using recursion
+        // int a = length(headA); 
+        // int b = length(headB); 
+        // ListNode* first = headA; 
+        // ListNode* second = headB; 
+
+        // return getIntersectionPointer(first,second,a,b);  
+        
+        // approach 5: using array 
+        vector<ListNode*> arr1; 
+        vector<ListNode*> arr2; 
+        ListNode * first = headA; 
+        ListNode * second = headB; 
+
+        while(first)
+        {
+            arr1.push_back(first); 
+            first = first -> next; 
+        }
+
+        while(second)
+        {
+            arr2.push_back(second); 
+            second = second -> next; 
+        }
+
+        ListNode * temp = NULL; 
+        int m = arr1.size(),n = arr2.size(); 
+        while(m && n && arr1[m-1] == arr2[n-1])
+        {
+            if(arr1[m-1] == arr2[n-1]) temp = arr1[m-1]; 
+            m --; 
+            n --; 
+        }
+        return temp; 
+
+
+    }
+};

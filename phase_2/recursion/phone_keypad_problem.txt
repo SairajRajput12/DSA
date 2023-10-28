@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public void solve(List<String> ans, String input, int index, StringBuilder output, String[] mapping) {
+        if (index >= input.length()) {
+            ans.add(output.toString());
+            return;
+        }
+        // first task: to obtain that string on character of the string. 
+        int num = input.charAt(index) - '0'; // i got the index of the string. 
+        String userString = mapping[num];  
+         
+
+        // second task call recursion function. 
+        for(int i = 0; i < userString.length(); i ++){
+            char s = userString.charAt(i);
+            output.append(s); 
+            solve(ans,input,index+1,output,mapping); 
+            output.deleteCharAt(output.length()-1); 
+        }
+    }
+
+    public List<String> letterCombinations(String digits) {
+        StringBuilder output = new StringBuilder();
+        int index = 0;
+        List<String> ans = new ArrayList<>();
+        if (digits.length() == 0) {
+            return ans;
+        }
+
+        String[] mapping = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        solve(ans, digits, index, output, mapping);
+        return ans;
+    }
+}
+

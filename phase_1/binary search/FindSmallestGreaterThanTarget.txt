@@ -1,0 +1,65 @@
+class Solution {
+    public char nextGreatestLetter(char[] letters, char target) {
+
+        // Approach : 2
+        // using binary search 
+
+
+            // char ans = letters[0]; 
+            // int start = 0, end = letters.length -1; 
+
+
+            // if(target < letters[0]){
+            //     return ans; 
+            // }
+
+
+            // while(start <= end){
+            //         int mid = start + (end - start)/2;  
+            //             if(letters[mid] > target){
+            //                 ans = letters[mid]; 
+            //                 end = mid - 1; 
+            //             }
+
+            //             else if(letters[mid] == target){
+            //                 start = mid + 1;
+            //             }
+
+            //             else{
+            //                 start = mid + 1; 
+            //             }
+            //             System.out.println(mid);
+            // }
+        // return ans;     
+
+            // // Approach: 1
+            // for(int i = 0; i < letters.length; i ++){
+            //         if(target < letters[i]){
+            //                 ans = letters[i]; 
+            //                 break;
+            //         }
+            // }
+            // return ans;
+
+            // Approach : 3 
+            // optimized code 
+            // binary search in different manner: 
+            int start = 0, end  = letters.length; 
+                while(start < end){
+                    int mid = start + (end - start)/2; 
+                        if(letters[mid] <= target){
+                            start = mid + 1;
+                        }
+
+                        else{
+                            end = mid;
+                        }
+                }
+
+                return letters[start % (letters.length)];
+            
+
+
+    }
+}
+

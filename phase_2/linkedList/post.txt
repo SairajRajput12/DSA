@@ -1,0 +1,129 @@
+
+# Approach
+<!-- Describe your approach to solving the problem. -->
+
+1. The code defines a `ListNode` struct representing a singly-linked list node with an integer value and a pointer to the next node.
+
+2. The `addTwoNumbers` function takes two input linked lists, `l1` and `l2`, which represent two numbers. The function calculates the sum of these two numbers, considering the linked lists as digits in reverse order.
+
+3. It uses the `temp` and `ma` pointers to construct a new linked list to store the result. `temp` is initialized with a dummy node, and `ma` is used to traverse the new linked list while adding nodes.
+
+4. The `carry` variable is used to keep track of any carry that might occur during addition. It is initialized to 0.
+
+5. The code iterates through both `l1` and `l2` simultaneously, adding the corresponding digits along with any carry from the previous addition. The sum is divided by 10, and the remainder is used as the value for the new node, while the result of the division is carried over to the next addition.
+
+6. After processing both input lists, it handles any remaining carry, creating additional nodes as needed.
+
+7. The result linked list is constructed by connecting the nodes created during addition.
+
+8. The function returns the `next` pointer of the dummy node (`temp->next`), which points to the head of the new linked list containing the sum.
+
+9. The time complexity of the code is O(N), where N is the length of the longer input list among `l1` and `l2`. It iterates through both lists once, and the length of the output list is also O(N).
+
+10. The space complexity of the code is O(N) because it creates a new linked list to store the result, and the length of this list is also O(N).
+
+# Complexity
+- Time complexity: O(N)
+<!-- Add your time complexity here, e.g. $$O(n)$$ -->
+
+- Space complexity:O(N)
+<!-- Add your space complexity here, e.g. $$O(n)$$ -->
+
+# Code
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+private: 
+    
+
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {  
+    // e.g, l1: 2 -> 4 -> 3 -> NULL 
+    //      l2: 5 -> 6 -> 7 -> 9 -> NULL 
+    // sum at l1 = 2 , if l2 is not null then sum is 7. 
+    // put into the new node. 
+    // temp -> new node 
+    // go one step ahead along with new node.  
+
+
+    ListNode* first = l1; 
+    ListNode* second = l2; 
+    ListNode* temp = new ListNode(-1); 
+    ListNode* ma = temp; 
+    int carry = 0; 
+    while(first != NULL && second != NULL)
+    {
+        int sum = carry; 
+        if(first != NULL)
+        {
+            sum += first -> val;  
+            first = first -> next; 
+        }
+        if(second != NULL)
+        {
+            sum += second -> val; 
+            second = second -> next; 
+        }
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum / 10; 
+    }
+
+    // now adding nodes from non emepty nodes. 
+    while(first != NULL)
+    {
+        int sum = carry; 
+        sum += first -> val; 
+        first = first -> next; 
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10; 
+    }
+
+    while(second != NULL)
+    {
+        int sum = carry; 
+        sum += second -> val; 
+        second = second -> next; 
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10; 
+    }
+
+    while(carry != 0)
+    {
+        int sum = carry; 
+        int digit = sum%10;  
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10;
+    }
+
+    return temp->next; 
+
+    // time complexity: O(N) 
+    // space complexity: O(N)
+
+
+    }
+};
+```
+
+
+
+# Happy coding! 🚀 
+
+![image.png](https://assets.leetcode.com/users/images/9a14fb1e-8c5b-414c-97de-899823056e01_1694964787.9424314.png)

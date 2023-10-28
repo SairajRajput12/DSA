@@ -1,0 +1,162 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+private: 
+    
+    ListNode* getMid(ListNode* head ) {
+        ListNode* slow = head; 
+        ListNode* fast = head -> next; 
+        while(fast != NULL && fast->next != NULL)
+        {
+            fast = fast -> next -> next; 
+            slow = slow -> next; 
+        }
+        return slow; 
+    }
+    ListNode* reverse(ListNode* head) {
+        ListNode* next = NULL; 
+        ListNode* curr = head; 
+        ListNode* prev = NULL; 
+
+        while(curr != NULL)
+        {
+            next = curr -> next; 
+            curr -> next = prev; 
+            prev = curr; 
+            curr = next; 
+        }
+
+        return prev;        
+    }
+
+    void traverse(ListNode* rhead){
+        if(rhead == NULL)
+        {
+            return; 
+        }
+
+        // go to recursion. 
+        traverse(rhead -> next); 
+        // if it is not then do comparision. 
+        if(rhead -> val != head -> val) flag = false; 
+        head = head -> next; 
+    }
+
+public:
+    bool flag; 
+    ListNode* head; 
+    bool isPalindrome(ListNode* head) {  
+        // approach 1: it takes extra space. 
+        // 1] first reverse it  
+        // 2] compare it with reversed linked list. 
+
+        // if(head == NULL || head -> next == NULL)
+        // {
+        //     return (true); 
+        // }
+
+        // ListNode* reversedLL = NULL; 
+        // ListNode* temp = head; 
+
+        // while(temp != NULL)
+        // {
+        //     ListNode* temp1 = new ListNode(temp -> val); 
+        //     temp1 -> next = reversedLL; 
+        //     reversedLL = temp1; 
+        //     temp = temp -> next; 
+        // }
+
+        // while(reversedLL != NULL && head != NULL)
+        // {
+        //     if(reversedLL -> val != head -> val)
+        //     {
+                
+        //         return false; 
+        //     }
+        //     reversedLL = reversedLL -> next; 
+        //     head = head -> next; 
+        // }
+        // return true;  
+
+
+        // approach 2: Converting linked list to the array data structure. 
+        // algo: 
+        // 1] create an array. 
+        // 2] copy ll into the array. 
+        // 3] apply array wala logic. 
+        // Time complexity : O(N) 
+        // Space complexity: O(N) 
+
+    //     vector <int> array; 
+    //     ListNode* temp = head; 
+    //     while(temp != NULL){
+    //         array.push_back(temp->val);  
+    //         temp = temp -> next; 
+    //     }
+
+    //     int i = 0, e = array.size()-1; 
+    //     while(i <= e)
+    //     {
+    //         if(array[i] != array[e])
+    //         {
+    //             return false; 
+    //         }
+    //         i ++; 
+    //         e --; 
+    //     }
+
+    //     return true; 
+    
+        // approach 3: using middle. 
+        // 1] find middle (using floyd's cycle). 
+        // 2] middle ke age wali ll ko reverse karo. 
+        // 3] compare both the halfs. 
+        // 4] repeat 2nd step to make it as it is. 
+
+        // 1] if it is  a single node in the list then ??
+        // if(head -> next == NULL)
+        // {
+        //     // then it is pallindrome. 
+        //     return true; 
+        // }
+
+        // // if not what we should do ?
+        // ListNode* middle = getMid(head); 
+        // ListNode* temp = middle -> next; 
+        // middle -> next = reverse(temp); 
+        // // beeche ke age ki ll reverse ho gayi. 
+        // ListNode* head1 = middle -> next; 
+        // ListNode* head2 = head; 
+        // while(head1 != NULL)
+        // {
+        //     if(head1 -> val != head2 -> val)
+        //     {
+        //         return false; 
+        //     }
+        //     head1 = head1 -> next; 
+        //     head2 = head2 -> next; 
+        // }
+
+
+        // // if it is pallindrome then reverse the list. 
+        // temp = middle -> next; 
+        // middle -> next = reverse(temp); 
+        // return true; 
+    
+    
+        // approach 4: using backtracking solution. 
+        flag = true; 
+        this -> head = head; 
+        traverse(head); 
+        return flag; 
+    }
+};

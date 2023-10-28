@@ -1,0 +1,99 @@
+class Solution {
+    // public static void solve(int index,List<List<Integer>> ans,int[] nums,ArrayList<Integer> sample){
+    //     // base case
+    //     if(index >= nums.length){
+    //         ans.add(new ArrayList<>(sample)); 
+    //         return; 
+    //     }
+
+    //     // ek call exclude ke liye. 
+    //     // ek call include ke liye. 
+
+    //     // exclude: 
+    //     solve(index+1,ans,nums,sample); 
+    //     // include
+    //     int element = nums[index]; 
+    //     sample.add(element);
+    //     // index = 0;  
+    //     solve(index + 1,ans,nums,sample); 
+    //     sample.remove(sample.size()-1); // i removed the last element.  
+    // }
+
+    public List<List<Integer>> subsets(int[] nums) { 
+    // using recursion: 
+        // List<List<Integer>> ans = new ArrayList(); 
+        // int index = 0; 
+        // ArrayList<Integer> sample = new ArrayList(); 
+        // solve(index,ans,nums,sample); 
+        // return ans; 
+
+    // using bit manipulation: 
+        int n = nums.length; 
+        List<List<Integer>> ans = new ArrayList(); 
+        int sizeOfPowerSet = (1 << n);  
+        for(int i = 0; i < sizeOfPowerSet; i ++){
+            ArrayList<Integer> sample = new ArrayList(); 
+            for(int j = 0; j < nums.length; j ++){
+                if((i & (1 << j)) == 0){
+                    sample.add(nums[j]); 
+                }
+            }
+            ans.add(new ArrayList<>(sample)); 
+        }
+
+        return ans; 
+
+    // using backtracking: 
+    
+    }
+}
+
+
+// using c++ 
+
+class Solution {
+private: 
+    /* 
+    approach 1: 
+    void solve(int index,vector<int> nums,vector<vector<int>>& ans,vector<int> output){
+        // base case: 
+        if(index >= nums.size()){
+            ans.push_back(output); 
+            return; 
+        }
+
+        // ek call exclude ke liye. 
+        solve(index+1,nums,ans,output); 
+        int e = nums[index]; 
+        output.push_back(e); 
+        solve(index+1,nums,ans,output); 
+    }
+    */ 
+
+
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        // appraoch 1: using recursion
+        // vector<int> output; 
+        // vector<vector<int>> ans; 
+        // int index = 0; 
+        // solve(index,nums,ans,output); 
+        //  return ans; 
+
+        // approach 2: using bit masking: 
+        int n = nums.size(); 
+        vector<vector<int>> ans; 
+        // (1 << n) = 2^n 
+
+        for(int i = 0; i < (1 << n); i ++){ // this loop will run from 0 to 2^n -1; 
+            vector<int> subset; 
+            for(int j = 0; j < n; j ++){
+                if((i & (1 << j))){
+                    subset.push_back(nums[j]); 
+                }
+            }
+            ans.push_back(subset); 
+        }
+        return ans; 
+    }
+};

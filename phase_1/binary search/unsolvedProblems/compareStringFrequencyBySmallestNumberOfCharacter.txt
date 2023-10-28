@@ -1,0 +1,51 @@
+import java.util.*; 
+import java.io.*; 
+
+class Solution {
+
+    public static int f(String sample){
+        // now convert the string into char array
+        char array[] = sample.toCharArray(); 
+        Arrays.sort(array); 
+        char min = array[0];
+        int cnt = 0;
+        for(int i = 0; i < array.length; i ++){
+                if(min == array[i]){
+                    cnt ++; 
+                }
+                
+        }
+        // System.out.println("The frequency is :" + cnt);
+        return cnt; 
+    }
+
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        //1]  brute force approach: 
+            // Compare Strings by Frequency of the Smallest Character
+        int[] ans = new int[queries.length]; 
+        int index = 0; 
+        int cnt = 0; 
+        for(int i = 0; i < queries.length ; i ++){
+            int m = f(queries[i]); 
+                cnt = 0; 
+                for(int j = (words.length - 1);j >= 0; j --){
+                        int n = f(words[j]); 
+                        if(n > m){
+                            cnt ++; 
+                        }    
+
+                        else{
+                            continue;
+                        }
+                        // System.out.println("cnt : " + cnt);
+                }
+                
+                ans[index] = cnt;     
+                index  ++;
+        }
+
+        return ans; 
+
+
+    }
+}

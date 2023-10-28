@@ -1,0 +1,151 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+private: 
+    void size(ListNode* head,int &s)
+    {
+        if(head == NULL) return; 
+        s ++; 
+        size(head->next,s); 
+    }
+
+    void rotate(ListNode* &head,ListNode* curr,ListNode* prev,int &k)
+    {
+        if(curr == NULL)
+        {
+            return; 
+        }
+
+        rotate(head,curr->next,curr,k); 
+        k --; 
+        if(k < 0)
+        {
+            return; 
+        }
+        prev -> next = NULL; 
+        curr -> next = head; 
+        head = curr; 
+    }
+
+public:
+    ListNode* rotateRight(ListNode* head, int k) { 
+    // approach 1: using extra space of O(N)
+    // if(head == NULL || k == 0) return head; 
+    //     ListNode* temp = head; 
+    //     vector<int> arr; 
+    //     while(temp != NULL)
+    //     {
+    //         arr.push_back(temp -> val); 
+    //         temp = temp -> next; 
+    //     }
+
+    //     k = k % arr.size(); 
+    //     if(k != 0)
+    //     {
+    //         reverse(arr.end() - k, arr.end()); 
+    //         reverse(arr.begin(),arr.end() - k); 
+    //         reverse(arr.begin(),arr.end()); 
+    //     }
+
+    //     temp = head; 
+    //     int i = 0; 
+    //     while(temp != NULL)
+    //     {
+    //         temp -> val = arr[i]; 
+    //         i ++; 
+    //         temp = temp -> next;
+    //     }
+    //     return head; 
+        
+    // approach 2: without using space.  
+    // brute force appraoch: 
+
+    // if(k == 0 || head == NULL) return head;  
+    // if(head -> next == NULL) return head; 
+
+    // ListNode* temp = head; 
+    // ListNode* prev = NULL; 
+    
+    // int cnt = 0; 
+    // int len = 0; 
+
+    // while(temp != NULL)
+    // {
+    //     temp = temp -> next; 
+    //     len ++; 
+    // }
+
+    // k = k % len; 
+    // // first part
+    // temp = head; 
+    //     while (k>0){
+    //             while(temp->next){
+    //             prev=temp;
+    //             temp=temp->next;
+    //             }
+    //         temp->next=head;
+    //         head=temp;
+    //         prev->next=NULL;
+    //         k--;
+
+    //     }
+
+    
+    
+
+        
+    
+    // // prev = temp; 
+    // // head -> will be start end of the first part. 
+    // // prev -> will be the end of the first part 
+    // // temp -> first end of second part 
+    // // end  -> end of the second part 
+    // return head; 
+
+    
+    
+    // appraoch 3: O(N) 
+    // if(head == NULL || head -> next == NULL || k == 0) return head;
+    // ListNode* tailFirst = head; 
+    // int len = 1; 
+    // while(tailFirst -> next != NULL)
+    // {
+    //     tailFirst = tailFirst -> next; 
+    //     len ++; 
+    // }
+
+    // k = k % len; 
+    // if(k == 0) return head; 
+
+    // ListNode* mid = head; 
+    // int cnt = 0; 
+    // while(cnt < (len - k - 1))
+    // {
+    //     cnt ++; 
+    //     mid = mid -> next; 
+    // }
+
+    // ListNode* newHead = mid -> next; 
+    // mid -> next = NULL; 
+    // tailFirst -> next = head; 
+    // return newHead; 
+
+
+    // approach 4: using recursion 
+    if(head == NULL || head -> next == NULL || k == 0) return head; 
+    int s = 0; 
+    size(head,s); 
+    k = k % s; 
+    if(k == 0) return head; 
+    rotate(head,head,NULL,k); 
+    return head; 
+    }
+};

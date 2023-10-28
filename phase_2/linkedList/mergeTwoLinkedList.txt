@@ -1,0 +1,135 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution { 
+    ListNode* solve(ListNode* first,ListNode* second)
+    {
+        if(first -> next == NULL)
+        {
+            first -> next = second; 
+            return first; 
+        }
+        ListNode* curr1 = first; 
+        ListNode* next1 = curr1 -> next; 
+        ListNode* curr2 = second; 
+        ListNode* next2 = curr2 -> next; 
+
+        while(curr2 != NULL && next1 != NULL)
+        {
+            if((curr2 -> val >= curr1 -> val) && (curr2 -> val <= next1 -> val))
+            {
+                // add this pointer between next1 and curr1 
+                curr1 -> next = curr2; 
+                next2 = curr2 -> next; 
+                curr2 -> next = next1; 
+
+                // update them 
+                curr1 = curr2; 
+                curr2 = next2; 
+            }
+            else{
+                // age badho. 
+                curr1 = next1; 
+                next1 = next1 -> next;  
+                if(next1 == NULL)
+                {
+                    curr1 -> next = curr2; 
+                    return first; 
+                }
+            }
+        }
+        return first; 
+    }
+
+    ListNode* merge(ListNode* list1, ListNode* list2)
+    {
+        if(list1 == NULL)
+        {
+            return list2; 
+        }
+        if(list2 == NULL)
+        {
+            return list1; 
+        }
+
+        if(list1 -> val < list2 -> val)
+        {
+            list1 -> next = merge(list1 -> next,list2); 
+            return list1; 
+        }
+        else{
+            list2 -> next = merge(list1,list2 -> next); 
+            return list2; 
+        }
+
+    }
+    
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        // if(list1 == NULL)
+        // {
+        //     return list2; 
+        // }
+        // if(list2 == NULL)
+        // {
+        //     return list1; 
+        // }
+
+        // if((list1 -> val <= list2 -> val))
+        // {
+        //     return solve(list1,list2); 
+        // }
+        // else{
+        //     return solve(list2,list1); 
+        // }
+    
+        
+        // approach 2 : recursive solution: 
+
+        // if(list1 == NULL)
+        // {
+        //     return list2;
+        // }
+
+        // if(list2 == NULL)
+        // {
+        //     return list1; 
+        // }
+
+        // ListNode* tmp = new ListNode(-1000);  // dummy node. 
+        // tmp -> next = list1; 
+        // merge(tmp,list2); 
+        // return tmp -> next; 
+    
+        // approach 3: using vector conversion. 
+        vector<int> merged_vector;
+        while (list1) {
+            merged_vector.push_back(list1->val);
+            list1 = list1->next;
+        }
+        while (list2) {
+            merged_vector.push_back(list2->val);
+            list2 = list2->next;
+        }
+
+        // Sort the merged vector
+        sort(merged_vector.begin(), merged_vector.end());
+
+        // Create a new linked list from the sorted vector
+        ListNode dummy(0);
+        ListNode* current = &dummy;
+        for (int val : merged_vector) {
+            current->next = new ListNode(val);
+            current = current->next;
+        }
+
+        return dummy.next;
+    }
+};

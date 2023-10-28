@@ -1,0 +1,60 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static char lower(char a){
+
+		if((a >= 'a' && a <= 'z') || (a >= '0' && a <= '9'))
+		{
+				return a; 
+		}
+
+		else{ // upper
+				int temp = (int)a - (int)'A' + (int) 'a'; 
+				return (char)temp; 
+		}
+	}
+
+	public static boolean checkPalindrome(String str) {
+	
+	    // WRITE YOUR CODE HERE	
+		//  step I: Faltu character ko hata do 
+		String temp =""; 
+		for(int i = 0; i < str.length() ; i ++)
+		{
+			if(str.charAt(i) >= 'A' && str.charAt(i) <= 'Z')
+			{
+				temp += str.charAt(i); 
+			}
+
+			else if(str.charAt(i) >= 'a' && str.charAt(i) <= 'z')
+			{
+				temp += str.charAt(i); 
+			}
+
+			else if(str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+				temp += str.charAt(i); 
+			}
+		}
+
+		// step II: Upper Case ko lower kar do 
+		String lower_case = ""; 
+		for (int i = 0; i < temp.length(); i++) {
+				char m = temp.charAt(i); 
+				lower_case += lower(m); 
+		}
+
+		// step III: check whether it is pallindrome or not. 
+		int start = 0, end = lower_case.length() - 1; 
+			while(start < end){
+					char j = lower_case.charAt(start); 
+					char k = lower_case.charAt(end); 
+						if((j^k) != 0){
+							return false;
+						}
+					start ++; 
+					end --; 	
+			}
+
+		 return true; 
+	}
+}

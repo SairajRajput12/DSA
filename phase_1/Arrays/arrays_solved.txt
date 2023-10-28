@@ -1,0 +1,138 @@
+#include<bits/stdc++.h> 
+#include<vector> 
+using namespace std; 
+
+class Solution {
+public:
+    void merge(vector<int>& a, int m, vector<int>& b, int n) {
+    // java code: 
+    /*
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+           int tail1 = m - 1, tail2 = n - 1, finished = m + n - 1;
+    while (tail1 >= 0 && tail2 >= 0) {
+        nums1[finished--] = (nums1[tail1] > nums2[tail2]) ? 
+                             nums1[tail1--] : nums2[tail2--];
+    }
+
+    while (tail2 >= 0) { //only need to combine with remaining nums2, if any
+        nums1[finished--] = nums2[tail2--];
+    }
+    
+    */ 
+      int tail1 = m - 1; 
+        int tail2 = n - 1; 
+        int finished = m + n - 1; 
+                while(tail1 >= 0 && tail2 >= 0){
+                        if(nums1[tail1] < nums2[tail2]){
+                                nums1[finished] = nums2[tail2]; 
+                                finished --; 
+                                tail2 --; 
+                        }
+
+                        else{
+                                nums1[finished] = nums1[tail1]; 
+                                finished --; 
+                                tail1 --; 
+                        }
+                }
+        while(tail2 >= 0){
+                nums1[finished] = nums2[tail2]; 
+                finished --; 
+                tail2 --;
+        }     
+    }
+};
+
+
+int main()
+{
+    cout<<"Leet code question on Arrays :"; 
+    // problem 1: reverse an array 
+    // 1 3 2 4 ----> 4 2 3 1 
+    
+    // approach :1 
+    /*
+    int arr[] = {1,2,3,4,5,6};
+    int m; 
+    cout << " Enter the digit after which the array element must be reversed "<< endl; 
+    cin >> m;
+    // Write your code here.
+	int i = (m + 1), j = 6 - 1;
+    while(i <= j){
+         if(i == j){
+            break; 
+        }
+        swap(arr[i],arr[j]); 
+        i ++; 
+        j --; 
+    }
+    
+    for (int i = 0; i < 6; i++) {
+        cout << arr[i] << " "; 
+    }
+    
+    cout << endl; 
+    */
+    // problem 2: merge 2 sorted arrays: 
+    // 1 3 5 7 9 + 2 4 6 ----> 1 2 3 4 5 6 7 9 
+    // int a[5] = {1,3,5,7,9}; 
+    // int b[3] = {2,4,6}; 
+    // int c[8];
+    // int i = 0, j = 0,k = 0;
+    
+    //         while(i < 5 && j < 3){
+    //                 if(b[j] < a[i]){
+    //                     c[k] = b[j]; 
+    //                     k ++; 
+    //                     j ++; 
+    //                 }
+                    
+    //                 else if(b[j] > a[i]){
+    //                     c[k] = a[i]; 
+    //                     k ++; 
+    //                     i ++; 
+    //                 }
+                    
+    //                 else{
+    //                     c[k] = b[j]; 
+    //                     i ++; 
+    //                     j ++; 
+    //                     k ++; 
+    //                 }
+    //         }
+    // // adding the remaining elements of the larger array 
+    // while(i < 5){
+    //     c[k] = a[i]; 
+    //     i ++; 
+    //     k ++; 
+    // }
+    // for (int i = 0; i < k; i++) {
+    //     cout << c[i] << " ";
+    // }        
+    // Solution s; 
+    // vector<int> a{1,3,5,7,9};
+    // vector<int> b{2,4,6}; 
+    // vector<int> c; 
+    // s.merge(a,a.size(),b,b.size()); 
+    // for (int i = 0; i < a.size(); i++) {
+    //     cout << a[i] << " "; 
+    // } 
+    
+    // for (int i = 0; i < b.size(); i++) {
+    //     cout << b[i] << endl; 
+    // }
+    
+    
+    // problem 3: move zeroes 
+    // 0 1 0 3 12 ---> 1 3 12 0 0 
+    // phase 1: 0 0 1 3 12 
+    // phase 2: 0 1 3 12 0 
+    // phase 3: 1 3 12 0 0 
+    // 2 pointer: 
+        // 1] == 0 -----> ignore it 
+        // 2] != 0 -----> swap it 
+    
+    
+    
+    return 0;
+}

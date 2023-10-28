@@ -1,0 +1,35 @@
+#include <vector>
+#include <algorithm>
+
+
+bool isValid(int first, int N, const string& temp) {
+    if (first > 0 && first < N) {
+        if (temp[first - 1] == '1') return false;
+        if (temp[first + 1] == '1') return false;
+    }
+    return true;
+}
+
+void solve(vector<string>& ans, int N, string& temp, int first) {
+    if (first == N) {
+        ans.push_back(temp);
+        return;
+    }
+
+    if (isValid(first, N, temp)) {
+        temp[first] = '1';
+        solve(ans, N, temp, first + 1);
+        temp[first] = '0'; // Backtrack by setting the character back to '0'
+    }
+
+    // Recursive call with character set to '0' from the beginning
+    solve(ans, N, temp, first + 1);
+}
+
+vector<string> generateString(int N) {
+    vector<string> ans;
+    string temp(N, '0');
+    solve(ans, N, temp, 0); 
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}

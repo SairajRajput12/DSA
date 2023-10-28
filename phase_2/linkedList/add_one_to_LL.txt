@@ -1,0 +1,69 @@
+#include <bits/stdc++.h> 
+/*****************************************************************
+Following is the Linked list node structure already written
+
+template <typename T>
+class LinkedListNode
+{
+public:
+    T data;
+    LinkedListNode<T>* next;
+    LinkedListNode(T data)
+    { 
+        this->data = data;
+        next = NULL;
+    }
+};
+*****************************************************************/
+
+LinkedListNode<int>* reverse(LinkedListNode<int>* head)
+{
+    LinkedListNode<int>* curr = head;
+    LinkedListNode<int>* prev = NULL; 
+    LinkedListNode<int>* forward = NULL; 
+    while(curr != NULL)
+    {
+        forward = curr -> next; 
+        curr -> next = prev; 
+        
+        prev = curr; 
+        curr = forward; 
+    }
+    return prev;     
+}
+
+LinkedListNode<int>* addOneToList(LinkedListNode<int> *head)
+{
+    //Write your code here
+
+    // approach 1: 
+    LinkedListNode<int>* h1 = reverse(head);
+    LinkedListNode<int>* h2 = h1; 
+    int sum = 0, carry = 1; 
+    LinkedListNode<int>* temp = NULL; 
+    
+    while(h1 != NULL)
+    {
+        if(h1->data == -1)
+        {
+            h1 = h1 -> next; 
+            continue; 
+        }
+        
+        sum = h1->data + carry; 
+        carry = (sum>=10)?1 : 0; 
+        sum = sum%10; 
+        h1 -> data = sum; 
+        temp = h1; 
+        h1 = h1 -> next;     
+    } 
+
+    if(carry > 0)
+    {
+        temp -> next = new LinkedListNode<int>(1); 
+    }
+    h1 = reverse(h2); 
+
+    return h1;     
+}
+

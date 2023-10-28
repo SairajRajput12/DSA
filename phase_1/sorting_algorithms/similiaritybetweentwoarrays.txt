@@ -1,0 +1,66 @@
+#include <bits/stdc++.h> 
+pair<int, int> findSimilarity(vector<int> arr1, vector<int> arr2, int n, int m) 
+{
+    n = arr1.size(); 
+    m = arr2.size(); 
+
+    int start = 0, end = n; 
+    int start1 = 0, end1 = m; 
+    int sim = 0, dis = 0; 
+    while (start < end && start1 < end1) {
+        if (arr1[start] == arr2[start1]) {
+            sim++; 
+            start++; 
+            start1++; 
+        } else if (arr1[start] < arr2[start1]) {
+            start++; 
+        } else {
+            start1++;
+        }
+    }
+
+    dis = n + m - sim; 
+    pair<int, int> myPair(sim, dis); 
+    return myPair; 
+} 
+
+
+
+
+// correct code:
+
+#include <bits/stdc++.h> 
+pair<int, int> findSimilarity(vector<int> arr1, vector<int> arr2, int n, int m) 
+{
+    n = arr1.size(); 
+    m = arr2.size(); 
+
+    int sim = 0, dis = 0; 
+	unordered_set<int> s; 
+     for(int i=0;i<n;i++){
+
+        for(int j=0;j<m;j++){
+
+            if(arr1[i]==arr2[j]) {s.insert(arr1[i]);
+
+            break;}
+
+        }
+
+    }
+	sim = s.size(); 
+	unordered_set<int> val; 
+	for(int i = 0; i < arr1.size(); i ++){
+		val.insert(arr1[i]); 
+	}
+
+	for(int i = 0; i < arr2.size(); i ++){
+		val.insert(arr2[i]); 
+	}
+	dis = val.size();     
+    pair<int, int> myPair;
+	myPair.first = sim; 
+	myPair.second = dis;  
+    return myPair; 
+} 
+

@@ -1,0 +1,21 @@
+void solve(vector<int> &ans,vector<int> &original,int index,int sum){
+	if(index == original.size()){
+		ans.push_back(sum); 
+		return; 
+	}
+	sum += original[index]; 
+	solve(ans,original,index+1,sum); 
+	sum -= original[index];  
+	solve(ans,original,index+1,sum); 
+}
+
+
+vector<int> subsetSum(vector<int> &num){
+	// Write your code here.	
+	sort(num.begin(),num.end()); 
+	vector<int> ans; 
+	// ans.push_back(0);
+	solve(ans,num,0,0); 
+	sort(ans.begin(),ans.end()); 
+	return ans; 
+}

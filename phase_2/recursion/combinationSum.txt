@@ -1,0 +1,56 @@
+class Solution {
+private:
+    void solve(vector<int> &original,int target,vector<vector<int>> &ans,vector<int> &temp,int index,int sum){
+        if(sum == target){ 
+            ans.push_back(temp); 
+            return; 
+        }
+        if(sum > target){
+            return; 
+        }
+        for(int i = index; i < original.size(); i ++){
+            temp.push_back(original[i]); 
+            solve(original,target,ans,temp,i,sum+original[i]); 
+            temp.pop_back(); 
+            // sum -= original[i]; 
+        }
+    }
+
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> temp; 
+        vector<vector<int>> ans; 
+        solve(candidates,target,ans,temp,0,0); 
+        return ans; 
+    }
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum2(vector<int>& nums, int target) 
+    {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>>ans={};
+        vector<int> v;
+        comb(0,nums,v,ans,target);
+        return ans;
+    }
+    void comb(int start,vector<int>& nums,vector<int>& v,vector<vector<int>>&ans,int target)
+    {
+        if(target==0)
+        {
+            ans.push_back(v);
+            return;
+        }
+        if(target<0)
+        return;
+        for(int i=start;i<nums.size();i++)
+        {
+            if(i>start&&nums[i]==nums[i-1])continue;
+            v.push_back(nums[i]);
+            comb(i+1,nums,v,ans,target-nums[i]);
+            v.pop_back();
+        }
+    }
+};

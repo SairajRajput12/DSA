@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../../../web dev/SundayProject"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp"
+		}
+	}
+}

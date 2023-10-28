@@ -1,0 +1,169 @@
+class Solution {
+
+    // approach 1: using recursion. 
+    // private static void swap(int i,int index,int[] nums){
+    //     int temp = nums[i]; 
+    //     nums[i] = nums[index]; 
+    //     nums[index] = temp; 
+    // }
+
+    // private static void solve(int[] nums,int index,List<List<Integer>> ans){
+    //     if(index >= nums.length){
+    //         ArrayList<Integer> list1 = new ArrayList<>();
+    //         for (int num : nums) {
+    //             list1.add(num);
+    //         }
+    //         ans.add(list1);
+    //         return; 
+    //     }
+
+    //     for(int i = index; i < nums.length; i ++){
+    //         swap(index,i,nums); 
+    //         solve(nums,index+1,ans); 
+    //         swap(index,i,nums); 
+    //     }
+    // }
+
+
+    // approach 2: using temproray data struture
+    public static void solve(int[] freq,int[] nums,List<List<Integer>> ans,List<Integer> data_structure){
+        if(data_structure.size() == nums.length){
+            ans.add(new ArrayList(data_structure)); 
+            return; 
+        }
+
+
+        // now go for forloop: 
+        for(int i = 0; i < nums.length; i ++){
+            if(freq[i] == 0){
+                // System.out.println("inside the loop"); 
+                data_structure.add(nums[i]); 
+                freq[i] = 1; 
+                solve(freq,nums,ans,data_structure); 
+                // back tracking. 
+                freq[i] = 0; 
+                data_structure.remove(data_structure.size()-1);
+            }
+        }
+    }    
+
+    public List<List<Integer>> permute(int[] nums) {
+    // using recursion: 
+        // int index = 0; 
+        // List<List<Integer>> ans = new ArrayList(); 
+        // solve(nums,index,ans); 
+        // return ans; 
+
+
+    // using temprory data strudture and recursion 
+        List<List<Integer>> ans = new ArrayList(); 
+        List<Integer> data_structure = new ArrayList(); 
+        int[] freq = new int[nums.length]; 
+        
+        solve(freq,nums,ans,data_structure); 
+        return ans; 
+    }
+}
+
+// using recursion in c++: 
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Solution { 
+	public static void swap(int index,int j,char[] s){
+		char temp = s[j]; 
+		s[j] = s[index]; 
+		s[index] = temp;  
+	}
+
+	public static void solve(ArrayList<String> s, String str, int index,char[] output){
+		if(index >= str.length()){
+			String sk = new String(output); 
+			s.add(sk); 
+			// output = ""; 
+			return; 
+		}
+		for(int i = index; i < str.length(); i ++){
+			swap(index,i,output); 
+			solve(s,str,index+1,output); 
+			// backtrack 
+			swap(index,i,output);  
+		}
+	}
+
+	public static ArrayList<String> generatePermutations(String str) {
+		// Write your code here 
+		ArrayList<String> s = new ArrayList<>(); 
+		char[] output = str.toCharArray(); 
+		int index = 0; 
+		solve(s,str,index,output); 
+		Collections.sort(s);
+
+		return s; 
+	}
+}
+
+
+
+
+
+
+
+// using temproaray data structure in c++:
+#include<bits/stdc++.h>
+
+using namespace std;
+class Solution {
+  private:
+    // void recurPermute(vector < int > & ds, vector < int > & nums, vector < vector < int >> & ans, int freq[]) {
+    //   if (ds.size() == nums.size()) { //  -------> base case . 
+    //     ans.push_back(ds);            // ---------> if the given data structure has stored all elements of length of the given array. 
+    //     return;
+    //   }
+
+    //   for (int i = 0; i < nums.size(); i++) { // iterate from 0 to n. 
+    //     if (!freq[i]) {         // check whether element is present  not. 
+    //       ds.push_back(nums[i]); //  let's pick it. 
+    //       freq[i] = 1;   // add mark it as picked it. 
+    //       recurPermute(ds, nums, ans, freq);  // again call the recursion again 
+    //       ds.pop_back(); // remove all elements
+    //       freq[i] = 0;  // whatever is picked up should remove it and remove it. 
+    //     }
+    //   }
+    // }
+
+  void solve(int index,vector<vector<int>> &ans,vector<int> &nums){
+      if(index >= nums.size()){
+        ans.push_back(nums); 
+        return; 
+      }
+
+
+      for(int i = index; i < nums.size(); i ++){
+          swap(nums[i],nums[index]); 
+          solve(index+1,ans,nums); 
+          swap(nums[i],nums[index]); 
+      }
+  }
+
+  public:
+    vector < vector < int >> permute(vector < int > & nums) { 
+
+      // approach 1: using datastructure. 
+      // vector < vector < int >> ans; // all permutations 
+      // vector < int > ds;
+      // int freq[nums.size()]; // the array of similiar size of the given array. 
+      // for (int i = 0; i < nums.size(); i++) freq[i] = 0;
+      // recurPermute(ds, nums, ans, freq);
+      //   // 1] ans ---------------->  will store other elements. 
+      //   // 2] ds  ---------------->  where the each permutation outcome going to be stored in. 
+      //   // 3] nums --------------->  is the array whose permutation will going to be find.
+      // return ans;
+      vector < vector < int >> ans; 
+      int index = 0; 
+      solve(index,ans,nums); 
+      return ans; 
+    }
+};

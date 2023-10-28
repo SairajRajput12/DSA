@@ -1,0 +1,68 @@
+class Solution {
+private: 
+    void swap(vector<int> &arr,int &m,int i)
+    {	
+        int temp = arr[i]; 
+        arr[i] = m; 
+        m = temp; 
+    } 
+    // 0 1 2 3 4 5 6 
+    // 
+    // 4 5 6 0 1 2 3
+public:
+    void rotate(vector<int>& arr, int k) {
+    // brute force approach:  
+        // k = k%arr.size(); 
+        // if(k == 0) return; 
+        // int cnt = 0, x = 0; 
+
+        // do
+        // {
+        //     x = 0; 
+        //     for(int i = 0; i < arr.size(); i ++)
+        //     {
+        //         swap(arr,x,i); 
+
+        //     }
+        //     swap(arr,x,0); 
+        //     cnt ++; 
+        // }while(cnt < (k)); 
+    // another approach 
+    // k = k % arr.size();
+     
+    // if(k != 0)
+    // {
+    // // step 1: reverse list from k to length 
+        
+    // reverse(arr.end() - k, arr.end()); 
+    
+    // // step 2: reverse the list from 0  to l - k - 1; 
+    // reverse(arr.begin(),arr.end()-k); 
+
+    // // step 3: reverse the whole list 
+    // reverse(arr.begin(),arr.end()); 
+    // }
+
+
+        // approach 3: using vector 
+        k = k % arr.size(); 
+        if(k == 0)
+        {
+            return; 
+        }
+
+        vector<int> rotated; 
+        for(int i = arr.size() - k; i < arr.size(); i ++)
+        {
+            rotated.push_back(arr[i]); 
+        }
+
+        for(int i = 0; i < arr.size() - k ; i ++)
+        {
+            rotated.push_back(arr[i]); 
+        }
+        arr = rotated; 
+
+
+    }
+};

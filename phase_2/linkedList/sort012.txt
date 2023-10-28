@@ -1,0 +1,159 @@
+// void selectionSort(Node* &head) {
+//     Node* current = head; 
+
+//     while (current != NULL) {
+//         Node* minNode = current; 
+//         Node* runner = current->next; 
+
+//         while (runner != NULL) {
+//             if (current->data > runner->data) {
+//                 minNode = runner; 
+//             }
+//             runner = runner->next; 
+//         }
+
+//         // Swap the data of the current node and the minimum node found.
+//         int temp = minNode->data; 
+//         minNode->data = current->data; 
+//         current->data = temp; 
+
+//         current = current->next; 
+//     }
+// }
+
+void populate(Node* &noed,Node* curr)
+{
+    noed -> next = curr; 
+    noed = curr; 
+}
+
+
+
+Node* sortList(Node *&head) { 
+    // approach 1: not optimal approach. 
+    // selectionSort(head);  
+
+    // approach 2: using map: O(N) 
+
+    // map<int ,int > mp; 
+    // Node* kali = head; 
+    // while(kali != NULL){
+    //     mp[kali->data] ++; 
+    //     kali = kali -> next; 
+    // }
+
+    // int zerothCount = mp[0]; 
+    // kali = head; 
+    // int cnt = 0; 
+    // while(cnt < zerothCount)
+    // {
+    //     kali -> data = 0; 
+    //     kali = kali -> next; 
+    //     cnt ++; 
+    // }
+
+    // int FirstCount = mp[1]; 
+    // cnt = 0; 
+    // while(cnt < FirstCount)
+    // {
+    //     kali -> data = 1; 
+    //     kali = kali -> next; 
+    //     cnt ++; 
+    // }
+    // cnt = 0; 
+    // int SecondCount = mp[2]; 
+    // while(cnt < SecondCount)
+    // {
+    //     kali -> data = 2; 
+    //     kali = kali -> next; 
+    //     cnt ++; 
+    // }
+
+    // return head; 
+
+    // approach 3: using counting variables. 
+    // int zerothCount = 0; 
+    // int FirstCount = 0; 
+    // int SecondCount = 0; 
+
+    // Node* temp = head; 
+    // while(temp != NULL){
+    //     if(temp -> data == 0){
+    //         zerothCount ++; 
+    //     }
+    //     if(temp -> data == 1){
+    //         FirstCount ++; 
+    //     }
+    //     if(temp -> data == 2){
+    //         SecondCount ++; 
+    //     }
+    //     temp = temp -> next; 
+    // }
+
+    // int cnt = 0; 
+    // temp = head;  
+    // while(temp != NULL){
+    //     if(zerothCount != 0){
+    //         temp -> data = 0; 
+    //         zerothCount --; 
+    //     }
+    //     else if(FirstCount != 0){
+    //         temp -> data = 1; 
+    //         FirstCount --; 
+    //     }
+    //     else{
+    //         temp -> data = 2; 
+    //         SecondCount --; 
+    //     }
+    //     temp = temp -> next; 
+    // }
+    // return head;
+
+    // approach 4: data replacement is not allowed:
+    // Time complexity: O(N). 
+    // space complexity: O(1).  
+    Node* zerothHead = new Node(-1); 
+    Node* zerothTail = zerothHead; 
+    Node* firstHead = new Node(-1);
+    Node* firstTail = firstHead;  
+    Node* SecondHead = new Node(-1); 
+    Node* secondTail = SecondHead; 
+
+    Node* curr = head; 
+    while(curr != NULL)
+    {
+        if(curr -> data == 0){
+            populate(zerothTail,curr); 
+        }
+        else if(curr -> data == 1){
+            populate(firstTail,curr); 
+        }
+        else if(curr -> data == 2){
+            populate(secondTail,curr); 
+        }
+        curr = curr -> next; 
+    }
+
+    // merge all of them. 
+    if(firstHead -> next != NULL){
+        zerothTail -> next = firstHead -> next; 
+    }
+    else{
+        zerothTail -> next = SecondHead -> next; 
+    }
+    // firstTail -> next = SecondHead -> next; 
+
+    firstTail -> next = SecondHead -> next; 
+    secondTail -> next = NULL; 
+    // setup head. 
+    head = zerothHead -> next; 
+
+    // delete unecessary nodes. 
+    delete zerothHead; 
+    delete firstHead; 
+    delete SecondHead; 
+    return head; 
+
+    
+}
+

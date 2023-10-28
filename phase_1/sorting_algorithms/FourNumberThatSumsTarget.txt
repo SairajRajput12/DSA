@@ -1,0 +1,33 @@
+// in efficient appraoch 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void annaSolve(vector<int>& arr, int target, int size, int noOfElementsAnnaVisited, vector<int>& ans, vector<vector<int>>& result) {
+    if (ans.size() == 4) {
+        if ((ans[0] + ans[1] + ans[2] + ans[3]) == target) {
+            result.push_back(ans);
+        }
+        return;
+    }
+
+    for (int i = noOfElementsAnnaVisited; i < size; i++) {
+        ans.push_back(arr[i]);
+        annaSolve(arr, target, size, i + 1, ans, result);
+        ans.pop_back();
+    }
+}
+
+string fourSum(vector<int> arr, int target, int n) {
+    // Write your code here.
+    vector<int> ans;
+    vector<vector<int>> result;
+    sort(arr.begin(), arr.end());
+    annaSolve(arr, target, n, 0, ans, result);
+
+    if (result.size() >= 1) {
+        return "Yes";
+    } else {
+        return "No";
+    }
+}

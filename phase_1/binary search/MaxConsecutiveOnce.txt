@@ -1,0 +1,94 @@
+class Solution {
+
+    // public boolean check(int[] nums, int atm, int k) {
+
+    //     int i=0,j=0;
+        
+    //     int zCtr=0;
+        
+    //     while(j<nums.length){
+            
+    //         if(j-i+1<k){
+                
+    //             if(nums[j]==0)zCtr++;
+                
+    //             j++;
+                
+    //         }else{
+                
+    //             if(nums[j]==0)zCtr++;
+                
+    //             if(zCtr<=atm) return true;
+                
+    //             if(nums[i]==0)zCtr--;
+                
+    //             i++;
+    //             j++;
+                
+    //         }
+            
+    //     }
+    //     return false;
+    // }
+
+    public int longestOnes(int[] nums, int k) {
+        // sliding window approach: 
+
+        //     int i = 0, j = 0, n = nums.length, countZeros = 0, ans = Integer.MIN_VALUE; 
+        //     while(j < n){
+        //         if(nums[j] == 0){
+        //             countZeros ++; 
+        //         }
+        //             while(countZeros > k){
+        //                 if(nums[i] == 0){
+        //                     countZeros --; 
+        //                 }
+
+        //                 i ++; 
+        //             }
+
+        //         ans = Math.max(ans , (j - i + 1)); 
+        //         j ++; 
+        //     }
+
+        // return ans; \
+        // using binary search: 
+
+
+        // binary search approach: 
+        // int ans = 0;
+        // int start = k, end = nums.length; 
+        // int mid = start + (end - start)/2; 
+        // while(start <= end){
+        //     mid = start + (end - start)/2;
+        //         if(check(nums,k,mid) == true){
+        //                 ans = Math.max(ans,mid); 
+        //                 start = mid + 1; 
+        //         }
+
+        //         else{
+        //                 end = mid - 1; 
+        //         }
+        // }
+
+        // return ans;  
+
+        // using 2 pointer approach: 
+        int i = 0, j = 0, flips = 0, ans = Integer.MIN_VALUE; 
+        for(j = 0; j < nums.length; j++){
+                if(nums[j] == 0){
+                    flips ++; 
+                }
+               
+
+                while(flips > k){
+                    if(nums[i] == 0) flips --; 
+                    i ++; 
+                }
+
+            ans = Math.max((j-i+1),ans);     
+                 
+        }
+    return ans; 
+    }
+}

@@ -1,0 +1,37 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        // way 1: 
+        /*
+        int rows = matrix.length; 
+        int cols = matrix[0].length; 
+        int col = cols - 1; 
+        int row = 0; 
+                    while(row < rows && col > -1){
+                            if(matrix[row][col] == target){
+                                return true; 
+                            }
+
+                            else if(matrix[row][col] < target){
+                                row ++; 
+                            }
+
+                            else{
+                                col --; 
+                            }
+                    }        
+        return false;            
+        */ 
+
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int l = 0, r = m * n - 1;
+        while (l != r){
+            int mid = (l + r - 1) >> 1;
+            if (matrix[mid / m][mid % m] < target)
+                l = mid + 1;
+            else 
+                r = mid;
+        }
+        return matrix[r / m][r % m] == target;            
+    }
+}

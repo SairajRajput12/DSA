@@ -1,0 +1,244 @@
+// in java: 
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.util.*;
+class Rat {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int[][] a = new int[n][n];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++) a[i][j] = sc.nextInt();
+
+            Solution obj = new Solution();
+            ArrayList<String> res = obj.findPath(a, n);
+            Collections.sort(res);
+            if (res.size() > 0) {
+                for (int i = 0; i < res.size(); i++)
+                    System.out.print(res.get(i) + " ");
+                System.out.println();
+            } else {
+                System.out.println(-1);
+            }
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+// User function Template for Java
+
+// m is the given matrix and n is the order of matrix
+class Solution {
+    private static boolean isSafe(int x,int y,int[][] freq,int[][] m,int n){
+            if(((x >= 0) && (x < n)) && ((y >= 0) && (y < n)) && freq[x][y] == 0 && m[x][y] == 1){
+                return true; 
+            }
+        
+        return false; 
+    }
+    
+    private static void solve(int[][] freq,int x,int y,ArrayList<String> ans,int[][] m,StringBuilder output,int n){
+        if(x == (n-1) && y == (n-1)){
+            String path = output.toString(); 
+            ans.add(path); 
+            return; 
+        }
+        
+        freq[x][y] = 1; 
+        // Down: 
+        int nextx = x + 1;
+        int nexty = y; 
+        if(isSafe(nextx,nexty,freq,m,n) == true){
+            output.append('D'); 
+            solve(freq,nextx,nexty,ans,m,output,n); 
+            output.deleteCharAt(output.length() - 1); 
+        }
+        
+         // UP: 
+         nextx = x - 1;
+         nexty = y; 
+        if(isSafe(nextx,nexty,freq,m,n) == true){
+            output.append('U'); 
+            solve(freq,nextx,nexty,ans,m,output,n); 
+            output.deleteCharAt(output.length() - 1); 
+        }
+        
+         // LEFT: 
+         nextx = x;
+         nexty = y - 1; 
+        if(isSafe(nextx,nexty,freq,m,n) == true){
+            output.append('L'); 
+            solve(freq,nextx,nexty,ans,m,output,n); 
+            output.deleteCharAt(output.length() - 1); 
+        }
+        
+         // RIGHT: 
+         nextx = x;
+         nexty = y + 1; 
+        if(isSafe(nextx,nexty,freq,m,n) == true){
+            output.append('R'); 
+            solve(freq,nextx,nexty,ans,m,output,n); 
+            output.deleteCharAt(output.length() - 1); 
+        }
+        
+        freq[x][y] = 0; 
+    }
+    
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        // Your code here
+        ArrayList<String> ans = new ArrayList(); 
+        
+        if(m[0][0]==0){
+            return ans;
+        }
+       int[][] freq = new int[n][n]; 
+        int x = 0; 
+        int y = 0; 
+        StringBuilder output = new StringBuilder(""); 
+        solve(freq,x,y,ans,m,output,n); 
+        Collections.sort(ans); 
+        return ans; 
+    }
+}
+
+
+
+
+
+
+
+
+// in c++: 
+//{ Driver Code Starts
+// Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function template for C++
+
+class Solution{
+    private: 
+    bool isSafe(int x,int y,int n,vector<vector<int>> &freq,vector<vector<int>> &m){
+        if(((x >= 0) && (x < n)) && ((y >= 0) && (y < n)) && freq[x][y] == 0 && m[x][y] == 1){
+            return true; 
+        }
+        return false; 
+    }
+    
+    
+    void solve(vector<string> &ans,vector<vector<int>> &freq,int x,int y,int n,vector<vector<int>> &m,string output){
+        
+        // you have riched x,y
+        if(x == (n-1) && y == (n-1)){
+            ans.push_back(output); 
+            return; 
+        }
+        freq[x][y] = 1; // mark as visited 
+            // Down 
+            int nextx = x + 1; 
+            int nexty = y; 
+            if(isSafe(nextx,nexty,n,freq,m)){
+                output.push_back('D'); 
+                solve(ans,freq,nextx,nexty,n,m,output);  
+                output.pop_back(); 
+            } 
+            
+            // UP 
+            nextx = x - 1; 
+            nexty = y; 
+            if(isSafe(nextx,nexty,n,freq,m)){
+                output.push_back('U'); 
+                solve(ans,freq,nextx,nexty,n,m,output);  
+                output.pop_back(); 
+            } 
+            
+            // LEFT: 
+            nextx = x; 
+            nexty = y - 1; 
+            if(isSafe(nextx,nexty,n,freq,m)){
+                output.push_back('L'); 
+                solve(ans,freq,nextx,nexty,n,m,output);  
+                output.pop_back(); 
+            } 
+            
+            // Right:  
+            nextx = x; 
+            nexty = y + 1; 
+            if(isSafe(nextx,nexty,n,freq,m)){
+                output.push_back('R'); 
+                solve(ans,freq,nextx,nexty,n,m,output);  
+                output.pop_back(); 
+            } 
+            
+                
+        freq[x][y] = 0;         
+        // }
+    }
+    
+    public:
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        // Your code goes here
+        // input: 
+        /*
+            1] ek bhul bhulaiya. wali maz/ 
+            2] 1 -> open path -> waha ja sakte ho. 
+            3] 0 -> waha nahi ja sakte ho. 
+            
+            give the solution for going to sourcw to destination. 
+        */
+        vector<string> ans; 
+        if(m[0][0] == 0){
+            return ans; 
+        }
+        
+        int x = 0, y = 0; 
+        vector<vector<int>> freq(n,vector<int>(n,0));  // assigning all values as 0.  
+        
+        // cout << freq[0][0] << endl; 
+        string output = ""; 
+        solve(ans,freq,x,y,n,m,output); 
+        sort(ans.begin(),ans.end()); 
+        return ans; 
+    }
+};
+
+    
+
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<vector<int>> m(n, vector<int> (n,0));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                cin >> m[i][j];
+            }
+        }
+        Solution obj;
+        vector<string> result = obj.findPath(m, n);
+        sort(result.begin(), result.end());
+        if (result.size() == 0)
+            cout << -1;
+        else
+            for (int i = 0; i < result.size(); i++) cout << result[i] << " ";
+        cout << endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
+
+

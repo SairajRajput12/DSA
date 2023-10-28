@@ -1,0 +1,1 @@
+cout << "This is Homework from Love babber's Math Library " << endl;

@@ -1,0 +1,28 @@
+class Solution {
+    public int compress(char[] chars) {
+            int i = 0;
+            int ansIndex = 0; 
+            int n = chars.length; 
+            while(i < n){
+                int j = i + 1; 
+                while(j < n && chars[i] == chars[j])
+                {
+                        j ++; 
+                }
+                // ya to pura traverse ho gaya. 
+                // different character encounter ho gaya. 
+                // old character store kar lo 
+                chars[ansIndex ++] = chars[i];  
+                int count = j - i; 
+                if(count > 1){
+                    String strFreq = String.valueOf(count); 
+                        for (char chFreq : strFreq.toCharArray())
+                            chars[ansIndex++] = chFreq;
+                }
+
+                i = j; 
+            }    
+
+        return ansIndex;     
+    }
+}

@@ -1,0 +1,35 @@
+class Solution {
+
+    private boolean feasible(int[] weights,int mid,int days){
+        int currCapacity = 0,daysNeeded = 1;
+        for(int weight : weights){
+            currCapacity += weight; 
+            if(currCapacity > mid){
+                currCapacity = weight; 
+                daysNeeded ++; 
+            }
+        }
+
+        return daysNeeded <= days; 
+    }
+    public int shipWithinDays(int[] weights, int days) {
+        int totalLoad = 0,maxLoad = 0; 
+        for (int weight : weights) {
+            totalLoad += weight;
+            maxLoad = Math.max(maxLoad, weight);
+        }
+
+        int start = maxLoad, end = totalLoad; 
+        int mid = start + (end - start)/2; 
+        while(start < end){
+            mid = start + (end - start)/2; 
+            if (feasible(weights, mid, days)) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+
+        return start;
+    }
+}

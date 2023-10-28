@@ -1,0 +1,103 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+    ListNode* findmid(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head -> next;
+    
+    while(fast != NULL && fast -> next != NULL) {
+        slow = slow -> next;
+        fast = fast -> next -> next; 
+    }
+    return slow;
+}
+
+
+    ListNode* merge(ListNode* left,ListNode* right)
+    {
+        if(left == NULL)
+        {
+            return right; 
+        }
+
+        if(right == NULL)
+        {
+            return left; 
+        }
+
+        ListNode* ans = new ListNode(-1); 
+        ListNode* temp = ans; 
+        while(left != NULL && right != NULL) 
+        {
+            if(left -> val < right -> val)
+            {
+                temp -> next = left; 
+                left = left -> next; 
+            }
+            else
+            {
+                temp -> next = right; 
+                right = right -> next; 
+            }
+            temp = temp -> next; 
+        }
+
+        // left bacha to 
+        while (left != nullptr) {
+            temp->next = left;
+            left = left->next;
+            temp = temp->next;
+        }
+
+        while (right != nullptr) {
+            temp->next = right;
+            right = right->next;
+            temp = temp->next;
+        }
+
+        return ans -> next; 
+    }
+
+public:
+    ListNode* sortList(ListNode* head) {
+        // base case.  
+        if(head == NULL || head -> next == NULL)
+        {
+            return head; 
+        }
+
+        // linked list ko 2 halves mein thodna hai. 
+        // step 1: mid element nikalo 
+        ListNode* mid = findmid(head);  // middle element mil gaya 
+
+        // step 2: split the linked list after finding mid 
+        ListNode* left = head;              // left half  head. 
+        ListNode* right = mid -> next;      // right half head. 
+        mid -> next = NULL;  // left end of the linked list is pointing to null 
+
+        left = sortList(left); 
+        right = sortList(right); 
+
+        // step 3: now merge both left and right half. 
+        ListNode* result = merge(left,right); 
+        return result;         
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+};

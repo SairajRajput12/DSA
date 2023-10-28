@@ -1,0 +1,75 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// } Driver Code Ends
+
+class Solution{
+    public:
+    // You need to complete this function
+    long long count = 0; 
+    void TOHelper(int N,int from ,int to,int aux){
+        if(N > 0){
+            TOHelper(N-1,from,aux,to); 
+            cout << "move disk " << N << " from rod " << from << " to rod "<< to  << endl; 
+            count ++; 
+            TOHelper(N-1,aux,to,from); 
+        }
+        
+    }
+    // avoid space at the starting of the string in "move disk....."
+    long long toh(int N, int from, int to, int aux) {
+        // Your code here
+        
+        /*
+        Story: 
+            -> when lord bramha was creating the universe he assigned those tasks to the priests. 
+            -> He has given same tasks to as that of the problem to those priests. 
+            -> He has given same conditions to those priests. 
+            -> He has given 64 plates which has taken 585 Billion years of time 2^64 - 1.considering that for 1 plate it will take 2 seconds. 
+            -> when this tasks finish then lord bramha will restart the universe. 
+            -> means lord bramha will create new universe. 
+        */ 
+
+        // problem statement: 
+        // 3 pols -> source, intermidiate/helper,destination. 
+        // 1] pick one plate at a time. 
+        // 2] never place bigger plate on smaller plate. 
+
+        // hypothesis:   
+        // we will put n-1 at helper pols. 
+        // if i put n-1 plate at helper then i only have to put nth at destination poll. 
+        // base condition : put last plate on destination. 
+        // number of steps: 2^n - 1. 
+        
+        TOHelper(N,from,to,aux); 
+        return count; 
+        
+    }
+
+};
+
+//{ Driver Code Starts.
+
+int main() {
+
+    int T;
+    cin >> T;//testcases
+    while (T--) {
+        
+        int N;
+        cin >> N;//taking input N
+        
+        //calling toh() function
+        Solution ob;
+        
+        cout << ob.toh(N, 1, 3, 2) << endl;
+    }
+    return 0;
+}
+
+
+//Position this line where user code will be pasted.
+// } Driver Code Ends

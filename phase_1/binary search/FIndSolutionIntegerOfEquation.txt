@@ -1,0 +1,54 @@
+/*
+ * // This is the custom function interface.
+ * // You should not implement it, or speculate about its implementation
+ * class CustomFunction {
+ *     // Returns f(x, y) for any given positive integers x and y.
+ *     // Note that f(x, y) is increasing with respect to both x and y.
+ *     // i.e. f(x, y) < f(x + 1, y), f(x, y) < f(x, y + 1)
+ *     public int f(int x, int y);
+ * };
+ */
+
+class Solution {
+    public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
+        // approach  1: 2 pointer 
+        //         List<List<Integer>> res = new ArrayList(); 
+        //         int x = 1,y = 1000; 
+        //         while(x <= 1000 && y >= 1){
+        //             int val = customfunction.f(x,y); 
+        //             if(val == z){
+        //                 res.add(Arrays.asList(x,y)); 
+        //                 x ++; 
+        //                 y --; 
+        //             }
+
+        //             else if(val < z){
+        //                 x ++; 
+        //             }
+
+        //             else{
+        //                 y --; 
+        //             }
+        //         }
+        // return res;        
+
+        // approach 2: binary search 
+         List<List<Integer>> result = new ArrayList(); 
+       for (int x = 1; x <= 1000; ++x) { // upper limit is 1000
+            int low = 1, high = 1001;
+            while (low < high) {
+                int mid = (low + high) / 2;
+                if (customfunction.f(x, mid) < z) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            if (customfunction.f(x, low) == z)
+                result.add(Arrays.asList(x, low));
+
+        }
+        return result; 
+
+    }
+}

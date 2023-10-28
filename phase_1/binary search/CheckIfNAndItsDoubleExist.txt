@@ -1,0 +1,115 @@
+import java.util.*; 
+import java.io.*; 
+
+class Solution {
+    
+       public boolean checkIfExist(int[] arr) {
+        // Approach 1: runtime: 1ms
+        
+        // Set<Integer> seen = new HashSet<>();   
+        // for (int i : arr) {
+        //     if (seen.contains(2 * i) || i % 2 == 0 && seen.contains(i / 2))
+        //         return true;
+        //     seen.add(i);
+        // } 
+        // return false;
+        
+        // Approach 2: runtime: 3ms
+        // int noZeroCount = 0; 
+        // Arrays.sort(arr); 
+        // for(int a : arr){
+        //         if(a != 0){
+        //             if(binarySearch(a,arr)&binarySearch(2*a,arr)){
+        //                 return true; 
+        //             }    
+        //         }
+                
+        //         else{
+        //             ++ noZeroCount; 
+        //         }
+        // }
+        
+        // return noZeroCount >= 2;
+        // }
+        
+        // public boolean binarySearch(int x, int[] nums) {
+        // int start = 0;
+        // int end = nums.length-1;
+        // while (start <= end) {
+        //     int mid = (int)((start+end)/2);
+        //     if (nums[mid] < x) {
+        //         start = 1 + mid;
+        //     }
+        //     else if (nums[mid] > x) {
+        //         end = mid - 1;
+        //     }
+        //     else {
+        //         return true;
+        //     }
+        // }
+
+        // Approach 3: Briute Force
+	    // int n = arr.length;
+		
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         if (i != j && arr[i] == 2 * arr[j]) return true;
+        //     }
+        // }
+
+        // return false;
+
+        // Approach 4: Using HashSet
+
+        // Set<Integer> set = new HashSet<>();
+
+        // for (int i : arr) {
+        //     if (set.contains(i * 2) || (i % 2 == 0 && set.contains(i / 2))) {
+        //         return true;
+        //     }
+
+        //     set.add(i);
+        // }
+
+        // return false;
+
+        // Approach 5: Another Approach Binary search
+           Arrays.sort(arr);
+
+        for (int i = 0; i < arr.length; i++) {
+            int target = 2 * arr[i];
+            int lo = 0, hi = arr.length - 1;
+
+            while (lo <= hi) {
+                int mid = lo + (hi - lo) / 2;
+
+                if(arr[mid] == target && mid != i) return true;
+                else if (arr[mid] < target) lo = mid + 1;
+                else hi = mid - 1;
+            }
+        }
+
+        return false;
+   
+
+    }
+    
+}
+public class Main
+{
+	public static void main(String[] args) {
+	    Solution s = new Solution(); 
+	    int[] a = {-20,8,-6,-14,0,-19,14,4};
+	   //int[] a = {-10,12,-20,-8,15};
+	   // int[] a = {-766,259,203,601,896,-226,-844,168,126,-542,159,-833,950,-454,-253,824,-395,155,94,894,-766,-63,836,-433,-780,611,-907,695,-395,-975,256,373,-971,-813,-154,-765,691,812,617,-919,-616,-510,608,201,-138,-669,-764,-77,-658,394,-506,-675,523}; 
+	   //int [] a = {3,1,7,11};
+	    Arrays.sort(a); 
+	   // System.out.println(a[19]);
+	    for (int i = 0; i < a.length; i ++){
+	        System.out.print(a[i] + " ");
+	    } 
+	    System.out.println();
+		System.out.println(s.checkIfExist(a));
+	}
+}
+

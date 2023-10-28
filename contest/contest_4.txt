@@ -1,0 +1,125 @@
+import java.util.* ;
+import java.io.*; 
+
+class Solution {
+  public static String encodeString(int n, String s) {
+    StringBuilder sb=new StringBuilder();
+      char[] c=new char[26];
+      int index=0;
+      // building char array
+      for(char ch='a';ch<='z';ch++){
+          c[index++]=ch;
+      }
+      for(int i=0;i<s.length();i++){
+          int a=s.charAt(i)-'a'; // this will give the index of current char in array 
+          if(s.charAt(i)=='a' || s.charAt(i)=='e' ||s.charAt(i)=='i' || s.charAt(i)=='o' ||s.charAt(i)=='u'){
+          // if it is a vowel than add the next char
+              sb.append(c[a+1]);
+          }else{
+          // if it is a consonant add prev
+              sb.append(c[a-1]);
+          }
+
+          
+      }
+      return sb.toString();
+  
+
+  }
+}
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int multipleLength(vector<int> &arr, int n) {
+//     int pr = 1;
+//     for(int i = 0; i < arr.size(); i++) {
+//         pr *= arr[i];
+//     }
+
+//     // convert the product -1 into the binary form 
+//     int res = pr - 1;  
+//     string binaryForm;
+    
+//     while (res > 0) {
+//         int m = res % 2; 
+//         binaryForm = to_string(m) + binaryForm;
+//         res = res / 2; 
+//     }
+    
+//     // cout << binaryForm << endl; 
+//     int len = binaryForm.length();
+//     // cout << len << endl; 
+    
+//     return len;
+
+    double ans = 0;
+    for (int i = 0; i < n; i++) {
+        ans=ans+log2(arr[i]);
+    }
+      return 1 + (int)ans;
+}
+
+
+
+
+
+	// Write your code here. 
+	// Ninja is given the task to create a perfect gift for the king. 
+	// he has N wraps to choose from which he can choose to wrap the gifts. 
+	// he also has M gifts from which he can choose the gifts for the king. 
+	
+	/*
+		Rules: 
+		1] select one wrapper to wrapp all choosen gifts. 
+		2] he can select one gift or more gift or no gifts at all. 
+		3] he has 2 copies of same gift. so, he can take 0/1/2 copies of each gift. 
+	*/ 
+
+	// he had x number such that cose spend is near to x/ if there are multiple answers then print minimum one. 
+	
+
+#include <bits/stdc++.h>
+using namespace std; 
+int ans = INT_MAX;
+int diff = INT_MAX;
+// int target;
+void solve(int s, vector<int> &gift, int index, int sum, int X){
+	//base case
+	if(index >= s){
+		int val = abs(X-sum);
+		// cout << sum << " " << val << endl;
+		if(val < diff){
+			diff = val;
+			ans = sum;
+		}else if(val == diff){
+			//agar do diff value same hain ans closest hain to jiska sum
+            //value less hai wo ans mei hoga
+			ans = min(ans, sum);
+		}
+		return;
+	}
+
+	//recursive
+	solve(s, gift, index+1, sum, X);
+	solve(s, gift, index+1, sum+gift[index], X);
+	solve(s, gift, index+1, sum+gift[index]*2, X);
+}
+int closestCost(int N, int M, int X, vector<int> W, vector<int> G)
+{
+	// Write your code here.
+	for(int i = 0; i < W.size(); i++){
+		solve(M, G, 0, W[i], X);
+	}
+	int temp = ans;
+	// multiple test case at time hone par 
+    // har bar INT_MAX and diff ki value reset krni hogi
+	ans = INT_MAX;
+	diff = INT_MAX;
+	return temp;
+}
+
+

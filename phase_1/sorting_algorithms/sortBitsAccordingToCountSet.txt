@@ -1,0 +1,248 @@
+#include <bits/stdc++.h> 
+using namespace std; 
+
+int getCount(int a) {
+    int cnt = 0; 
+    while (a != 0) {
+        if (a & 1) {  // Use 'a & 1' to check if the least significant bit is set.
+            cnt++; 
+        }
+        a >>= 1; 
+    }
+    return cnt; 
+}
+
+
+
+void sortSetBitsCount(vector<int>& arr, int size) {
+    map<int, vector<int>> solver;  
+    int ma = INT_MIN; 
+    int mi = INT_MAX; 
+
+    for (int i = 0; i < size; i++) {
+        solver[getCount(arr[i])].push_back(arr[i]);  // Store the count of set bits in the map.
+        ma = max(ma,getCount(arr[i])); 
+        mi = min(mi,getCount(arr[i])); 
+    }
+
+
+    int index = 0; 
+     for(int i=ma;i>=mi;i--)
+
+    {
+
+        if(solver[i].size() )
+
+        {
+
+            for(auto &x:solver[i])
+
+            {
+
+                arr[index++]=x;
+
+            }
+
+        }
+
+    }
+}
+
+// map: 
+*
+	Time Complexity: O(N*log(N))
+	Space Complexity: O(N),
+
+	where N is the number of elements in the array
+*/
+
+// Function to count the number of set bits in an integer
+int countSetBits(int number)
+{
+	int count = 0;
+	while (number != 0)
+	{
+		count += (number & 1);
+		// Using bitwise right shift to divide the number by two
+		number = number >> 1;
+	}
+
+	return count;
+}
+
+void sortSetBitsCount(vector<int>& arr, int size)
+{
+	// Multimap to store the (count of set bits, integer) pair
+	multimap<int, int> result;
+	int value;
+	for (int i = 0; i < size; i++)
+	{
+		value = countSetBits(arr[i]);
+		result.insert({(-1 * value), arr[i]});
+	}
+
+	arr.clear();
+	// Traversing the Multimap to retrieve the order
+	for (auto j : result)
+	{
+		arr.push_back(j.second);
+	}
+
+}
+
+// using comparator while calling in built function, 
+int countSetBits(int number)
+{
+	return bitset<32>(number).count();
+}
+
+// Comparator for sort function
+bool comparatorFunction(int number1, int number2)
+{
+	if (countSetBits(number1) > countSetBits(number2)) {
+		return true;
+	}
+	return false;
+}
+
+void sortSetBitsCount(vector<int>& arr, int size)
+{
+	// Calling the inbuilt sort function with the customized comparator according to the condition described in the problem statement
+	stable_sort(arr.begin(), arr.end(), comparatorFunction );
+}
+
+
+// 3rd solution:
+/*
+	Time Complexity:  O(N)
+	Space Complexity: O(N),
+
+	where N is the number of elements in the array.
+*/
+
+// Function to count the number of set bits in an integer
+int countSetBits(int number)
+{
+	int count = 0;
+	while (number != 0)
+	{
+		count += (number & 1);
+		// Using bitwise right shift to divide the number by two
+		number = number >> 1;
+	}
+
+	return count;
+}
+
+void sortSetBitsCount(vector<int>& arr, int size)
+{
+	vector<int>bitsCount[33];
+	int val;
+	for (int i = 0; i < size; i++)
+	{
+		val = countSetBits(arr[i]);
+		bitsCount[val].push_back(arr[i]);
+	}
+
+	// Clearing the input array to store the result in this array.
+	arr.clear();
+	// Outer loop runs for 33 times( from 0-32 ) because we are taking into consideration 32 bit numbers only.
+	for (int i = 32; i >= 0; i--)
+	{
+		for (int j = 0; j < bitsCount[i].size(); j++)
+		{
+			arr.push_back(bitsCount[i][j]);
+		}
+	}
+
+}
+
+
+// leetcode version:
+
+class Solution {
+    public int[] sortByBits(int[] arr) {
+        int total = 0;
+        Arrays.sort(arr);
+        int[] ans = new int[arr.length];
+        for(int i=0; i<16; i++){
+            for(int j=0; j<arr.length; j++){
+                if(countBit(arr[j]) == i){
+                    ans[total] = arr[j];
+                    total++;
+                }
+            }
+        }
+        return ans;
+    }
+    public static int countBit(int n){
+        int count = 0;
+        int a = 1;
+        while(n>0){
+            if((n&1)==1){
+                count++;
+            }
+            n = n>>1;
+        }
+        return count;
+    }
+}
+
+
+// solution in leetcode version: 
+
+class Solution {
+
+// static int countSetBits(int n){
+//     return bitset<32>(n).count(); 
+// }
+
+
+// static bool comparatorFunction(int number1, int number2)
+// {
+// 	if (countSetBits(number1) < countSetBits(number2)) {
+// 		return true;
+// 	}
+// 	return false;
+// }
+
+// another approach: 
+int countSetBits(int number)
+{
+	int count = 0;
+	while (number != 0)
+	{
+		count += (number & 1);
+		// Using bitwise right shift to divide the number by two
+		number = number >> 1;
+	}
+
+	return count;
+}
+
+
+public:
+    vector<int> sortByBits(vector<int>& arr) {
+        // sort(arr.begin(),arr.end()); 
+        // stable_sort(arr.begin(), arr.end(), comparatorFunction); 
+
+        // 2nd appraoch: 
+        vector<int> bitsCount[33]; 
+        sort(arr.begin(),arr.end()); 
+        int val; 
+        for(int i = 0; i < arr.size(); i ++){
+            val = countSetBits(arr[i]); 
+            bitsCount[val].push_back(arr[i]);
+        }
+
+        arr.clear();
+        for (int i = 0; i < 33; i++)
+        {
+            for (int j = 0; j < bitsCount[i].size(); j++)
+            {
+                arr.push_back(bitsCount[i][j]);
+            }
+        }
+        return arr; 
+    }
+};

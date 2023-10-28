@@ -1,0 +1,192 @@
+#include <bits/stdc++.h> 
+/***************************************
+ 
+    Following is the Node class already written.
+
+    class Node 
+    {
+    public:
+        int data;
+        Node* next;
+        Node* prev;
+
+        Node(int data) 
+        {
+            next = NULL; prev=NULL;
+            this->data = data;
+        }
+
+        ~Node() 
+        {
+            if (next != NULL)
+            {
+                delete next;
+            }
+        }
+    };
+ 
+***************************************/
+int sum(vector<int> ans)
+{
+    int sum = 0; 
+    for(int i = 0; i < ans.size(); i ++)
+    {
+        sum += ans[i]; 
+    }
+    return sum; 
+}
+
+
+// void solve(Node* head,vector<int> &ds,int x,vector<vector<int>> &test)
+// {
+//     if(ds.size() >= 3)
+//     {
+//         if(sum(ds) == x)
+//         {
+//             test.push_back(ds); 
+            
+//         }
+//         return; 
+//     }
+
+//     if(head == NULL || ds.size() > 3)
+//     {
+//         return;
+//     }
+//     ds.push_back(head->data); 
+//     solve(head->next,ds,x,test); 
+//     ds.pop_back(); 
+//     solve(head->next,ds,x,test); 
+// }
+
+
+void solve(Node* head,vector<int> &ds,int x,int test,int cnt)
+{
+    if(cnt >= 3)
+    {
+        if(test == x)
+        {
+            ds.push_back(1); 
+            
+        }
+        return; 
+    }
+
+    if(head == NULL)
+    {
+        return;
+    }
+    // int make = head -> data; 
+    solve(head->next,ds,x,test+head->data,cnt+1); 
+    solve(head->next,ds,x,test,cnt); 
+}
+
+
+//                                                          {} 
+//                  {-4}                                                    {2}              {3}        {8}     {9} 
+//              {-4,2}            {-4,3}            {-4,8}      {-4,9}  {2,3}{2,8}{2,9}  {3,8}{3,9}   {8,9}    {NULL} 
+// {-4,2,3}{-4,2,8}{-4,2,9}    {-4,3,8}{-4,3,9}    {-4,8,9}     null 
+// 
+
+
+int countAllTripletSum(Node *head, int x)
+{
+    // Write your code here. 
+    // approach 1: using ds : TLE
+    // if(head == NULL) return 0;  
+    // vector<int> ds;
+    // vector<vector<int>> ds1; 
+    // solve(head,ds,x,ds1); 
+    // return ds1.size(); 
+
+
+    // approach 2: using 2 pointer with loop: 
+    // O(nlogn)
+    // if (head == NULL)
+    // {
+    //     return 0;
+    // }
+    // Node *ptr = head, *last = head;
+    // int count = 0;
+
+    // // Iterate to find the last node.
+    // while (last->next != NULL)
+    // {
+    //     last = last->next;
+    // }
+
+    // // Iterate for the first element.
+    // while (ptr != NULL)
+    // {
+
+    //     // Initialise the two pointers.
+    //     Node *start = ptr->next;
+    //     Node *end = last;
+
+    //     /*
+	//         Keep iterating until the start and
+	// 		end pointers do not cross each other.
+	// 	*/
+    //     while (start != NULL && end != NULL && start != end && end->next != start)
+    //     {
+
+    //         // If the sum of the triplet is X increment count.
+    //         if ((x - ptr->data) == start->data + end->data)
+    //         {
+    //             count = count + 1;
+    //             start = start->next;
+    //             end = end->prev;
+    //         }
+
+    //         /*
+	// 		    Move the start pointer forward if
+	// 			sum of triplet is less than X.
+	// 		*/
+    //         else if ((x - ptr->data) > start->data + end->data)
+    //         {
+    //             start = start->next;
+    //         }
+
+    //         /*
+	// 		    Move the end pointer backwards if the
+	// 			sum of the triplet is greater than X.
+	// 		*/
+    //         else
+    //         {
+    //             end = end->prev;
+    //         }
+    //     }
+
+    //     ptr = ptr->next;
+    // }
+
+    // // Return the count of triplets with sum X.
+    // return count;
+
+    // approach 3: using hashset
+    Node* first = head; 
+    int cnt = 0;
+    unordered_set<int> visited; 
+    while(first != NULL) 
+    {
+        Node* second = first -> next; 
+        while(second != NULL)
+        {
+            int com = x - (first -> data + second -> data); 
+            if(visited.find(com) != visited.end())
+            {
+                cnt ++; 
+            }
+            second = second -> next; 
+        }
+        visited.insert(first -> data); 
+        first = first -> next; 
+    }
+
+    return cnt; 
+
+
+
+}
+
+

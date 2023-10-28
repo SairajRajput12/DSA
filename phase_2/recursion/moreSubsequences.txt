@@ -1,0 +1,37 @@
+void genrateSubsequence(int size,set<string> &ans,string temp,int index,string original){
+    int n = size; 
+    int sizeOfSubset = 1 << n; 
+    for(int i = 0; i < sizeOfSubset; i ++){
+          string tommy = ""; 
+          for(int j = 0; j < n; j ++){
+            if((i&(1 << j)) == 0){
+              tommy += original[j];  
+            }
+          } 
+          if(tommy.length() > 0){ 
+              ans.insert(tommy); 
+          }
+    }
+}
+
+
+
+string moreSubsequence(int n, int m, string a, string b)
+{
+    // Write your code here
+    set<string> ans1; 
+    set<string> ans2; 
+    string temp1 = ""; 
+    string temp2 = ""; 
+    genrateSubsequence(n,ans1,temp1,0,a); 
+    genrateSubsequence(m,ans2,temp2,0,b); 
+    if(ans1.size() > ans2.size()){
+        return a; 
+    }
+    else if(ans1.size() < ans2.size()){
+        return b; 
+    }
+    else{
+        return a; 
+    }
+}

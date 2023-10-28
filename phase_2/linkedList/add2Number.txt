@@ -1,0 +1,254 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+private: 
+    // ListNode* reverse(ListNode* &h)
+    // {
+    //     ListNode* curr = h; 
+    //     ListNode* next1 = NULL; 
+    //     ListNode* prev = NULL; 
+    //     while(curr != NULL)
+    //     {
+    //         next1 = curr -> next; 
+    //         curr -> next = prev; 
+    //         prev = curr; 
+    //         curr = next1; 
+    //     }
+    //     return prev; 
+    // }   
+
+    // void insertAtTail(ListNode* &l1,ListNode* &l2,int digit)
+    // {
+    //     // first creating node. 
+    //     ListNode* temp = new ListNode(digit);  
+    //     if(l1 == NULL)
+    //     {
+    //         l1 = temp; 
+    //         l2 = temp; 
+    //         return; 
+    //     }
+    //     else
+    //     {        
+    //         l2 -> next = temp; 
+    //         l2 = temp; 
+    //     }
+
+    // }
+
+
+
+    // ListNode* add(ListNode* &l1,ListNode* &l2)
+    // {
+    //    // steps: 
+    //    // 1] carry = 0; 
+    //    // 2] find the sum. 
+    //    // 3] find digit. 
+    //    // 4] create node for digit. 
+    //    // 5] carry nikalo , - carry = sum/10; 
+    //    ListNode* ansHead = NULL; 
+    //    ListNode* ansTail = NULL; 
+
+    //    int carry = 0; 
+    //    while(l1 != NULL && l2 != NULL)
+    //    {
+    //        int sum = l1 -> val + l2 -> val + carry; 
+    //        int digit = sum % 10; 
+    //        // create node and add in linked list. 
+    //        insertAtTail(ansHead,ansTail,digit); 
+    //        carry = sum/10;  
+    //        l1 = l1 -> next; 
+    //        l2 = l2 -> next; 
+    //    }
+
+    //    // do addition of remaining: 
+    //    while(l1 != NULL)
+    //    {
+    //        int sum = carry + l1 -> val; 
+    //        int digit = sum%10; 
+    //        insertAtTail(ansHead,ansTail,digit); 
+    //        carry = sum/10;  
+    //        l1 = l1 -> next; 
+    //    }
+
+    //    while(l2 != NULL)
+    //    {
+    //        int sum = carry + l2 -> val; 
+    //        int digit = sum%10; 
+    //        insertAtTail(ansHead,ansTail,digit); 
+    //        carry = sum/10;  
+    //        l2 = l2 -> next; 
+    //    }
+
+    //    while(carry != 0)
+    //    {
+    //        int sum = carry; 
+    //        int digit = sum%10; 
+    //        insertAtTail(ansHead,ansTail,digit); 
+    //        carry = sum/10; 
+    //    }
+    //    return ansHead; 
+    // }
+
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) { 
+    
+    // my own approach: 
+    /*
+        if(l1 == NULL)
+        {
+            return l1; 
+        }
+        if(l2 == NULL)
+        {
+            return l2; 
+        }
+
+        if(l1 -> next == NULL)
+        {
+            l2 -> val = l1 -> val + l2 -> val; 
+            return l2; 
+        }
+
+        if(l2 -> next == NULL)
+        {
+            l1 -> val = l2 -> val + l1 -> val; 
+            return l1; 
+        }
+
+        int index = 0; 
+        ListNode* temp = l1; 
+        int ans1 = 0; 
+        while(temp != NULL)
+        {
+            ans1 += (temp->val)*pow(10,index);  
+            cout << "ans1 : " << ans1 << endl; 
+            temp = temp -> next; 
+            index ++; 
+        }
+
+        index = 0; 
+        temp = l2; 
+        int ans2 = 0; 
+        while(temp != NULL)
+        {
+            ans2 += (temp -> val)*pow(10,index);  
+            cout << "ans2 : " << ans2 << endl; 
+            temp = temp -> next; 
+            index ++; 
+        }
+
+        ans1 = ans1 + ans2; 
+        ListNode* temp1 = new ListNode();
+        ListNode* result = temp1; // Store the result in a separate pointer
+
+        while (ans1 != 0) {
+            cout << "digit :" << ans1 % 10 << endl;
+            ListNode* ans = new ListNode(ans1 % 10);
+            temp1->next = ans;
+            ans1 = ans1 / 10;
+            temp1 = temp1->next;
+        }
+        
+        // You need to return the result, not temp1, which is at the end of the list
+        return result->next;
+    */     
+
+    // approach 2: not passed all testcases. 
+    
+    // i/p: head -> 4 -> 5 -> NULL and head1 -> 3 -> 4 -> 5 -> NULL 
+    // 345 + 45 = 390. 
+    // o/p: head -> 3 -> 9 -> 0 
+
+    // step: 
+    // 1] reverse the linked list. 
+    //     ListNode* tem1 = reverse(l1); 
+    //     ListNode* tem2 = reverse(l2); 
+    // // 2] sum from left side.  
+    //     ListNode* ans = add(tem1,tem2);  
+    // // 3] reverse ans. 
+    //     ans = reverse(ans);  
+    // // 4] return ans.  
+    //     return ans; 
+
+    // approach 3: striver's approach 
+    // e.g, l1: 2 -> 4 -> 3 -> NULL 
+    //      l2: 5 -> 6 -> 7 -> 9 -> NULL 
+    // sum at l1 = 2 , if l2 is not null then sum is 7. 
+    // put into the new node. 
+    // temp -> new node 
+    // go one step ahead along with new node.  
+
+
+    ListNode* first = l1; 
+    ListNode* second = l2; 
+    ListNode* temp = new ListNode(-1); 
+    ListNode* ma = temp; 
+    int carry = 0; 
+    while(first != NULL && second != NULL)
+    {
+        int sum = carry; 
+        if(first != NULL)
+        {
+            sum += first -> val;  
+            first = first -> next; 
+        }
+        if(second != NULL)
+        {
+            sum += second -> val; 
+            second = second -> next; 
+        }
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum / 10; 
+    }
+
+    // now adding nodes from non emepty nodes. 
+    while(first != NULL)
+    {
+        int sum = carry; 
+        sum += first -> val; 
+        first = first -> next; 
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10; 
+    }
+
+    while(second != NULL)
+    {
+        int sum = carry; 
+        sum += second -> val; 
+        second = second -> next; 
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10; 
+    }
+
+    while(carry != 0)
+    {
+        int sum = carry; 
+        int digit = sum%10;  
+        ListNode* new_Node = new ListNode(sum%10); 
+        ma -> next = new_Node; 
+        ma = ma -> next; 
+        carry = sum/10;
+    }
+
+    return temp->next; 
+
+    // time complexity: O(N) 
+    // space complexity: O(N)
+
+
+    }
+};

@@ -1,0 +1,55 @@
+class Solution {
+
+    public boolean search(int[] nums1,int target){
+            int start = 0, end = nums1.length-1; 
+            int mid = start + (end - start)/2; 
+                while(start <= end){
+                    mid = start + (end - start)/2;
+                    if(nums1[mid] == target){
+                        return true;
+                    }
+
+                    else if(target < nums1[mid]){
+                        end = mid - 1;
+                    }
+
+                    else{
+                        start = mid + 1;
+                    }
+                }
+
+            return false;  
+    }
+
+    public int getCommon(int[] nums1, int[] nums2) {
+           
+           // approach 1: using 2 pointer methood: 
+           
+            int i = 0, j = 0; 
+            while(i < nums1.length && j < nums2.length){
+                    if(nums1[i] == nums2[j]){
+                        return nums1[i]; 
+                    }
+
+                    else if(nums1[i] < nums2[j]){
+                        i ++;
+                    }
+
+                    else{
+                        j ++; 
+                    }
+            }
+            return -1;
+            
+
+            // // using binary search 
+            // for(int a : nums2){
+            //     if(search(nums1,a) == true){
+            //         return a; 
+            //     } 
+            // }
+
+        // return -1; 
+
+    }
+}

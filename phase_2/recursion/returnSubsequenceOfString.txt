@@ -1,0 +1,51 @@
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+class Solution {
+   public static ArrayList<String> subsequences(String str) {
+      // Write your code here
+      // using recursion: 
+      //  ArrayList<String> ans = new ArrayList<>();
+      //  find("", str, ans); 
+
+      // using bit-manipulation: 
+      ArrayList<String> ans = new ArrayList<>(); 
+      int n = str.length(); 
+      int sizeOfSubset = 1 << n; 
+      for(int i = 0; i < sizeOfSubset; i ++){
+          StringBuilder tommy = new StringBuilder(""); 
+          for(int j = 0; j < n; j ++){
+            if((i&(1 << j)) == 0){
+              tommy.append(str.charAt(j)); 
+            }
+          } 
+          if(tommy.length() > 0){
+              String m = tommy.toString(); 
+              ans.add(m); 
+          }
+      }
+
+      return ans;
+}
+
+static void find(String p, String str, ArrayList<String> ans)    //"abc"
+  {
+   if(str.length() == 0)
+   {
+    
+      if(p !="") ans.add(p);
+       return;
+     
+   }
+   find(p+str.charAt(0), str.substring(1), ans);
+   find(p, str.substring(1), ans);
+  }
+
+
+}
+
+
+
+// c ++: 
+

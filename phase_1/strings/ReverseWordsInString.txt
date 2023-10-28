@@ -1,0 +1,101 @@
+//{ Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t > 0) {
+            String s = sc.next();
+            Solution obj = new Solution();
+            System.out.println(obj.reverseWords(s));
+            t--;
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+
+class Solution 
+{
+    //Function to reverse words in a given string.
+    public static void reverseWord(int start,char[] ch,int end)
+	{
+	    
+	    char temperary; 
+	        while(start <= end)
+	        {
+	            // jarias sairaj  
+	            temperary = ch[start]; 
+	            ch[start] = ch[end]; 
+	            ch[end] = temperary; 
+	            start ++; 
+	            end --;
+	           // System.out.println(reverse);
+	        }
+	         
+	}
+    
+    
+    String reverseWords(String name)
+    {
+        // code here
+       // simple approach : 1 
+        
+        // for(int i  = n; i != 0; i --){
+        //         char a= S.charAt(i); 
+        //         if(a == '.' ||a == ' '){
+                
+        //           for(int j = (i + 1) ; j <= n ; j ++){
+        //               char b = S.charAt(j); 
+        //                     if(b == '.' ||b == ' '){
+        //                         break; 
+        //                     }
+                            
+        //                 reversed_string += b; 
+        //              }
+        //                 char c = S.charAt(i);     
+                   
+        //           reversed_string += c;  
+        //         }
+        // }
+        
+        // // adding first word into the String 
+        // for(int i  = 0; i < S.length() ; i ++){
+        //         if(S.charAt(i) == '.'||S.charAt(i) == ' '){
+        //             break; 
+        //         }
+        //     reversed_string += S.charAt(i); 
+        // }
+        
+        // Approach 2: optimisation 1 
+        
+        int n = name.length() - 1; 
+        char[] ch = name.toCharArray(); 
+        int start = 0; 
+        int end = 0; 
+        char m; 
+        // System.out.println(test);
+        // appraoch 1: to reverse the each charecter from the given word like jarias tupjaR hsakarp 
+                for (end = 0; end < ch.length ; end ++)
+                {
+                    if(ch[end] == '.' || ch[end] == ' ')
+                    {
+                        m = ch[end]; 
+                        reverseWord(start,ch,end - 1);
+                        start = end + 1; 
+                    }
+                }
+         // Now swapping the last word 
+        reverseWord(start,ch,end -1);  
+         
+        // Now reverse the whole String 
+        reverseWord(0,ch,ch.length - 1); 
+        
+        return new String(ch);
+    }
+}

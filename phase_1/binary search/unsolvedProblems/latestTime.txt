@@ -1,0 +1,114 @@
+
+import javax.swing.tree.TreeNode;
+import java.util.*;
+
+public class Solution {
+
+    private int[] buses;
+    private int[] passengers;
+    private int capacity;
+    
+    public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+        this.buses = buses;
+        this.passengers = passengers;
+        this.capacity = capacity;
+        Arrays.sort(buses);
+
+        Arrays.sort(passengers);
+
+
+        // The answer will never be after the last bus
+        int maxValue = buses[buses.length-1];
+        // You can always get the bus if you come before the first passenger or at the time of the first bus
+        int minValue = Math.min(passengers[0]-1, buses[0]);
+
+        // Creating a list of intervals
+        List<int[]> intervals = new ArrayList<>();
+        int prev = minValue-1;
+        for (int passenger : passengers) {
+            if(passenger - prev <=1) {
+                prev = passenger;
+                continue;
+            }
+            intervals.add(new int[]{prev+1, passenger-1});
+            prev = passenger;
+        }
+        if(maxValue > prev) intervals.add(new int[]{prev+1, maxValue});
+
+
+        int l = 0;
+        int h = intervals.size()-1;
+
+        // Check that the answer is not in the last interval
+        int willGetBusIntervalH = willGetBusInterval(intervals.get(h));
+        if(willGetBusIntervalH >= 0){
+            if(willGetBusIntervalH > 0) return willGetBusIntervalH;
+            else return intervals.get(h)[1];
+        }
+
+        // invariant : willGetBusInterval(l) = true (i.e >= 0) && willGetBusInterval(h) = false
+        // we are looking for the highest l
+        while(h - l > 1){
+            int m = (h + l) >>> 1;
+            int result = willGetBusInterval(intervals.get(m));
+            if(result > 0) return result;
+            else if(result == 0) l = m;
+            else h = m;
+        }
+
+        // Still need to find the value inside l
+        int willGetBusIntervalL = willGetBusInterval(intervals.get(l));
+        if(willGetBusIntervalL > 0) return willGetBusIntervalL;
+        else return intervals.get(l)[1];
+    }
+
+    // Return value means :
+    // -1 : false for the whole interval
+    // 0 : true for the whole interval
+    // other number : value inside interval
+    private int willGetBusInterval(int[] interval){
+        int l = interval[0];
+        int h = interval[1];
+
+        if(!willGetBus(l)) return -1;
+        if(willGetBus(h)) return 0;
+
+        // invariant: f(l) = true && f(h) = false
+        // we are looking for the highest l
+        while(h - l > 1){
+            int m = (h + l) >>> 1;
+            if(willGetBus(m)) l = m;
+            else h = m;
+        }
+
+        return l;
+    }
+    private boolean willGetBus(int value){
+        int[] passengers = insertTimeInsidePassengersArray(value);
+
+        int index = 0;
+        for (int bus : buses) {
+            int seatsTaken = 0;
+            while(index < passengers.length && seatsTaken < capacity){
+                if(passengers[index] <= bus ){
+                    if(passengers[index] == value) return true;
+                    index++;
+                    seatsTaken++;
+                }
+                else break;
+            }
+        }
+        return false;
+    }
+
+    // Similar to the insertion part of an insertion sort
+    private int[] insertTimeInsidePassengersArray(int time){
+        int[] result = Arrays.copyOf(this.passengers, this.passengers.length +1);
+        int i = result.length -2;
+        for(; i >= 0 && time < result[i]; i--){
+            result[i+1] = result[i];
+        }
+        result[i+1] = time;
+        return result;
+    }
+}

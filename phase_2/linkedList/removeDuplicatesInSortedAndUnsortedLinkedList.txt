@@ -1,0 +1,144 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+    Following is the class structure of the Node class:
+    class Node
+    {
+    public:
+        int data;
+        Node *next;
+        Node(int data)
+        {
+            this->data = data;
+            this->next = NULL;
+        }
+    };
+*****************************************************************/
+
+void sortMe(Node* &head){
+    Node* temp = head; 
+    while(temp != NULL){
+        Node* newc = temp -> next; 
+        int val = temp -> data; 
+        while(newc != NULL){
+            if(newc->data < val){
+                // do swap operation. 
+                int v = newc -> data; 
+                newc -> data = val; 
+                temp -> data = v; 
+            }
+            newc = newc -> next; 
+        }
+        temp = temp -> next; 
+
+    }
+}
+
+
+Node *removeDuplicates(Node *&head)
+{
+    // Write your code here
+    // brute force approach: time limit exceeded.  
+    // if(head == NULL || head -> next == NULL){
+    //     return head;
+    // }
+
+    // Node* first = head; 
+    // Node* another = NULL; 
+    // while(first != NULL){
+    //         another = first -> next; 
+    //         Node* prev = first; 
+    //         while(another != NULL){
+    //             if(another -> data == first -> data){
+    //                 // yes duplicate element is found. 
+    //                 prev->next = another->next; 
+    //                 delete another; 
+    //                 another = prev -> next;   
+    //             }
+    //             else{
+    //                 prev = another; 
+    //                 another = another -> next; 
+    //             }
+    //         }
+    //     first = first -> next; 
+    // }
+    // return head; 
+
+
+
+    // approach 2 using maps: 
+    // unordered_map<int , bool> visited;  
+    // Node* temp = head; 
+    // Node* prev = NULL; 
+    // while(temp != NULL){
+    //     if(visited[temp->data] == true){ 
+    //         prev-> next = temp->next;
+    //         temp = prev -> next;
+    //     }
+    //     else{
+    //         visited[temp->data] = true; 
+    //         prev = temp; 
+    //         temp = temp -> next;    
+    //     }
+    // }
+    // return head; 
+
+
+    // approach 3: using sorting method do it after solving sorting method. 
+    // it works but fails in some cases. 
+    // if(head == NULL){
+    //         return NULL; 
+    // }
+
+    // sortMe(head); 
+
+    // Node* temp = head; 
+    //     while(temp != NULL){
+    //         if((temp->next != NULL) && temp->data == temp -> next->data){ 
+    //             Node* newa = temp -> next -> next; 
+    //             // Node* nodeToDelete = temp -> next; 
+    //             // delete(nodeToDelete); 
+    //             temp -> next = newa; 
+    //         }
+    //         else{
+    //             temp = temp -> next; 
+    //         }
+    //     }
+
+    // return head; 
+}
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if(head == NULL){
+            return NULL; 
+        }
+
+        // non empty list.
+        ListNode* temp = head; 
+        while(temp != NULL){
+            if((temp->next != NULL) && temp->val == temp -> next->val){ 
+                ListNode* newa = temp -> next -> next; 
+                ListNode* nodeToDelete = temp -> next; 
+                delete(nodeToDelete); 
+                temp -> next = newa; 
+            }
+            else{
+                temp = temp -> next; 
+            }
+        }
+
+        return head; 
+    }
+};

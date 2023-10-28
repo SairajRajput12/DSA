@@ -1,0 +1,51 @@
+class Solution {
+    public int arrangeCoins(int n) {
+            // solution 1: Time complexity O(n): 
+            // return (int)(Math.sqrt(2*(long)n + 0.25) - (0.5)); 
+
+            // solution 2:  Linear Search of time Complexity O(n): 
+          
+            /*
+            int i = 1; 
+            int res = 0; 
+                    while(i <= n)
+                    {
+                        n -= i; 
+                        res ++; 
+                        i ++; 
+                    }         
+            return res;  
+            */
+             // solution 3: using binary search (time complexity is O(logn))
+
+        if (n < 0) {
+            throw new IllegalArgumentException("Input Number is invalid. Only positive numbers are allowed");
+        }
+        if (n <= 1) {
+            return n;
+        }
+        if (n <= 3) {
+            return n == 3 ? 2 : 1;
+        }
+            long start = 2, end = n/2; 
+            long mid = start + (end - start)/2; 
+                while(start <= end){
+                    long coinsFilled = (mid*(mid+1))/2; 
+                        if(coinsFilled == n){
+                                return (int)mid;
+                        }
+
+                        else if(coinsFilled > n){
+                                end = mid - 1;
+                        }
+
+                        else{
+                                start = mid + 1;
+                        }
+                     mid = start + (end - start)/2; 
+                }
+        return (int)end;  
+        
+            
+    }
+}

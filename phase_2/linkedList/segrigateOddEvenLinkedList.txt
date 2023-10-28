@@ -1,0 +1,168 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+    void helper (ListNode** head, int& k)
+{
+    ListNode* temp = *head, *prev = 0, *odd_head = *head ;
+    int n = k;
+	
+    //Jumping to the next or target odd element
+    while(temp && n--)
+    {
+        prev = temp; 
+        temp = temp -> next; 
+    }
+    //Recursion base condition, will return when reached the NULL
+    if(temp == NULL)
+        return;
+    // connecting odd elements and shifting even node to the next of new odd node without disturbing the order
+	
+    prev->next = temp -> next;
+    temp -> next = odd_head -> next;
+    odd_head -> next = temp;
+    odd_head = odd_head -> next;
+    helper(&temp,++k );
+    
+}
+
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        // if(head == NULL || head -> next == NULL) return head; 
+        // 1 2 3 4 5 
+        // 1 3 2 4 5  
+        // 1 3 2 5 4 
+        // 1 3 5 2 4 
+        // 1 2 3 4 5
+        // approach 1:  
+        // step 1 : calculate the length 
+        // step 2 : add first odd indexed node to the original linked list 
+        // step 3 : add even indexed node to the original linked list 
+        // step 4 : remove first nodes from that linked list
+        
+        // ListNode* lastNode = head; 
+        // int len = 1; 
+        // while(lastNode -> next != NULL)
+        // {
+        //     lastNode = lastNode -> next; 
+        //     len ++; 
+        // }
+
+        // // yes i reached to the last node. 
+        // int cnt = 0; 
+        // ListNode* traverse = head; 
+        // while(cnt < len)
+        // {
+        //     if(cnt%2 == 0)
+        //     {
+        //         ListNode* oddNode = new ListNode(traverse -> val); 
+        //         lastNode -> next = oddNode; 
+        //         lastNode = lastNode -> next; 
+        //     }
+        //     traverse = traverse -> next; 
+        //     cnt ++; 
+        // }
+
+        // traverse = head; 
+        // cnt = 0; 
+        // while(cnt < len)
+        // {
+        //     if(cnt%2 != 0)
+        //     {
+        //         ListNode* oddNode = new ListNode(traverse -> val); 
+        //         lastNode -> next = oddNode; 
+        //         lastNode = lastNode -> next; 
+        //     }
+        //     traverse = traverse -> next; 
+        //     cnt ++; 
+        // }
+
+
+        // // yes i made modifications now what should i do ??
+        // ListNode* temp = head; 
+        // ListNode* prev = NULL; 
+        // cnt = 0; 
+        // while(cnt < len)
+        // {
+        //     prev = temp; 
+        //     temp = temp -> next; 
+        //     cnt ++; 
+        // }
+        // prev -> next = NULL; 
+        // head = temp; 
+        // return head; 
+    
+        // approach 2:  using floyd's cycle. 
+        // s f
+        // 1 2 3 4 5 
+        //   s   f
+        // 1 3 2 4 5 
+        // 1 3 2 5 4 
+        //     s   f
+        // 1 3 5 2 4
+        // s f 
+        // 1 2 3 4 5 
+        // 1 3 2 4 5 
+        // 3 1 2 4 5 
+        // p   s f
+        // 3 1 2 5 4 
+        // 3 1 5 2 4 
+
+        // fast -> pudhe dhkalnar. 
+        // slow ->  mage annar 
+        // s f 
+        // 2 1 3 5 6 4 7 
+        // 2 3 1 5 6 4 7 
+        // 3 2 1 5 6 4 7 
+        //     s f 
+        // 3 2 1 6 5 4 7 
+        // 3 2 6 1 5 4 7 
+        //       p  s f 
+        // 3 2 6 1 5 7 4 
+        // 3 2 6 1 7 5 4 
+        // 3 2 6 7 1 5 4
+        // then sort the both parts. 
+        // 2 3 6 7 1 5 4 
+    // approach 2: by changing linkages  
+    // if(head == NULL || head -> next == NULL) return head; 
+    // ListNode* even = head; 
+    // ListNode* odd = head -> next; 
+    // ListNode* oddHead = odd; 
+    // while(odd != NULL && odd -> next != NULL)
+    // {
+    //     even -> next = odd -> next; 
+    //     even = even -> next; 
+    //     odd -> next = even -> next; 
+    //     odd = odd -> next; 
+    // }
+
+    // even -> next = oddHead; 
+    // return head; 
+
+    // approach 3: 
+    if(head == NULL || head -> next == NULL )
+        return head;
+    
+	//two jumps are required at starting to jump from 1st node to 3rd node
+    int k = 2;
+    helper( &head,k) ;
+    
+    return head;
+    }
+};
+
+// 2 3 1 5 6 4 7 
+// 3 2 1 5 6 4 7 
+//     s f 
+// 3 2 1 6 5 4 7 
+// 3 2 6 1 5 4 7 
+//         s f 
+// 3 2 6 1 5 7 4 
+// 3 2 6 5 7 5 4 
