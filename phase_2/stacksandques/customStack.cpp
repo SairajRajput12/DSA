@@ -65,3 +65,104 @@ int maxSize;
  * int param_2 = obj->pop();
  * obj->increment(k,val);
  */
+ 
+ 
+/*
+class Node {
+public:
+    int data;
+    Node* next;
+    
+    Node(int data) {
+        this->data = data;
+        this->next = nullptr;
+    }
+};
+class CustomStack {
+    Node* top;
+    int size;
+    int cnt;
+public:
+    CustomStack(int size) {
+        top = nullptr;
+        this->size = size;
+        cnt = 0;
+    }
+
+    void push(int data) {
+        // Check for overflow condition
+        if (cnt == size) {
+            cout << "Stack overflow" << endl;
+            return;
+        }
+
+        // Create a new node
+        Node* temp = new Node(data);
+
+        if (top == nullptr) {
+            top = temp;
+        } else {
+            temp->next = top;
+            top = temp;
+        }
+
+        cnt++;
+    }
+
+    int pop() {
+        // First check for the stack underflow condition.
+        if (top == nullptr) {
+            cout << "Stack underflow condition" << endl;
+            return -1;
+        } else {
+            Node* n = top;
+            top = top->next;
+            cnt--;
+            int m = n->data;
+            delete n;
+            return m;
+        }
+    }
+
+    bool empty() {
+        return top == nullptr;
+    }
+
+    int peek() {
+        if (top == nullptr) {
+            cout << "Please insert an element" << endl;
+            return -1;
+        } else {
+            return top->data;
+        }
+    }
+
+    void increment(int k, int val) {
+        Node* tar = top;
+
+        if (k >= size) {
+            // Increment all elements
+            while (tar != nullptr) {
+                tar->data += val;
+                tar = tar->next;
+            }
+        } else {
+            // Find the k-th node
+            for (int i = 0; i < (k-1); i++) {
+                if(tar == NULL){
+                    return; 
+                }
+                tar = tar->next;
+            }
+
+            // Increment elements from k onwards
+            while (tar != nullptr) {
+                tar->data += val;
+                tar = tar->next;
+            }
+        }
+    }
+};
+
+
+*/
