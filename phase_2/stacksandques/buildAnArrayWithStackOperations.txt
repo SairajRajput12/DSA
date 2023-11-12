@@ -1,0 +1,36 @@
+class Solution {
+    bool present(vector<int>& target,int n){
+        for(int i = 0; i < target.size(); i ++){
+            if(target[i] == n){
+                return true; 
+            }
+        }
+        return false;
+    }
+public:
+    vector<string> buildArray(vector<int>& target, int n) {
+        // so our goal is to make the stack equal to the target array using following protocol: 
+        // 1. If the stream of the integers is not empty, pick the next integer from the stream and push it to the top of the stack.
+        // 2. If the stack is not empty, pop the integer at the top of the stack.
+        // 3. If, at any moment, the elements in the stack (from the bottom to the top) are equal to target, do not read new integers from the stream and do not do more operations on the stack.
+
+        // algorithm: 
+        // 1. so iterate from 1 to n. 
+        // if ith element is present in the target array then do push operation else do pop 
+        vector<string> ans; 
+        stack<int> analyser; 
+        for(int i = 0; i < n; i ++){
+            ans.push_back("Push");  
+            analyser.push(i+1); 
+            if(!present(target,(i+1))){
+                ans.push_back("Pop");  
+                analyser.pop(); 
+            }
+
+            if(target.size() == analyser.size()){
+                break; 
+            }
+        }
+        return ans; 
+    }
+};
