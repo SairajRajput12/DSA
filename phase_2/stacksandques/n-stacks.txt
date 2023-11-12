@@ -1,0 +1,113 @@
+#include <bits/stdc++.h> 
+class NStack
+{
+    // aapke pass input mein array hai. 
+    // array single rahega 
+    // single array ke andar n-stacks implement karne hai. 
+    // approach 1: 
+    // i have an array of length n and if i divide it into k parts then the length of each part will be the n/k 
+    // push stack at each element of an array in the stack and do push or pop method. 
+    // this appraoch has big drawback than it will not handle the variable stack problem. 
+    // space optimized way mein use nahi ho raha.  
+    // iss approach se os ke darwaje khul jate hai 
+
+    // approach 2: 
+    // we need 2 things for this approach: 
+    // 1. top -> it will keep track of the top element of each stack 
+    // 11. next -->  it points to the next element after stack top. 
+    //          |->  points to the next free space or block 
+    //          |->     
+int *arr; 
+int *top; 
+int *next; 
+int n,s; 
+int freespot; 
+
+public:
+    // Initialize your data structure.
+    NStack(int N, int S)
+    {
+        // Write your code here. 
+        // N -> number of stacks - 3
+        // S -> size of array  - 6
+        // Q -> number of queries - 5
+        // push(10,1),push(10,1),push(30,2),pop(1),pop(2). 
+        // top: -1,-1,-1.  
+        // new: 1,2,3,4,5,-1. 
+
+        // push(10,1) 
+        // -> 1. find index.   
+        // index = freespot 
+        // -> 2. update freespot 
+        // freespot = next[index] 
+        // -> 3. insert in array 
+        // arr[index] = x 
+        // -> 4. update next 
+        //  next[index] = purana wala top : top[m-1] 
+        // -> 5. update top 
+        n = N; 
+        s = S; 
+        arr  = new int[s]; 
+        top = new int[n]; 
+        next = new int[s]; 
+
+        for(int i = 0; i < n; i ++)
+        {
+            top[i] = -1; 
+        } 
+
+        for(int i = 0; i < s; i ++){
+            next[i] = (i+1); 
+        }
+
+        // update last index to -1; 
+        next[s-1] = -1; 
+        freespot = 0; 
+    }
+
+    // Pushes 'X' into the Mth stack. Returns true if it gets pushed into the stack, and false otherwise.
+     bool push(int x, int m)
+    {
+        //check for overflow
+        if(freespot == -1) {
+            return false;
+        }
+        
+        //find index
+        int index = freespot;
+        
+        //insert element into array
+        arr[index] = x;
+        
+        //update freespot
+        freespot = next[index];
+       
+        //update next;
+        next[index] = top[m-1];
+        
+        //update top
+        top[m-1] = index;
+        
+        return true;
+    }
+
+    // Pops top element from Mth Stack. Returns -1 if the stack is empty, otherwise returns the popped element.
+    int pop(int m)
+    {
+        // Write your code here. 
+        if(top[m-1] == -1){
+            cerr << "stack underflow has occured please add the element" << endl; 
+            return -1; 
+        }
+
+        int index = top[m-1]; 
+
+        top[m-1] = next[index];
+
+        next[index] = freespot;
+
+        freespot = index;
+
+        return arr[index];
+    }
+};
