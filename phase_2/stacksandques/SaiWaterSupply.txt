@@ -1,0 +1,32 @@
+class Solution {
+private: 
+    int findNextGreaterElement(vector<int> &heights,int in){
+        for(int i = in; i < heights.size(); i ++){
+            if(heights[i] >= heights[in]){
+                return i; 
+            }
+        }
+        return -1; 
+    }
+public:
+    int trap(vector<int>& heights) {
+        int area = 0; 
+        for(int i = 0; i < heights.size(); i ++){
+            int curr = heights[i];  
+            for(int j = (i+1); j < heights.size(); j ++){
+                if(curr == 0 && j != 0 && j < heights.size()-1){
+                    area += 1*min(heights[i],heights[i+1]); 
+                }
+                else{
+                    int x = findNextGreaterElement(heights,(i+1)); 
+                    if(x == -1){
+                        // that element is the max element
+                        continue; 
+                    }
+                    area += (heights[x]-curr)*(x-i); 
+                }
+            }
+        }
+        return area;    
+    }
+};
