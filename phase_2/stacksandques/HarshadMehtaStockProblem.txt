@@ -1,0 +1,39 @@
+class StockSpanner {
+public:
+    int index;
+    stack<pair<int, int>> st;
+    vector<int> arr;
+    map<int,int> tracker; 
+
+    StockSpanner() {
+        index = -1;
+    }
+
+    int next(int price) {
+        // approach 1: Brute force approach
+        // index += 1;
+        // arr.push_back(price);
+        // int x = index - 1; 
+        // int span = 1; 
+        // while(x >= 0 && arr[x] <= price){
+        //     span ++; 
+        //     x -= 1; 
+        // }
+        // return span; 
+
+        // Approach 2:
+        index += 1;
+        while (!st.empty() && st.top().second <= price){
+            st.pop();
+        }
+
+        if (st.empty()){
+            st.push({index, price});
+            return index + 1;
+        }
+
+        int result = st.top().first;
+        st.push({index, price});
+        return index - result;
+    }
+};
