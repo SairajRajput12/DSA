@@ -1,0 +1,24 @@
+class Solution {
+    void genrate(vector<int> arr,vector<vector<int>> &possible){
+        for(int i = 0; i < arr.size(); i ++){ 
+            vector<int> sample;  
+            for(int j = (i); j < arr.size(); j ++){
+                sample.push_back(arr[j]); 
+                possible.push_back(sample); 
+            }
+        }
+    }
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        // approach 1: brute force approach 
+        // step 1: sare possible arrays nikalo 
+        vector<vector<int>> possible; 
+        genrate(arr,possible); 
+        int res = 0; 
+        for(const auto &subarray: possible){
+            int min_ele = *min_element(subarray.begin(),subarray.end()); 
+            res += min_ele; 
+        }  
+        return res; 
+    }
+};
