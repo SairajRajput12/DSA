@@ -1,0 +1,176 @@
+class Solution {
+private:
+    int findNextGreaterElement(vector<int>& heights, int in) {
+        for (int i = in; i < heights.size(); i++) {
+            if (heights[i] >= heights[in]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    int LGE(int previous,vector<int>& heights){
+        if(previous == 0){
+            return -1; 
+        } 
+        int max_element = -1; 
+
+        for(int i = previous; i >= 0; i --){
+            if(heights[i] > max_element){
+                max_element = heights[i]; 
+            }
+        }
+
+        return max_element; 
+    }
+
+    int RGE(int next,vector<int>& heights){
+        if(next == (heights.size()-1)){
+            return -1; 
+        }
+
+        int max_element = -1; 
+
+        for(int i = next; i < heights.size(); i ++){
+            if(heights[i] > max_element){
+                max_element = heights[i]; 
+            }
+        }
+
+        return max_element; 
+
+    }
+
+public:
+    int trap(vector<int>& heights) {
+        // approach 1: brute force but not optimal 
+        // int area = 0;
+        // int size = heights.size();
+
+        // for (int i = 0; i < size - 1; i++) {
+        //     int curr = heights[i];
+
+        //     // Skip zero-height elements
+        //     if (curr == 0) {
+        //         continue;
+        //     }
+
+        //     int next = findNextGreaterElement(heights, i);
+
+        //     if (next != -1) {
+        //         int minHeight = std::min(heights[i], heights[next]);
+
+        //         for (int j = i + 1; j < next; j++) {
+        //             area += std::max(minHeight - heights[j], 0);
+        //         }
+
+        //         i = next - 1; // Skip the elements between i and next
+        //     }
+        // }
+
+        // return area;
+
+        // optimal solution: approach 2 
+        // brute force part 2 
+        // algorithm: 
+        /*
+            1. traverse through each element
+            2. find it's right and left greatest element 
+            3. area += min(rightGE,leftGE) - height_of_element 
+            4. return area. 
+        */
+        
+        // int n = heights.size(); 
+        // long long area = 0; 
+        // for(int i = 0; i < (n); i ++){
+        //     int left_greatest_element = LGE((i),heights); 
+        //     int right_greatest_element = RGE((i),heights); 
+        //     if(left_greatest_element == -1 || right_greatest_element == -1){
+        //         continue; 
+        //     } 
+        //     else{
+        //         area = area + (int) min(right_greatest_element,left_greatest_element)-heights[i]; 
+        //     }
+        // }
+
+        // return area; 
+
+
+        // approach 2: prefix-suffix approach 
+        // step 1: find the prefix max for each element 
+        // step 2: find the suffix max of each element 
+        // step 3: apply the formula 
+        // step 4: return the area 
+        // int n = heights.size(); 
+        // int prefix[n]; 
+        // int suffix[n]; 
+        // int area = 0; 
+        // prefix[0] = heights[0]; 
+        // for(int i = 1; i < heights.size(); i ++){
+        //     prefix[i] = max(prefix[i-1],heights[i]); 
+        // }
+
+        // suffix[n-1] = heights[n-1]; 
+        // for (int i = n - 2; i >= 0; i--){
+        //     suffix[i] = max(suffix[i + 1], heights[i]);
+        // } 
+
+        // for(int i = 1; i < (n-1);i ++){
+        //     int var = min(prefix[i-1],suffix[i+1]); 
+        //     if(var > heights[i]){
+        //         area += var - heights[i]; 
+        //     }
+        // }
+        // return area; 
+
+        // approach 3: using stack
+        // this solution consumes lot of space 
+        // do not give this solution in the interview 
+        // stack<int> st; 
+        // int area = 0; 
+        // for(int i = 0; i < heights.size(); i ++){
+        //     while(!(st.empty()) && heights[st.top()] < heights[i]){
+        //         int popped_height = heights[st.top()]; 
+        //         st.pop(); 
+        //         if(st.empty()){
+        //             break; 
+        //         }
+        //         int min_d = i - st.top() - 1; 
+        //         int min_h = min(heights[i],heights[st.top()]) - popped_height; 
+        //         area += min_d*min_h; 
+        //     }            
+
+        //     st.push(i); 
+        // }     
+
+        // return area;  
+
+        // approach 4: using 2 pointer approach 
+        int n = heights.size(); 
+        int left = 0, right = n-1; 
+        int res = 0; 
+        int max_left_height = 0, max_right_height = 0;
+        
+        while(left <= right){
+            if(heights[left] <= heights[right]){
+                if(heights[left] > max_left_height){
+                    max_left_height = heights[left]; 
+                }
+                else{
+                    res += max_left_height - heights[left]; 
+                }
+                left ++; 
+            }
+            else{
+                if(heights[right] > max_right_height){
+                    max_right_height = heights[right]; 
+                }
+                else{
+                    res += max_right_height - heights[right]; 
+                }
+                right --;
+            }
+        }
+        return res; 
+    }
+};
