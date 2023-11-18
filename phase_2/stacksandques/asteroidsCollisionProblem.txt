@@ -1,0 +1,84 @@
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        // Find out the state of the asteroids after all collisions 
+        // 1. if 2 asteroids meet, the smaller one will explode. 
+        // 2. if both are of the same size then both will explode if they are in opposite directions. 
+        // 3. if both of them are in the same direction then they will not explode. 
+
+        // the elements of the vector is the size of each element where the size represents the direction of each asteroids.  
+        // Find out the state of the asteroids after all collisions 
+        // 1. if 2 asteroids meet, the smaller one will explode. 
+        // 2. if both are of same size then both will explode if they are in opposite direction. 
+        // 3. if both of them are in same direction then they will not going to be explode. 
+
+        // my approach: 
+        // approach 1: but not optimal 
+        // stack<int> black_hole; 
+        // for(int i = 0; i < asteroids.size();  i ++){  
+        //     if(i == 0 && asteroids[i] < 0){
+        //         black_hole.push(asteroids[i]); 
+        //         continue; 
+        //     }
+
+        //     if(asteroids[i] > 0){
+        //         black_hole.push(asteroids[i]); 
+        //     }
+        //     else{
+        //         while (!black_hole.empty() && black_hole.top() < -1 * asteroids[i]) {
+        //             black_hole.pop(); 
+        //         }
+        //         if (!black_hole.empty() && black_hole.top() == -1 * asteroids[i]) {
+        //             black_hole.pop(); // both asteroids explode
+        //         } else if (black_hole.empty() || black_hole.top() < 0) {
+        //             black_hole.push(asteroids[i]); // smaller asteroid survives
+        //         }
+        //     }
+        // }
+
+        // vector<int> ans; 
+
+        // while(!black_hole.empty()){
+        //     int x = black_hole.top(); 
+        //     ans.push_back(x); 
+        //     black_hole.pop(); 
+        // }
+        // reverse(ans.begin(),ans.end()); 
+        // return ans; 
+
+
+        // Approach 2: from video 
+        stack<int> black_hole; 
+        int n = asteroids.size(); 
+        for(int i = 0; i < n; i ++){
+            while(!black_hole.empty() && asteroids[i] < 0 && black_hole.top() > 0){
+                int sum = black_hole.top() + asteroids[i]; 
+                if(sum == 0){
+                    asteroids[i] = 0; 
+                    black_hole.pop(); 
+                }
+                else if(sum > 0){
+                    asteroids[i] = 0; 
+                    break; 
+                }
+                else{
+                    black_hole.pop(); 
+                }
+            }
+
+            if(asteroids[i] != 0){
+                black_hole.push(asteroids[i]); 
+            }
+        }
+        int x = black_hole.size(); 
+        vector<int> ans(x); 
+ 
+        while(!black_hole.empty()){
+            int xe = black_hole.top(); 
+            ans[--x] = xe;  
+            black_hole.pop(); 
+        }
+         
+        return ans; 
+    }
+};
