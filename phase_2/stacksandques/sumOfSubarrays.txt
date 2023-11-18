@@ -1,0 +1,80 @@
+#include <vector>
+
+class Solution {
+    vector<int> getNSL(vector<int> &arr,int x){
+        vector<int> result(x); 
+        stack<int> st; 
+        for(int i = 0; i < x; i ++){
+            if(st.empty()){
+                result[i] = -1; 
+            }
+            else{
+                while(!st.empty() && arr[st.top()] >= arr[i]){
+                    st.pop(); 
+                }
+                result[i] = st.empty() ? -1 : st.top(); 
+            }
+            st.push(i); 
+        }
+        return result; 
+    }
+    // here line 12 and line 31 are different to prevent the duplication
+
+    vector<int> getNSR(vector<int> &arr,int x){
+        vector<int> result(x); 
+        stack<int> st; 
+        for(int i = (x-1); i >= 0; i --){
+            if(st.empty()){
+                result[i] = x; 
+            }
+            else{
+                while(!st.empty() && arr[st.top()] > arr[i]){
+                    st.pop(); 
+                }
+                result[i] = st.empty() ? x : st.top(); 
+            }
+            st.push(i); 
+        }
+        return result; 
+    }
+
+
+public:
+    int sumSubarrayMins(std::vector<int>& arr) {
+        // brute force approach : throws TLE 
+        // const int MOD = 1e9 + 7;
+        // int ans = 0;
+
+        // for (int i = 0; i < arr.size(); ++i) {
+        //     int minValue = arr[i];
+        //     ans = (ans + minValue) % MOD;
+
+        //     for (int j = i + 1; j < arr.size(); ++j) {
+        //         if (arr[j] < minValue) {
+        //             minValue = arr[j];
+        //         }
+        //         ans = (ans + minValue) % MOD;
+        //     }
+        // }
+
+        // return ans; 
+
+        // approach 2: using stack 
+        int n = arr.size(); 
+        
+        vector<int> NSL = getNSL(arr,n); 
+        vector<int> NSR = getNSR(arr,n); 
+
+        long long sum = 0; 
+        int M = 1e9 + 7; 
+
+        for(int i = 0; i < n; i ++){
+            long long ls = i - NSL[i]; 
+            long long rs = NSR[i] - i; 
+            long long totalWays = ls*rs; 
+            long long totalSum = arr[i]*totalWays; 
+            sum = (sum + totalSum)%M; 
+        }
+        return sum; 
+    }
+};
