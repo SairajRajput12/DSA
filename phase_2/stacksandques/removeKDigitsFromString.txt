@@ -1,0 +1,64 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        // when the stack is empty then push the element 
+        // if st.top() > curr then pop the element and push curr and decrement k 
+
+        // approach using stacks : 
+        int n = num.size(); 
+        if(k >= num.size()){
+            return "0"; 
+        } 
+
+        stack<char> s; 
+        for(int i = 0; i < num.size(); i ++){
+            if(s.empty()){
+                s.push(num[i]); 
+            }
+            else{
+                while(!s.empty() && s.top() > num[i] && k>0){     
+                    s.pop();
+                    k--;
+                }
+                s.push(num[i]); 
+            }
+        }
+
+        while(k > 0){
+            s.pop(); 
+            k --; 
+        }
+
+        if(s.empty()) return "0"; 
+
+        while(!s.empty()){
+            num[n - 1] = s.top(); 
+            s.pop(); 
+            n -= 1;  
+        }
+
+        // remove leading zeroes 
+        int i = n; 
+        while(num[i] == '0'){
+            i ++; 
+        }
+        return (num.substr(i) == "") ? "0" : num.substr(i);
+
+        // throws memory limit execeeded 
+        // string ans; 
+        // while(!s.empty()){
+        //     ans = s.top() + ans; 
+        //     s.pop(); 
+        // }
+
+        // int i = 0; 
+        // while(ans[i] == '0'){
+        //     i ++; 
+        // }
+
+        // return (ans.substr(i) == "") ? "0" : ans.substr(i); 
+
+
+
+    }
+};
