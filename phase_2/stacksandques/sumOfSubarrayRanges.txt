@@ -1,0 +1,79 @@
+class Solution {
+    void genrate(vector<vector<int>> &result,vector<int>& nums,vector<int>& sample,int start,int end){
+        if(start > end){
+            return; 
+        }
+        for (int i = start; i <= end; ++i) {
+            result.push_back(std::vector<int>(nums.begin() + start, nums.begin() + i + 1));
+        }
+
+        genrate(result, nums,sample, start + 1, end);
+    }
+    
+
+
+
+    public:
+    long long subArrayRanges(vector<int>& nums) {
+        // appraoch 1: my appraoch but not optimal 
+        // int n = nums.size(); 
+        // vector<vector<int>> possible; 
+        // vector<int> sample; 
+        // genrate(possible,nums,sample,0,n-1); 
+        // auto it = possible; 
+        // long long ans = 0; 
+        // for (auto& c : possible) {
+        //     auto x = *std::min_element(c.begin(), c.end()); 
+        //     auto y = *std::max_element(c.begin(), c.end()); 
+        //     auto diff = y - x; 
+        //     ans += diff; 
+        // }
+        // return ans; 
+
+        // approach 2: brute force appraoch 
+        // int n = nums.size(); 
+        // long long ans = 0; 
+        // for(int i = 0; i < n; i ++){
+        //     int minv = nums[i];
+        //     int maxv = nums[i]; 
+        //     for(int j = i; j < n; j ++){
+        //         minv = min(minv,nums[j]); 
+        //         maxv = max(maxv,nums[j]); 
+        //         ans += (maxv - minv); 
+        //     }
+        // }
+        // return ans; 
+
+        // approach 3: using stack 
+        // Σ max - Σ min = ans; 
+        int n = nums.size(); 
+        long long answer = 0; 
+        stack<int> st; 
+
+        for(int i = 0; i <= n; ++i){
+            while(!st.empty() && (i == n || nums[st.top()] >= nums[i])){
+                int mid = st.top(); 
+                st.pop(); 
+                int left = st.empty() ? -1 : st.top(); 
+                answer -= (long long)nums[mid] * (i - mid) * (mid - left);
+            }
+            st.push(i); 
+        }
+
+
+        // finding sum of al maximum 
+        stack<int> st2; 
+
+        for(int i = 0; i <= n; ++i){
+            while(!st2.empty() && (i == n || nums[st2.top()] <= nums[i])){
+                int mid = st2.top(); 
+                st2.pop(); 
+                int left = st2.empty() ? -1 : st2.top(); 
+                answer += (long long)nums[mid] * (i - mid) * (mid - left);
+            }
+            st2.push(i); 
+        }
+
+        return answer;
+    }
+};
