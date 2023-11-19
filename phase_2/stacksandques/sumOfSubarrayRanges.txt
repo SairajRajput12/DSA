@@ -11,6 +11,44 @@ class Solution {
     }
     
 
+    long long f(vector<int> nums){
+        int n = nums.size(); 
+        vector<int> left(n,-1);
+        vector<int> right(n,n); 
+        stack<int> st;
+
+        // find NSL 
+        for(int i = 0; i < nums.size(); i ++){
+            while(!st.empty() && nums[st.top()] <= nums[i]){
+                st.pop(); 
+            }
+            if(!st.empty()){
+                left[i] = st.top(); 
+            }
+            st.push(i); 
+        }
+
+         st = stack<int>();
+        // find NSR
+        for(int i = (n-1); i >= 0; i --){
+            while(!st.empty() && nums[st.top()] < nums[i]){
+                st.pop(); 
+            }
+            if(!st.empty()){
+                right[i] = st.top(); 
+            }
+            st.push(i); 
+        }
+
+        long long ans = 0; 
+        for(int i = 0; i < n; i ++){
+            int e = nums[i]; 
+            int leftR = i - left[i]; 
+            int rightR = right[i] - i; 
+            ans += (long long)(leftR)*(long long)(rightR)*(long long)(e); 
+        }
+        return ans;
+    }
 
 
     public:
@@ -44,36 +82,10 @@ class Solution {
         // }
         // return ans; 
 
-        // approach 3: using stack 
-        // Σ max - Σ min = ans; 
-        int n = nums.size(); 
-        long long answer = 0; 
-        stack<int> st; 
-
-        for(int i = 0; i <= n; ++i){
-            while(!st.empty() && (i == n || nums[st.top()] >= nums[i])){
-                int mid = st.top(); 
-                st.pop(); 
-                int left = st.empty() ? -1 : st.top(); 
-                answer -= (long long)nums[mid] * (i - mid) * (mid - left);
-            }
-            st.push(i); 
-        }
-
-
-        // finding sum of al maximum 
-        stack<int> st2; 
-
-        for(int i = 0; i <= n; ++i){
-            while(!st2.empty() && (i == n || nums[st2.top()] <= nums[i])){
-                int mid = st2.top(); 
-                st2.pop(); 
-                int left = st2.empty() ? -1 : st2.top(); 
-                answer += (long long)nums[mid] * (i - mid) * (mid - left);
-            }
-            st2.push(i); 
-        }
-
-        return answer;
+        // approach 3: using stack easy appraoch 
+        long long mx = f(nums);
+        for (int i = 0; i < nums.size(); ++i) nums[i] *= -1;
+        long long mi = f(nums);
+        return mx + mi;
     }
 };
