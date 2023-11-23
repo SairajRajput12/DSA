@@ -1,64 +1,170 @@
-#include <bits/stdc++.h> 
-class Queue {
-public:
-int *arr; 
-int rear; 
-int qfront; 
-int size; 
+#include<bits/stdc++.h>
+using namespace std; 
 
-    Queue() {
-        // Implement the Constructor
-        size = 100001;  
-        rear = 0;
-        qfront = 0; 
-        arr = new int[size]; 
+class Node{
+
+public: 
+int data; 
+Node* next; 
+    Node(int data){
+        this -> next = NULL; 
+        this -> data = data; 
     }
 
-    /*----------------- Public Functions of Queue -----------------*/
+    ~Node(){
+        // cout << "memory has been free for the data = " << this -> data << endl; 
+    }
+};
+
+class Queue{
+public: 
+    Node* qfront; 
+    Node* rear; 
+    int size; 
+    int cnt; 
+    
+    Queue(){
+        qfront = NULL; 
+        rear = NULL; 
+        size = 100001; 
+        cnt = 0; 
+    }
+
+    // insertion operation 
+    void enqueue(int data){
+        // check whether the queue is full or not 
+        if(cnt >= size){
+            cerr << "Queue overflow has occured cannot insert elements" << endl; 
+            return; 
+        }
+        
+        // if the Queue is empty means there is single node to insert 
+        Node* nodeToInsert = new Node(data); 
+        if(cnt == 0){
+            qfront = nodeToInsert; 
+            rear = nodeToInsert; 
+            cnt ++; 
+        }
+        else{
+            // means it is not single node  
+            rear-> next = nodeToInsert; 
+            rear = nodeToInsert;  
+            cnt ++;     
+        }
+    }
+
+    int dequeue(){
+        // cout << "inside desicion statement" << endl; 
+        if(cnt == 0){
+            // means no element is entered means it is empty 
+            cerr << "we cannot insert elements in this queue" << endl; 
+            return -1; 
+        }
+        else if(cnt == 1){
+            // means it contains single element  
+            int d = rear -> data; 
+            qfront = NULL; 
+            rear = NULL; 
+            cnt = 0;  
+            return d; 
+        }
+        else{
+            Node* nodeToDelete = qfront; 
+            int data = nodeToDelete -> data; 
+            qfront = qfront -> next; 
+            nodeToDelete -> next = NULL; 
+            delete(nodeToDelete); 
+            cnt --; 
+            return data; 
+        }
+    }
+
+    
+
+    int front(){
+        if(cnt == 0){
+            return -1; 
+        }
+        else{
+            return qfront -> data; 
+        }
+    }
 
     bool isEmpty() {
         // Implement the isEmpty() function 
-        if(qfront == rear){
+        if(cnt == 0){
             return true; 
         }
         return false; 
     }
 
-    void enqueue(int x) {
-        // Implement the enqueue() function
-        if(rear == size){
-            cerr << "Queue is full " << endl; 
-        }
-        else{
-            arr[rear] = x; 
-            rear ++; 
-        }
-    }
-
-    int dequeue() {
-        // Implement the dequeue() function
-        if(qfront == rear){
-            return -1; 
-        }
-        else{
-            int ans = arr[qfront]; 
-            arr[qfront] = -1; 
-            qfront ++; 
-            if(qfront == rear){
-                qfront = 0; 
-                rear = 0; 
-            }
-            return ans; 
-        }
-    }
-
-    int front() {
-        // Implement the front() function
-        if(qfront == rear){
-            return -1; 
-        }
-        else{
-            return arr[qfront]; 
-        }
-    }
 };
+
+// #include <bits/stdc++.h> 
+// class Queue {
+// public:
+// int *arr; 
+// int rear; 
+// int qqfront; 
+// int size; 
+
+//     Queue() {
+//         // Implement the Constructor
+//         size = 100001;  
+//         rear = 0;
+//         qqfront = 0; 
+//         arr = new int[size]; 
+//     }
+
+//     /*----------------- Public Functions of Queue -----------------*/
+
+//     bool isEmpty() {
+//         // Implement the isEmpty() function 
+//         if(qfront == rear){
+//             return true; 
+//         }
+//         return false; 
+//     }
+
+//     void enqueue(int x) {
+//         // Implement the enqueue() function
+//         if(rear == size){
+//             cerr << "Queue is full " << endl; 
+//         }
+//         else{
+//             arr[rear] = x; 
+//             rear ++; 
+//         }
+//     }
+
+//     int dequeue() {
+//         // Implement the dequeue() function
+//         if(qfront == rear){
+//             return -1; 
+//         }
+//         else{
+//             int ans = arr[qfront]; 
+//             arr[qfront] = -1; 
+//             qfront ++; 
+//             if(qfront == rear){
+//                 qfront = 0; 
+//                 rear = 0; 
+//             }
+//             return ans; 
+//         }
+//     }
+
+//     int front() {
+//         // Implement the front() function
+//         if(qfront == rear){
+//             return -1; 
+//         }
+//         else{
+//             return arr[qfront]; 
+//         }
+//     }
+// };
+
+
+
+
