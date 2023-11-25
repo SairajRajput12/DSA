@@ -1,0 +1,99 @@
+#include <bits/stdc++.h> 
+class NQueue{
+// appraoch 2: 
+int *frontA; 
+int *rearA; 
+int *arr; 
+int *next; 
+int N; 
+int S; 
+int freespot; 
+
+public:
+    // Initialize your data structure.
+    NQueue(int n, int s){
+        // Write your code here.
+        N = n; 
+        S = s; 
+        arr = new int[S]; 
+        next = new int[S]; 
+        frontA = new int[N]; 
+        rearA = new int[N]; 
+        freespot = 0;
+
+        for(int i = 0; i < N; i ++){
+            frontA[i] = -1; 
+            rearA[i] = -1; 
+        }
+
+        for(int i = 0; i < S; i ++){
+            next[i] = (i+1); 
+        }
+        next[S-1] = -1; 
+
+    }
+
+    // Enqueues 'X' into the Mth queue. Returns true if it gets pushed into the queue, and false otherwise.
+    bool enqueue(int data, int qn){
+        // Write your code here.
+
+        // overflow ho gaya ?? 
+            if( freespot == -1) {
+                // cout << "No Empty space is present" << endl;
+                return false;
+            }
+
+            //find first free index
+            int index = freespot;
+
+            //update freespot
+            freespot = next[index];
+
+            //check whther first element
+            if(frontA[qn-1] == -1){
+                frontA[qn-1] = index;
+            }
+            else{
+                //link new element to the prev element
+                next[rearA[qn-1]] = index;
+            }
+
+            //update next
+            next[index] = -1;
+
+            //update rear
+            rearA[qn-1] = index;
+
+            //push element
+            arr[index] = data;
+        return true; 
+    }
+
+    // Dequeues top element from Mth queue. Returns -1 if the queue is empty, otherwise returns the popped element.
+    int dequeue(int qn){
+        // Write your code here. 
+         //underflow 
+            if(frontA[qn-1] == -1)
+            {
+                // cout << "Queue UnderFlow " << endl;
+                return -1;
+            }
+
+            //find index to pop
+            int index = frontA[qn-1];
+
+            //front ko aage badhao
+            frontA[qn-1] = next[index];
+
+            //freeSlots ko manage karo
+            next[index] = freespot;
+            freespot = index;
+            return arr[index]; 
+    }
+};
+
+
+
+
+
+

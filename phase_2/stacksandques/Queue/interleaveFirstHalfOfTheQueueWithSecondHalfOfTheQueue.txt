@@ -1,0 +1,96 @@
+#include <bits/stdc++.h> 
+void giveMeAnswerBaby(queue < int > &q,queue<int> &firstHalf,int s)
+{
+    if(firstHalf.size() == 0){
+        return; 
+    }
+    int x = firstHalf.front();  
+    firstHalf.pop(); 
+    int y = q.front(); 
+    q.pop(); 
+    giveMeAnswerBaby(q,firstHalf,s); 
+    q.push(y); 
+    q.push(x); 
+}
+
+void reverseMeBaby(queue<int> &q){
+    if(q.size() == 0){
+        return; 
+    }
+    int x = q.front(); 
+    q.pop();
+    reverseMeBaby(q); 
+    q.push(x); 
+}
+
+void interLeaveQueue(queue < int > & q) {
+    // first appraoch: using recursion and 2 queue 
+    // int n = q.size();
+    // queue<int> firstHalf;
+    // int s = (n + 1) / 2; // Calculate the size of the first half
+    // while (s--) {
+    //     firstHalf.push(q.front());
+    //     q.pop();
+    // }
+    // // firstHalf -> 10 20 30 40 50 
+    // // q -> 60 70 80 90 100 
+    // // 50 100 
+    // // 
+
+    // giveMeAnswerBaby(q, firstHalf, s); 
+    // reverseMeBaby(q); 
+
+    // approach 2: using stack  
+    stack<int> s; 
+    int firstHalf = q.size()/2; 
+
+    for(int i = 0; i < firstHalf; i ++ ){
+        s.push(q.front()); // top: 50 40 30 20 10 
+        q.pop(); 
+    }
+    // q : front - 60 70 80 90 100 
+    while(!s.empty()){
+        q.push(s.top()); 
+        s.pop(); 
+    }
+    // q : front - 60 70 80 90 100 50 40 30 20 10 
+    for(int i = 0; i < firstHalf; i ++){
+        q.push(q.front()); 
+        q.pop(); // q : front - 50 40 30 20 10 60 70 80 90 100 
+    }
+
+    // stack:from top 50 40 30 20 10 
+    // first add stack top element 
+    // 10 60 20 70 30 80 40 90 50 100 
+    for(int i = 0; i < firstHalf; i ++){
+        s.push(q.front()); 
+        q.pop(); // q : front - 50 40 30 20 10 60 70 80 90 100 
+    }
+
+    while(!s.empty()){
+        q.push(s.top()); 
+        s.pop(); 
+        q.push(q.front()); 
+        q.pop(); 
+    }
+
+    
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

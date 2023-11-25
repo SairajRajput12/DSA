@@ -1,3 +1,89 @@
+
+#include <bits/stdc++.h> 
+class NStack
+{
+// wee need 
+// 1] array for storing the n stacks 
+// 2] the n sized array which will keep the track of the index of  top element of the stack 
+// 3] the next which will keep the track of the next element of the stack 
+// 4] the freespot variable which will give the freespot present in the array 
+int *arr; 
+int *top; 
+int *next; 
+int freespot; 
+int S; 
+int N; 
+public:
+    // Initialize your data structure.
+    NStack(int N, int S)
+    {
+        // Write your code here.
+        // initialize all of them  
+        this -> N = N; 
+        this -> S = S; 
+        arr = new int[S]; 
+        top = new int[N];  
+        next = new int[S]; 
+
+        for(int i = 0; i < S; i ++){
+            next[i] = i+1; 
+        }
+        next[S-1] = -1; 
+
+        for(int i = 0; i < N; i ++){
+            top[i] = -1; 
+        }
+        freespot = 0; 
+    }
+
+    // Pushes 'X' into the Mth stack. Returns true if it gets pushed into the stack, and false otherwise.
+    bool push(int x, int m)
+    {
+        // Write your code here. 
+        if(freespot == -1){
+            return false;  // element enter na ho sake 
+        }
+
+        int index = freespot; 
+        // freespot ko update kare 
+        freespot = next[index]; 
+
+        // element add kare 
+        arr[index] = x; 
+
+        // next element ko update kare 
+        next[index] = top[m-1]; 
+
+        // top element ko update kare 
+        top[m-1] = index; // it stores the index of the freespot of the array 
+
+        return true; 
+    }
+
+    // Pops top element from Mth Stack. Returns -1 if the stack is empty, otherwise returns the popped element.
+    int pop(int m)
+    {
+        // Write your code here.
+        if(top[m-1] == -1){
+            return -1; 
+        }
+
+        // push ka ulta kardo bass. 
+
+        int index = top[m-1]; 
+
+        top[m-1] = next[index]; 
+
+        next[index] = freespot; 
+
+        freespot = index; 
+
+        return arr[index]; 
+    }
+};
+
+
+/*
 #include <bits/stdc++.h> 
 class NStack
 {
@@ -13,10 +99,10 @@ class NStack
 
     // approach 2: 
     // we need 2 things for this approach: 
-    // 1. top -> it will keep track of the top element of each stack 
+    // 1. top ka array(k sized) -> it will keep track of the top element of each stack 
+    //                          -> it represents the index of top elements of the stacks. 
     // 11. next -->  it points to the next element after stack top. 
     //          |->  points to the next free space or block 
-    //          |->     
 int *arr; 
 int *top; 
 int *next; 
@@ -47,9 +133,9 @@ public:
         // -> 5. update top 
         n = N; 
         s = S; 
-        arr  = new int[s]; 
-        top = new int[n]; 
-        next = new int[s]; 
+        arr  = new int[s]; // stores n stacks
+        top = new int[n];  // store the top element 
+        next = new int[s]; // will store the next of each top element 
 
         for(int i = 0; i < n; i ++)
         {
@@ -61,13 +147,17 @@ public:
         }
 
         // update last index to -1; 
-        next[s-1] = -1; 
-        freespot = 0; 
+        next[s-1] = -1; // 0 1 2 3 4 ....(S-1) -1
+        freespot = 0; // agla free spot konsa hai ?
     }
 
     // Pushes 'X' into the Mth stack. Returns true if it gets pushed into the stack, and false otherwise.
      bool push(int x, int m)
     {
+        // question 1: push(10,1)
+        // konse index pe dalu ?? 
+        // find index 
+
         //check for overflow
         if(freespot == -1) {
             return false;
@@ -79,12 +169,12 @@ public:
         //insert element into array
         arr[index] = x;
         
-        //update freespot
+        //freespot ko update kardo bhai 
         freespot = next[index];
        
         //update next;
-        next[index] = top[m-1];
-        
+        next[index] = top[m-1]; // next index ko update kardo purana wala top se. means it represents the  element below the top of the stack. 
+         
         //update top
         top[m-1] = index;
         
@@ -111,3 +201,6 @@ public:
         return arr[index];
     }
 };
+
+*/
+
