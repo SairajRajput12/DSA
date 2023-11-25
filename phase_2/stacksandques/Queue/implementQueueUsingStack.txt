@@ -1,0 +1,85 @@
+class MyQueue { 
+int n; 
+stack<int> q1; 
+int index; 
+stack<int> q2; 
+public:
+    MyQueue() {
+        n = 100001; 
+        index = 0; 
+    }
+    
+    void push(int x) {
+        if(n - index >= 1){
+            q1.push(x); 
+            index ++;  
+        }
+        else{
+            cerr << "stack overflow has occured " << endl; 
+            return; 
+        }
+    }
+    
+    int pop() {
+        if(index == 0){
+            cerr << "stack underflow has occured" << endl; 
+            return -1;
+        }
+        else{
+            while(!q1.empty())
+            {
+                q2.push(q1.top()); 
+                q1.pop(); 
+            }
+
+            int elementToPop = q2.top(); 
+            q2.pop(); 
+            while(!q2.empty())
+            {
+                q1.push(q2.top()); 
+                q2.pop(); 
+            }
+            index --; 
+            return elementToPop; 
+        }
+    }
+    
+    int peek() {
+        int p = 0; 
+        if(index == 0){
+            p = -1; 
+        }
+        else{
+             while(!q1.empty())
+            {
+                q2.push(q1.top()); 
+                q1.pop(); 
+            }
+
+            p = q2.top(); 
+            
+            while(!q2.empty())
+            {
+                q1.push(q2.top()); 
+                q2.pop(); 
+            }
+        }
+        return p; 
+    }
+    
+    bool empty() {
+        if(q1.size() == 0){
+            return true; 
+        }
+        return false; 
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
