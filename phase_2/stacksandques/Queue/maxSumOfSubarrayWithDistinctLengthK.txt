@@ -1,0 +1,102 @@
+class Solution {
+public:
+    long long maximumSubarraySum(vector<int>& nums, int k) {
+        // approach 1 : time limit exceeded: 
+
+        // long long maxSum = INT_MIN; 
+        // int j = 0; 
+        // for(int i = 0; i < nums.size(); i ++) {
+        //     long long sum = 0; 
+        //     unordered_set<int> seen; 
+
+        //     for(j = i; j < i + k && j < nums.size(); j ++) {
+        //         if(seen.count(nums[j]) > 0) {
+        //             // invalid pair 
+        //             break; 
+        //         }
+        //         seen.insert(nums[j]);
+        //         sum += nums[j]; 
+        //     }
+
+        //     if((j - i) != k){
+        //         sum = 0; 
+        //     }
+            
+        //     maxSum = max(maxSum, sum); 
+        // }
+        
+        // return maxSum;
+
+        // approach 2: using optimized appraoch 
+        // map<int,int> count; 
+        // long long maxSum = INT_MIN;  
+        // long long sum = 0;
+        
+        // for(int i = 0; i < nums.size(); i ++){
+        //     queue<int> q; 
+        //     for(int j = i; j < (i+k); j ++){ 
+        //         count[nums[j]] ++; 
+        //         if(count[nums[j]] > 1) continue; 
+        //         q.push(nums[j]); 
+        //     }
+
+        //     if(q.size() != k) continue; 
+        //     while(!q.empty()){
+        //         int x = q.front(); 
+        //         q.pop(); 
+        //         sum += x; 
+        //     }
+        //     maxSum = max(maxSum, sum); 
+        // }
+
+        // return maxSum; 
+
+        // approach 3: love babbar's approach 
+        // time complexity: O(N) 
+        // unordered_map<int,int> mp; 
+        // long long int ans = 0, sum = 0; 
+
+        // for(int i = 0; i < nums.size(); i++){
+        //     if(mp.count(nums[i]) == 0){
+        //         sum += nums[i]; 
+        //     }
+        //     mp[nums[i]] ++; 
+        //     if(mp.size() == k){
+        //         ans = max(ans,sum); 
+        //     }
+        //     // removal logic 
+        //     if(i - k + 1 >= 0){
+        //         mp[nums[i+1-k]] --; 
+        //         if(mp[nums[i+1-k]] == 0){
+        //             sum -= nums[i+1-k]; // remove it from the sum
+        //             mp.erase(nums[i+1-k]); // remove that element from map 
+        //         }
+        //     }
+        // }
+        // return ans; 
+
+        // approach 4: using queue 
+        long long ans=0,curr=0;
+        unordered_set<int>s;
+        queue<int>q;
+        int n=nums.size();
+
+        for(int i=0;i<nums.size();i++){
+            q.push(nums[i]);
+            curr+=nums[i];
+            while(s.find(nums[i])!=s.end()){
+                curr-=q.front();
+                s.erase(q.front());
+                q.pop();
+            }
+            s.insert(nums[i]);
+            while(q.size()>k){
+                curr-=q.front();
+                s.erase(q.front());
+                q.pop();
+            }
+            if(q.size()==k) ans=max(ans,curr);
+        }
+        return ans;
+    }
+};
