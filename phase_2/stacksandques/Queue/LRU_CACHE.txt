@@ -1,0 +1,309 @@
+class LRUCache {
+public:
+class node{
+    public: 
+    int data; 
+    node* next; 
+    node* prev; 
+    int key; 
+     
+
+        node(int key,int data){
+            this -> key = key; 
+            this -> data = data; 
+        }
+
+        ~node(){
+            cout << "node with the data : " << this -> data << " and key : "<<this->key  <<" deleted succesfully "<< endl; 
+        }
+};
+
+int capacity;
+node* head = new node(-1,-1); 
+node* tail = new node(-1,-1); 
+unordered_map<int,node*> m; 
+
+
+    LRUCache(int capacity) {
+        this -> capacity = capacity; 
+        head -> next = tail; 
+        tail -> prev = head; 
+    }
+
+    void add_node(node * newnode) {
+        node * temp = head -> next;
+        newnode -> next = temp;
+        newnode -> prev = head;
+        head -> next = newnode;
+        temp -> prev = newnode;
+    }
+
+    void delete_node(node * delnode) {
+        node * delprev = delnode -> prev;
+        node * delnext = delnode -> next;
+        delprev -> next = delnext;
+        delnext -> prev = delprev;
+    }
+    
+    int get(int key) {
+        // steps: 
+        // 1. head pasnche least recently used astil
+        // 2. tail pasnche used astil 
+        // a. first check whether the key exist or not if not then return -1 
+        // b. if yes then first get the value at that node and return it 
+        // c. then add that data next to the head 
+        // d. add it in hashmap as next element of the head
+        if(m.find(key) != m.end()){
+            node* existing = m[key]; 
+            int d = existing -> data; 
+            delete_node(existing); 
+            m.erase(key); 
+            add_node(existing); 
+            m[key] = head -> next; 
+            return d; 
+        }       
+        return -1; 
+    }
+    
+      void put(int key, int value) {
+            // first check the node exist or not if exist then delete that node 
+            if(m.find(key) != m.end()){
+                node* existing = m[key]; 
+                delete_node(existing); 
+                m.erase(key); 
+            } 
+
+            // second then go and check whether the 
+            if(m.size() == capacity){
+                m.erase(tail -> prev -> key); 
+                delete_node(tail->prev); 
+            }                
+
+            add_node(new node(key,value)); 
+            m[key] = head -> next; 
+      }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+
+
+
+
+
+// class LRUCache {
+//   public:
+//     class node {
+//       public:
+//         int key;
+//       int val;
+//       node * next;
+//       node * prev;
+//       node(int _key, int _val) {
+//         key = _key;
+//         val = _val;
+//       }
+//     };
+
+//   node * head = new node(-1, -1);
+//   node * tail = new node(-1, -1);
+
+//   int cap;
+//   unordered_map < int, node * > m;
+
+//   LRUCache(int capacity) {
+//     cap = capacity;
+//     head -> next = tail;
+//     tail -> prev = head;
+//   }
+
+//   void addnode(node * newnode) {
+//     node * temp = head -> next;
+//     newnode -> next = temp;
+//     newnode -> prev = head;
+//     head -> next = newnode;
+//     temp -> prev = newnode;
+//   }
+
+//   void deletenode(node * delnode) {
+//     node * delprev = delnode -> prev;
+//     node * delnext = delnode -> next;
+//     delprev -> next = delnext;
+//     delnext -> prev = delprev;
+//   }
+
+//   int get(int key_) {
+//     if (m.find(key_) != m.end()) {
+//       node * resnode = m[key_];
+//       int res = resnode -> val;
+//       m.erase(key_);
+//       deletenode(resnode);
+//       addnode(resnode);
+//       m[key_] = head -> next;
+//       return res;
+//     }
+
+//     return -1;
+//   }
+
+//   void put(int key_, int value) {
+//     if (m.find(key_) != m.end()) {
+//       node * existingnode = m[key_];
+//       m.erase(key_);
+//       deletenode(existingnode);
+//     }
+
+//     // check if size was full then delete the lru node. 
+//     if (m.size() == cap) {
+//       m.erase(tail -> prev -> key);
+//       deletenode(tail -> prev);
+//     }
+
+//     addnode(new node(key_, value));
+//     m[key_] = head -> next;
+//   }
+// };
+
+
+class LRUCache {
+    int keyValue[10001];
+    int count[10001];
+    queue <int> lru;
+    int keyTotal = 0;
+    int cap;
+
+public:
+    LRUCache(int capacity) {
+        cap = capacity; 
+    }
+    
+    int get(int key) {
+        if(count[key] == 0) return -1; 
+        else{
+            count[key] ++; 
+            lru.push(key); 
+            return keyValue[key]; 
+        }
+    }
+    
+    void put(int key, int value) {
+        if (keyTotal < cap) {
+            keyValue[key] = value;
+            if (!count[key]) keyTotal++;
+            count[key]++;
+            lru.push(key);
+        }
+        else {
+            if (count[key] == 0) {
+                while (true) {
+                    if (!--count[lru.front()]) {
+                        lru.pop();
+                        break;
+                    }
+                    lru.pop();
+                }
+                keyValue[key] = value;
+                count[key]++;
+                lru.push(key);
+            }
+            else {
+                keyValue[key] = value;
+                count[key]++;
+                lru.push(key);
+            }
+        }
+
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+
+
+ /* 
+ code: 
+ #include <iostream>
+#include <queue>
+#include <unordered_map>
+
+using namespace std;
+
+class LRUCache {
+    queue<pair<int, int>> q;
+    unordered_map<int, int> cache; // Use unordered_map for O(1) key lookup
+    int capacity;
+    int index;
+
+public:
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+        this->index = 0;
+    }
+
+    void removeFromQ(int key) {
+        queue<pair<int, int>> temp;
+        while (!q.empty()) {
+            int element = q.front().first;
+            int evalue = q.front().second;
+            q.pop();
+            if (key == element)
+                continue;
+            temp.push(make_pair(element, evalue));
+        }
+        while (!temp.empty()) {
+            q.push(temp.front());
+            temp.pop();
+        }
+    }
+
+    int get(int key) {
+        // Check if the key is present in the cache
+        if (cache.find(key) != cache.end()) {
+            removeFromQ(key);
+            q.push(make_pair(key, cache[key]));
+            return cache[key];
+        }
+
+        return -1;
+    }
+
+    void put(int key, int value) {
+        // Check if the key is already present in the cache
+        if (cache.find(key) != cache.end()) {
+            // Update the value
+            cache[key] = value;
+
+            // Move the key to the front of the queue (recently used)
+            removeFromQ(key);
+            q.push(make_pair(key, value));
+        } else {
+            // Check if the cache is at capacity
+            if (index < capacity) {
+                // Cache has space, add the new key-value pair
+                q.push(make_pair(key, value));
+                cache[key] = value;
+                index++;
+            } else {
+                // Cache is at capacity, remove the least recently used element
+                int lruKey = q.front().first;
+                q.pop();
+                cache.erase(lruKey);
+
+                // Add the new key-value pair
+                q.push(make_pair(key, value));
+                cache[key] = value;
+            }
+        }
+    }
+};
+ */
