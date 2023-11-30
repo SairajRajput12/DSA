@@ -1,8 +1,9 @@
-class LFUCache {
-int cap; 
-int size; 
-unordered_map<int,list<vector<int>> :: iterator> mp; // key -> Address har ek node ka 
-map<int,list<vector<int>>> freq; // counter -> key,value,counter 
+class LFUCache { 
+    // so mi pahile required data structure create karnar ahe. 
+    int cap; 
+    int size; 
+    unordered_map<int,list<vector<int>> :: iterator> mp; // key -> Address har ek node ka 
+    map<int,list<vector<int>>> freq; // counter -> key,value,counter 
 
 
 public:
@@ -13,55 +14,61 @@ public:
 
     void makeMostFrequentlyUsed(int key)
     {
-        auto &vec = *(mp[key]); // original key mein change hoga 
-
-        int value = vec[1]; 
-        int f = vec[2]; 
-        freq[f].erase(mp[key]);
-        if(freq[f].empty()){
-            freq.erase(f); 
+        // first find that key 
+        // erase from map and delete from the vector 
+        // now increase the count and insert it with the increased value 
+        auto &vec1 = *(mp[key]);
+        int value = vec1[1]; 
+        int cnt = vec1[2]; 
+        freq[cnt].erase(mp[key]);
+        if(freq[cnt].empty()){
+            freq.erase(cnt); 
         }
-        f ++;  
-        freq[f].push_front({key,value,f}); 
-        mp[key] = freq[f].begin();  
+        cnt ++; 
+        freq[cnt].push_front({key,value,cnt}); 
+        mp[key] = freq[cnt].begin();  
     }
     
     int get(int key) {
-        if(mp.find(key) == mp.end()){
-            return -1; 
+        // kya element present hai 
+        if(mp.find(key) != mp.end()){
+            auto &vec = *(mp[key]); 
+            int value = vec[1]; 
+            makeMostFrequentlyUsed(key); 
+            return value; 
         }
-
-        auto &vec = (*(mp[key]));  // vector ka address mil gaya 
-        int value = vec[1]; 
-        makeMostFrequentlyUsed(key); 
-        return value;     
+        return -1; 
     }
     
     void put(int key, int value) {
-        if(cap == 0)
-            return; 
-
-        if(mp.find(key) != mp.end()){
-            // present hai pehle se 
-            auto &vec = (*(mp[key])); 
-            vec[1] = value; 
-            makeMostFrequentlyUsed(key); 
+        // if there is zero capacity then return 
+        if(cap == 0){
+            return;
         }
-        else if(size < cap){
+
+        // if there is existing key in the map
+        if(mp.find(key) != mp.end()){
+            // now update that existing key and increment the count and put it as front 
+            auto &vec1 = (*(mp[key])); 
+            vec1[1] = value; 
+            makeMostFrequentlyUsed(key);  
+        }
+        else if(cap > size){
             size ++; 
-            // fresh banda hai  
-            freq[1].push_front(vector<int> ({key,value,1})); 
-            mp[key] = freq[1].begin();             
+            freq[1].push_front(vector<int> ({key,value,1}));
+            mp[key] = freq[1].begin(); 
         }
         else{
-            // bhai mere pass jaga hi nahi hai 
-            // time to remove lfu or lru 
-            auto &konsa_sa_list = freq.begin()->second; 
-            int key_to_delete = (konsa_sa_list.back())[0]; 
-            konsa_sa_list.pop_back(); 
-            if(konsa_sa_list.empty()){
-                freq.erase(freq.begin()->first); // map.erase(key)  
-            } 
+            // bhai present hai 
+            // to mein new element ko add karunga
+            // 1 ke front mein and remove the last from that vector 
+            auto &konsa_list_delete_karna_hai = freq.begin()->second; 
+            int key_to_delete = (konsa_list_delete_karna_hai.back())[0]; 
+            konsa_list_delete_karna_hai.pop_back(); 
+
+            if(konsa_list_delete_karna_hai.empty()){
+                freq.erase(freq.begin()->first); 
+            }
 
             freq[1].push_front(vector<int>({key,value,1})); 
             mp.erase(key_to_delete); 
@@ -76,3 +83,83 @@ public:
  * int param_1 = obj->get(key);
  * obj->put(key,value);
  */
+
+
+ // class LFUCache {
+// int cap; 
+// int size; 
+// unordered_map<int,list<vector<int>> :: iterator> mp; // key -> Address har ek node ka 
+// map<int,list<vector<int>>> freq; // counter -> key,value,counter 
+
+
+// public:
+//     LFUCache(int capacity) {
+//         cap = capacity; 
+//         size = 0; 
+//     }
+
+//     void makeMostFrequentlyUsed(int key)
+//     {
+//         auto &vec = *(mp[key]); // original key mein change hoga 
+
+//         int value = vec[1]; 
+//         int f = vec[2]; 
+//         freq[f].erase(mp[key]);
+//         if(freq[f].empty()){
+//             freq.erase(f); 
+//         }
+//         f ++;  
+//         freq[f].push_front({key,value,f}); 
+//         mp[key] = freq[f].begin();  
+//     }
+    
+//     int get(int key) {
+//         if(mp.find(key) == mp.end()){
+//             return -1; 
+//         }
+
+//         auto &vec = (*(mp[key]));  // vector ka address mil gaya 
+//         int value = vec[1]; 
+//         makeMostFrequentlyUsed(key); 
+//         return value;     
+//     }
+    
+//     void put(int key, int value) {
+//         if(cap == 0)
+//             return; 
+
+//         if(mp.find(key) != mp.end()){
+//             // present hai pehle se 
+//             auto &vec = (*(mp[key])); 
+//             vec[1] = value; 
+//             makeMostFrequentlyUsed(key); 
+//         }
+//         else if(size < cap){
+//             size ++; 
+//             // fresh banda hai  
+//             freq[1].push_front(vector<int> ({key,value,1})); 
+//             mp[key] = freq[1].begin();             
+//         }
+//         else{
+//             // bhai mere pass jaga hi nahi hai 
+//             // time to remove lfu or lru 
+//             auto &konsa_sa_list = freq.begin()->second; 
+//             int key_to_delete = (konsa_sa_list.back())[0]; 
+//             konsa_sa_list.pop_back(); 
+//             if(konsa_sa_list.empty()){
+//                 freq.erase(freq.begin()->first); // map.erase(key)  
+//             } 
+
+//             freq[1].push_front(vector<int>({key,value,1})); 
+//             mp.erase(key_to_delete); 
+//             mp[key] = freq[1].begin(); 
+//         }
+//     }
+// };
+
+// /**
+//  * Your LFUCache object will be instantiated and called as such:
+//  * LFUCache* obj = new LFUCache(capacity);
+//  * int param_1 = obj->get(key);
+//  * obj->put(key,value);
+//  */
