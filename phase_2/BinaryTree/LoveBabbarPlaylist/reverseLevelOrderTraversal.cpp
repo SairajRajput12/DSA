@@ -10,37 +10,71 @@
  * };
  */
 class Solution {
+
+    void traverse(vector<vector<int>>& ans,queue<TreeNode* > &q){
+        if(q.size() == 0){
+            return; 
+        }
+
+        int size = q.size(); 
+        vector<int> sample; 
+        for(int i = 0; i < size; i ++){
+            TreeNode* temp = q.front(); 
+            q.pop(); 
+
+            if(temp -> left != NULL){
+                q.push(temp -> left); 
+            }
+
+            if(temp -> right != NULL){
+                q.push(temp -> right); 
+            }
+
+            sample.push_back(temp -> val); 
+        }
+        traverse(ans,q); 
+        ans.push_back(sample); 
+    }
 public:
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        // appraoch 1: pehle first wali appraoch try maro then reverse that 2d array
-        
+        //     vector<vector<int>> ans; 
+        //     if(root == NULL){
+        //         return ans; 
+        //     }
+        //     queue<TreeNode*> q;
+        //     q.push(root); 
+        //     while(!q.empty()){
+        //     vector<int> sample; 
+        //     int size = q.size(); 
+        //     for(int i = 0; i < size; i ++){
+        //             TreeNode* temp = q.front(); 
+        //             q.pop(); 
+        //             if(temp -> left != NULL){
+        //                 q.push(temp -> left); 
+        //             }
+                    
+        //             if(temp -> right != NULL){
+        //                 q.push(temp -> right); 
+        //             }
+
+        //             sample.push_back(temp -> val); 
+        //         }
+
+        //         ans.push_back(sample); 
+        //     }
+        // reverse(ans.begin(),ans.end()); 
+        // return ans; 
+
+        // appraoch 2: using recursion 
+        queue<TreeNode* > q; 
         vector<vector<int>> ans; 
         if(root == NULL){
             return ans; 
         }
-        queue<TreeNode*> q;
+
         q.push(root); 
-        while(!q.empty()){
-        vector<int> sample; 
-        int size = q.size(); 
-        for(int i = 0; i < size; i ++){
-                TreeNode* temp = q.front(); 
-                q.pop(); 
-                if(temp -> left != NULL){
-                    q.push(temp -> left); 
-                }
-                
-                if(temp -> right != NULL){
-                    q.push(temp -> right); 
-                }
-
-                sample.push_back(temp -> val); 
-            }
-
-            ans.push_back(sample); 
-        }
-    reverse(ans.begin(),ans.end()); 
-    return ans; 
+        traverse(ans,q); 
+        return ans; 
     }
 
 
