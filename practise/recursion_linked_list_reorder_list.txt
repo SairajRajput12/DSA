@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+    void solve(ListNode*& start) {
+        if(start == NULL || start -> next == NULL)
+        {
+            return; 
+        }         
+
+
+        ListNode* lastFirst = start; 
+        while(lastFirst -> next -> next != NULL)
+        {
+            lastFirst = lastFirst -> next;
+        }
+
+        ListNode* temp = lastFirst -> next; 
+        lastFirst -> next = NULL; // make it NULL 
+        temp -> next = start -> next;  
+        start -> next = temp; 
+        start = temp -> next; 
+        solve(start); 
+    }
+
+public:
+    void reorderList(ListNode* head) {
+        // appraoch 1: using recursion (recursion practise series)
+        if (head == NULL || head->next == NULL) {
+            return;
+        }
+        ListNode* start = head;
+        solve(head);
+    }
+};

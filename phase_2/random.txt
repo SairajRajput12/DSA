@@ -1,0 +1,57 @@
+class Solution {
+    bool isCorrect(int end,int start,string s)
+    {
+        char m = s[end]; 
+        while(start < end){
+            int j = (int)m ^ (int)s[start]; 
+            if(j == 0){
+                return false; 
+            }
+            start ++; 
+        }
+        return true; 
+    }
+public:
+    int lengthOfLongestSubstring(string s) {
+    // approach 1: using the hashmap by tracking the position: 
+        // if(s.size() <= 1)
+        // {
+        //     return s.size(); 
+        // }
+        // unordered_map<char,int> mp; 
+        // int start = 0;
+        // int ans = 0; 
+
+        // for(int i  = 0; i < s.size(); i ++)
+        // {
+        //     if(mp.find(s[i]) != mp.end() && mp[s[i]] >= start)
+        //     {
+        //         start = mp[s[i]] + 1; 
+        //     }
+
+        //     mp[s[i]] = i; 
+        //     ans = max(ans,i-start + 1);
+        // }
+        // return ans; 
+
+    // approach 2: Another appraoch: failure approach
+        // int start = 0; 
+        // int end = 0; 
+        // int ans = 0; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     end = i;
+        //     if(isCorrect(end,start,s)){
+        //         ans = max(ans,i-start+1); 
+        //     }
+        //     else{
+        //         start = i; 
+        //     }
+        // }
+
+        // return ans;  
+    
+    // approach 3: using another appraoch 
+    
+    }
+
+};

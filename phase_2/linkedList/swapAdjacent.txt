@@ -1,0 +1,67 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        // approach 1: using vector
+        if(head == NULL || head -> next == NULL){
+            return head; 
+        }
+        vector<int> sam;
+        ListNode* temp = head; 
+        while(temp != NULL)
+        {
+            sam.push_back(temp -> val); 
+            temp = temp -> next; 
+        }
+        int i = 1; 
+        while(i < sam.size())
+        {
+            int x = sam[i-1]; 
+            sam[i-1] = sam[i]; 
+            sam[i] = x; 
+            i = i + 2; 
+        }
+
+        temp = head; 
+        int index = 0; 
+        while(temp != NULL){
+            temp -> val = sam[index]; 
+            index ++; 
+            temp = temp -> next; 
+        }
+
+        return head; 
+
+        // approach 2: without using extra space
+
+        // if(head == NULL || head -> next == NULL){
+        //     return head; 
+        // }
+
+        // ListNode* dummy = new ListNode(); 
+        // ListNode* currNode = head; 
+        // ListNode* prevNode = dummy; 
+
+        // while(currNode && currNode -> next)
+        // {
+        //     prevNode -> next = currNode -> next; 
+        //     currNode -> next = prevNode -> next -> next; 
+        //     prevNode -> next -> next = currNode;  
+
+        //     prevNode = currNode; 
+        //     currNode = currNode -> next; 
+        // }
+
+        // return dummy -> next;
+    }
+};
+
