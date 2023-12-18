@@ -1,0 +1,102 @@
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+class Solution {
+private: 
+    int height(TreeNode* root){
+        if(root == NULL){
+            return 0; 
+        }
+
+        int left = height(root -> left); 
+        int right = height(root -> right); 
+        int ans = max(left,right) + 1; 
+        return ans; 
+    }
+
+    pair<int,int> DiameterFast(TreeNode* root)
+    {
+        if(root == NULL){
+            pair<int,int> threesome = make_pair(0,0); 
+            return threesome; 
+        }
+
+        pair<int,int> left = DiameterFast(root -> left); 
+        pair<int,int> right = DiameterFast(root -> right); 
+        int op1 = left.first; 
+        int op2 = right.first; 
+        int op3 = left.second + right.second; 
+
+        pair<int,int> ans; 
+        ans.first = max(op1,max(op2,op3)); 
+        ans.second = max(left.second,right.second) + 1; 
+        return ans; 
+    }
+
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+    // i tried with this appraoch: 
+
+        // if (root == nullptr) {
+        //     return 0;
+        // }
+
+        // queue<TreeNode*> q;
+        // q.push(root);
+
+        // int maxi = 0;
+
+        // while (!q.empty()) {
+        //     int size = q.size();
+
+        //     // process nodes at the current level
+        //     for (int i = 0; i < size; i++) {
+        //         TreeNode* temp = q.front();
+        //         q.pop();
+
+        //         if (temp->left != nullptr) {
+        //             q.push(temp->left);
+        //         }
+
+        //         if (temp->right != nullptr) {
+        //             q.push(temp->right);
+        //         }
+        //     }
+
+        //     // update the maximum number of nodes at any level
+        //     maxi = max(maxi, size);
+        // }
+
+        // return maxi;
+
+    // approach 1: recursive appraoch 
+    // this approach is not that efficient 
+    // time complexity: O(N^2)
+        // if(root == NULL){
+        //     return 0; 
+        // }
+
+        // int op1 = diameterOfBinaryTree(root -> left); // ek to max diameter left subtree mein hoga
+        // int op2 = diameterOfBinaryTree(root -> right); // ek to max diameter right subtree mein hoga 
+        // int op3 = height(root -> left) + height(root -> right); 
+
+        // int ans = max(op1,max(op2,op3)); 
+        // return ans; 
+
+    // approach 2: optimised approach 
+        return DiameterFast(root).first; 
+    }
+};
