@@ -1,0 +1,148 @@
+class Solution {
+public:
+    bool isLeaf(Node* root){
+      return (!root->left && !root->right);
+    }
+    
+    void addLeft(Node * root,vector<int> &ans )
+    {
+        if(!root || isLeaf(root))
+        {
+            return;
+        }
+        if(!isLeaf(root))
+        {
+            ans.push_back(root->data);
+        }
+        if(root->left) addLeft(root->left,ans);
+        else
+          addLeft(root->right,ans);
+    }
+    void addRight(Node * root,vector<int> &temp )
+    {
+        if(!root || isLeaf(root))
+        {
+            return;
+        }
+        if(!isLeaf(root))
+        {
+            temp.push_back(root->data);
+        }
+        if(root->right) addRight(root->right,temp);
+        else
+          addRight(root->left,temp);
+    }
+    void addLeaf(Node* root,vector<int> &ans)
+    {
+        if(isLeaf(root))
+        {
+            ans.push_back(root->data);
+            return;
+        }
+        if(root->left)
+          addLeaf(root->left,ans);
+        if(root->right)
+          addLeaf(root->right,ans);
+    }
+    vector <int> boundary(Node *root)
+    {
+        vector<int> ans;
+        vector<int> temp;
+        if(!root)
+          return ans;
+        if(!isLeaf(root)) ans.push_back(root->data);
+        addLeft(root->left,ans);
+        addLeaf(root,ans);
+        addRight(root->right,temp);
+        for(int i=temp.size()-1;i>=0;i--)
+        {
+            ans.push_back(temp[i]);
+        }
+        return ans;
+        
+    }};
+
+
+void leftBoundary(TreeNode<int>* root, vector<int>& ans);
+void rightBoundary(TreeNode<int>* root, vector<int>& ans);
+void leafNodes(TreeNode<int>* root, vector<int>& ans);
+
+vector<int> traverseBoundary(TreeNode<int>* root)
+{
+    vector<int> ans;
+
+    if (root == NULL)
+    {
+        return ans;
+    }
+
+    ans.push_back(root -> data);
+
+    // Traverse left boundary
+    leftBoundary(root -> left, ans);
+
+    // Traverse for leaf nodes
+    leafNodes(root -> left, ans);
+    leafNodes(root -> right, ans);
+
+    // Traverse right boundary
+    rightBoundary(root -> right, ans);
+
+    return ans;
+}
+
+void leftBoundary(TreeNode<int>* root, vector<int>& ans)
+{
+    if (root == NULL || (root -> left == NULL && root -> right == NULL))
+    {
+        return;
+    }
+
+    ans.push_back(root -> data);
+
+    if (root -> left != NULL)
+    {
+        leftBoundary(root -> left, ans);
+    }
+    else
+    {
+        leftBoundary(root -> right, ans);
+    }
+}
+
+void rightBoundary(TreeNode<int>* root, vector<int>& ans)
+{
+    if (root == NULL || (root -> left == NULL && root -> right == NULL))
+    {
+        return;
+    }
+
+    if (root -> right != NULL)
+    {
+        rightBoundary(root -> right, ans);
+    }
+    else
+    {
+        rightBoundary(root -> left, ans);
+    }
+
+    ans.push_back(root -> data);
+}
+
+void leafNodes(TreeNode<int>* root, vector<int>& ans)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    if (root -> left == NULL && root -> right == NULL)
+    {
+        ans.push_back(root -> data);
+        return;
+    }
+
+    leafNodes(root -> left, ans);
+    leafNodes(root -> right, ans);
+}
+

@@ -1,0 +1,89 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private: 
+map<int, vector<int>> data;
+
+    void solve(TreeNode* root,int index){
+        if(root == NULL){
+            return; 
+        }
+
+        if(data.count(index)){
+            data[index].push_back(root -> val); 
+        }
+        else{
+            data.insert({index,vector<int>({root -> val})});  // sala ek line pure output ki look change kar deti hai
+        }
+        solve(root -> left,index + 1); 
+        solve(root -> right,index + 1); 
+    }
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        // vector<vector<int>> ans; 
+        // if(root == NULL){
+        //     return ans; 
+        // }
+
+        // queue<TreeNode*> q; 
+        // q.push(root); 
+        // int level = 0; 
+        // while(!q.empty()){
+        //     int size = q.size(); 
+        //     vector<int> tempo(size,0); 
+        //     for(int i = 0; i < size; i ++){
+        //         TreeNode* temp = q.front(); 
+        //         q.pop(); 
+
+        //         if(level%2 == 0){
+        //             tempo[i] = temp -> val; 
+        //         }
+        //         else{
+        //             tempo[size-i-1] = temp -> val; 
+        //         }
+
+        //         if(temp -> left != NULL){
+        //             q.push(temp -> left); 
+        //         }
+
+        //         if(temp -> right != NULL){
+        //             q.push(temp -> right); 
+        //         }
+        //     }
+        //     level ++; 
+        //     ans.push_back(tempo); 
+        // }
+        // return ans; 
+
+
+        // approach 2: 
+        solve(root,0); 
+        vector<vector<int>> result; 
+
+
+        int index = 0; 
+        for(auto i : data){
+            if(index % 2 == 0){
+                result.push_back(i.second); 
+            }
+            else{
+                vector<int> payload; 
+                for(int j = i.second.size()-1; j >= 0; j --){
+                    payload.push_back(i.second[j]);
+                }
+                result.push_back(payload); 
+            }
+            index ++; 
+        }        
+        return result; 
+    }
+};
