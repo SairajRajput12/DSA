@@ -35,6 +35,19 @@ public:
         ans.push_back(sample[sample.size()-1]); 
         solve(ans,q);
     }
+
+    void solveB(TreeNode* root,int level,vector<int> &ans){
+        if(root == NULL){
+            return; 
+        }
+
+        if(level == ans.size()){
+            ans.push_back(root -> val); 
+        }
+
+        solveB(root->right,level+1,ans); 
+        solveB(root->left,level+1,ans); 
+    }
     vector<int> rightSideView(TreeNode* root) { 
     // appraoch 1: using level order traversal 
     /*
@@ -70,14 +83,18 @@ public:
     */ 
 
     // approach 2: using recursion 
+        // vector<int> ans; 
+        // if(root == NULL){
+        //     return ans; 
+        // } 
+        // queue<TreeNode* > q; 
+        // q.push(root); 
+        // solve(ans,q); 
+        // return ans; 
+
+    // approach 3: using recursion 
         vector<int> ans; 
-        if(root == NULL){
-            return ans; 
-        } 
-        queue<TreeNode* > q; 
-        q.push(root); 
-        solve(ans,q); 
+        solveB(root,0,ans); 
         return ans; 
     }
 };
-
