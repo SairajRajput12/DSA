@@ -1,0 +1,122 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+
+
+
+// approach 1: using data structures 
+// Disscussion: 
+/*
+Algorithm: 
+1. create mapping called parent to node which will store the parent node of each node 
+2. find the target node if found then return it 
+3. if not found then make it exception 
+4. find the value of infecting a tree using bfs
+
+*/
+
+
+
+private: 
+// **************************************************DECLARATION*********************************************** 
+map<TreeNode*,TreeNode*> parentToChild; 
+queue<TreeNode*> q1; 
+queue<TreeNode*> q2; 
+map<TreeNode*,bool> visited; 
+int ans = 0; 
+TreeNode* target; 
+
+// member functions 
+    TreeNode* initialise(TreeNode* root,int target){
+        q1.push(root);
+        TreeNode* res = NULL; 
+        parentToChild[root] = NULL;  
+        while(!q1.empty()){
+            TreeNode* front = q1.front(); 
+            q1.pop(); 
+
+            if(front -> val == target){
+                res = front; 
+            }
+
+
+            if(front->left != NULL){
+                parentToChild[front->left] = front; 
+                q1.push(front->left);
+            }
+
+            if(front -> right != NULL){
+                parentToChild[front->right] = front; 
+                q1.push(front->right); 
+            }
+        }
+
+        return res; 
+    }
+
+    void burnTree(TreeNode* target,int &ans){
+        if(target == NULL){
+            cerr << "the target node is not present that's why we cannot process " <<endl; 
+            return; 
+        }
+        
+        ans = 0; 
+
+        q2.push(target); 
+        visited[target] = true; // visited 
+        while(!q2.empty()){
+            int c = 0; 
+            int size = q2.size(); 
+            for(int i = 0; i < size; i ++){
+                TreeNode* front = q2.front(); 
+                q2.pop(); 
+
+                if(front -> left != NULL && visited[front -> left] != true){
+                    q2.push(front -> left); 
+                    c = 1; 
+                    visited[front->left] = true; 
+                }
+
+                if(front -> right != NULL && visited[front -> right] != true){
+                    q2.push(front -> right); 
+                    c = 1; 
+                    visited[front->right] = true; 
+                }
+
+                if( parentToChild[front] != NULL && visited[parentToChild[front]] != true){
+                    q2.push(parentToChild[front]); 
+                    c = 1; 
+                    visited[parentToChild[front]] = true; 
+                }
+            }
+
+            if(c == 1){
+                ans ++; 
+            }
+        }
+    }
+public:
+    int amountOfTime(TreeNode* root, int start) {
+        if(root == NULL){
+            return 0; 
+        }
+
+        target = initialise(root,start);
+        if(target == NULL){
+            cerr << "cannot find target node or value of node that you have entered is not present in the given binary tree" << endl; 
+            return 0; 
+        }
+
+        burnTree(target,ans);  
+        return ans; 
+    }
+};

@@ -100,78 +100,74 @@ struct Node
 class Solution
 {
 private:
-    map<int, int> mp;
+    map<int, pair<int,int>> mp;
     vector<int> ans;
     queue<pair<Node* ,int>> q; 
 
-    void solve(Node* root, int horizontal_distance)
-    {
-        if (root == NULL)
-        {
-            return;
-        }
-
-        // Check if the horizontal distance is already in the map
-        if (mp.find(horizontal_distance) == mp.end())
-        {
-            // If not present, add the current node's data to the map
-            mp.insert({horizontal_distance, root->data});
-        }
-
-        // Traverse left and right subtrees with updated horizontal distance
-        solve(root->left, horizontal_distance - 1);
-        solve(root->right, horizontal_distance + 1);
+void solve(Node* root, int hd,int level) {
+    if (root == NULL) {
+        return;
     }
+
+    // Use [] operator to insert or update the value for the key hd
+    if(mp.find(hd)==mp.end() || mp[hd].first > level){
+            mp[hd]={level,root->data};
+    }
+
+    solve(root->left, hd - 1,level+1);
+    solve(root->right, hd + 1,level+1);
+}
+
 
 public:
     vector<int> topView(Node* root)
     {
         // Your code here
 
-        // if (root == NULL)
-        // {
-        //     return ans;
-        // }
+        if (root == NULL)
+        {
+            return ans;
+        }
 
-        // // Start traversal from the root with initial horizontal distance as 0
-        // solve(root, 0);
+        // Start traversal from the root with initial horizontal distance as 0
+        solve(root, 0,0);
 
-        // // Populate the result vector with values from the map
-        // for (auto x : mp)
-        // {
-        //     ans.push_back(x.second);
-        // }
+        // Populate the result vector with values from the map
+        for (auto x : mp)
+        {
+            ans.push_back(x.second.second);
+        }
 
-        // return ans;
+        return ans;
         
         // approach 2: level order traversal 
-        if(root == NULL){
-            return ans; 
-        }
+        // if(root == NULL){
+        //     return ans; 
+        // }
         
-        q.push({root,0}); 
-        while(!q.empty()){
-            pair<Node* ,int> temp = q.front(); 
-            q.pop(); 
-            Node* fNode = temp.first; 
-            int hd = temp.second; 
-            if(mp.find(hd) == mp.end()){
-                mp.insert({hd,fNode -> data}); 
-            }
+        // q.push({root,0}); 
+        // while(!q.empty()){
+        //     pair<Node* ,int> temp = q.front(); 
+        //     q.pop(); 
+        //     Node* fNode = temp.first; 
+        //     int hd = temp.second; 
+        //     if(mp.find(hd) == mp.end()){
+        //         mp.insert({hd,fNode -> data}); 
+        //     }
             
-            if(fNode -> left != NULL){
-                q.push({fNode -> left,hd - 1}); 
-            }
+        //     if(fNode -> left != NULL){
+        //         q.push({fNode -> left,hd - 1}); 
+        //     }
             
-            if(fNode -> right != NULL){
-                q.push({fNode -> right,hd + 1}); 
-            }
-        }
+        //     if(fNode -> right != NULL){
+        //         q.push({fNode -> right,hd + 1}); 
+        //     }
+        // }
         
-        for(auto m : mp){
-            ans.push_back(m.second); 
-        }
-        return ans; 
+        // for(auto m : mp){
+        //     ans.push_back(m.second); 
+        // }
+        // return ans; 
     }
 };
 

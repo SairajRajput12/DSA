@@ -33,22 +33,53 @@ public:
         // return ans; 
 
         // approach 2: iterative appraoch 
-        stack<TreeNode*> st; 
-        vector<int> ans; 
-        while(root != NULL || !st.empty())
-        {
-            if(root != NULL)
-            {
-                st.push(root); 
-                root = root -> left; 
+        // stack<TreeNode*> st; 
+        // vector<int> ans; 
+        // while(root != NULL || !st.empty())
+        // {
+        //     if(root != NULL)
+        //     {
+        //         st.push(root); 
+        //         root = root -> left; 
+        //     }
+        //     else{
+        //         root = st.top(); 
+        //         st.pop(); 
+        //         ans.push_back(root -> val); 
+        //         root = root -> right; 
+        //     }
+        // }
+        // return ans;
+
+        // approach 3: using morris traversal 
+        TreeNode* currNode = root; 
+        vector<int> nodes; 
+        while(currNode != NULL){
+            if(currNode -> left != NULL){
+                // if it have the current child then find it's predecessor 
+                TreeNode* predecessor = currNode -> left; 
+                while(predecessor -> right != NULL && predecessor -> right != currNode){
+                    predecessor = predecessor -> right; 
+                }
+
+                if(predecessor -> right == NULL){
+                    // create linkage 
+                    predecessor -> right = currNode; 
+                    currNode = currNode -> left; 
+                }
+                else{
+                    // remove linkage 
+                    predecessor -> right = NULL; 
+                    nodes.push_back(currNode -> val); 
+                    currNode = currNode -> right; 
+                }   
             }
             else{
-                root = st.top(); 
-                st.pop(); 
-                ans.push_back(root -> val); 
-                root = root -> right; 
+                nodes.push_back(currNode -> val); 
+                currNode = currNode -> right; 
             }
         }
-        return ans; 
+
+        return nodes; 
     }
 };

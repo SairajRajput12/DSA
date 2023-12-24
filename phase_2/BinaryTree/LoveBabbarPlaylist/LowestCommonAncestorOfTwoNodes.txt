@@ -1,0 +1,163 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+map<TreeNode*,vector<int>> mp; 
+
+    void evaluate(TreeNode* root) {
+        if (root == NULL) {
+            return;
+        }
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            TreeNode* current = q.front();
+            q.pop();
+
+            if (mp.find(current) == mp.end()) {
+                mp[current] = vector<int>();
+            }
+
+            mp[current].push_back(current->val);
+
+            if (current->left != NULL) {
+                q.push(current->left);
+            }
+
+            if (current->right != NULL) {
+                q.push(current->right);
+            }
+        }
+    }
+
+
+    bool solve(TreeNode* root, TreeNode* n, vector<int>& str) {
+        if (root == NULL) {
+            return false;
+        }
+
+        str.push_back(root->val);
+        if (root->val == n->val) {
+            return true; 
+        }
+        if ((root->left && solve(root->left,n, str)) || (root->right && solve(root->right, n,str)))
+            return true;
+    
+        str.pop_back(); 
+        return false; 
+    }
+
+
+    TreeNode* findNode(int val, TreeNode* root) {
+        if (root == NULL || root->val == val) {
+            return root;
+        }
+
+        TreeNode* leftResult = findNode(val, root->left);
+        TreeNode* rightResult = findNode(val, root->right);
+
+        // Check if the node is found in the left or right subtree
+        if (leftResult != NULL) {
+            return leftResult;
+        } else {
+            return rightResult;
+        }
+    }
+
+
+
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    // approach 1: using recursion 
+        // if(root == NULL){
+        //     return root; 
+        // }
+
+        // if(root == p  || root  == q ){
+        //     return root; 
+        // }
+
+        // TreeNode* leftAns = lowestCommonAncestor(root -> left,p,q); 
+        // TreeNode* rightAns = lowestCommonAncestor(root -> right,p,q); 
+
+        // if(leftAns != NULL && rightAns != NULL){
+        //     return root; 
+        // }
+        // else if(leftAns == NULL && rightAns != NULL){
+        //     return  rightAns; 
+        // }
+        // else if(leftAns != NULL && rightAns == NULL){
+        //     return leftAns; 
+        // }
+        // else{
+        //     return NULL; 
+        // }
+
+    // appraoch 2: using strings 
+    if(root == NULL){
+        return root; 
+    }
+        vector<int> str1; 
+        vector<int> str2; 
+        bool k = solve(root,p,str1); 
+        bool m = solve(root,q,str2); 
+        vector<int> commonCharacters;
+        for(int i = 0; i < str1.size(); i ++){
+            cout << str1[i] <<" "; 
+        }
+
+
+        cout << endl; 
+        for(int i = 0; i < str2.size(); i ++){
+            cout << str2[i] <<" "; 
+        }
+
+        cout << endl; 
+        int i = 0; 
+        while (i < str1.size() && i < str2.size() && str1[i] == str2[i]) {
+            i++;
+        }
+
+
+        if (i > 0) {
+            int val = str1[i - 1];
+            return findNode(val, root);
+        } else {
+            return NULL;
+        } 
+    
+    // approach 3: using maps 
+        // if (root == NULL || p == NULL || q == NULL) {
+        //     return NULL;
+        // }
+
+        // // Populate the map with paths from the root to each node
+        // evaluate(root);
+
+        // // Get the paths for nodes p and q from the map
+        // vector<int>& pathP = mp[p];
+        // vector<int>& pathQ = mp[q];
+        // for(int i = 0; i < pathP.size(); i ++){
+
+        // }
+        // // Find the lowest common ancestor based on the paths
+        // TreeNode* result = NULL;
+        // for (int i = 0; i < min(pathP.size(), pathQ.size()); ++i) {
+        //     if (pathP[i] == pathQ[i]) {
+        //         result = findNode(pathP[i], root);
+        //     } else {
+        //         break;
+        //     }
+        // }
+
+        // return result;
+    }
+};

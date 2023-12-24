@@ -1,0 +1,33 @@
+class Solution {
+public:
+
+    int findEqualCharacterIndex(const std::string& str, char targetChar) {
+        size_t index = str.find_first_not_of(targetChar);
+        return (index == std::string::npos) ? static_cast<int>(str.length()) : static_cast<int>(index);
+    }
+
+    string countAndSay(int n) {
+        if(n == 1){
+            return "1"; 
+        }
+
+
+        string x = countAndSay(n-1); 
+        string ans = ""; 
+        int ct = 1; 
+        for(int i = 0; i < x.size()-1; i ++){
+            // my appraoch will be: 
+            // 1. i will be first pick up the substring where the initial character is equal to the first character of the string x and 
+            // count the length of that substring and add that count into the new substring along with that character and shift i to that index of next character 
+            if(x[i] == x[i+1]){
+                ct ++; 
+            }
+            else{
+                ans += (to_string(ct) + x[i]); 
+                ct = 1; 
+            }
+        }
+        ans = ans + to_string(ct) + x[x.size()-1]; 
+        return ans; 
+    }
+};
