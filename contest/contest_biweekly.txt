@@ -1,32 +1,58 @@
+#include <vector>
+#include <iostream>
+using namespace std;
+
 class Solution {
-public:
-    int incremovableSubarrayCount(vector<int>& nums) {
-        int ans=0,n=nums.size();
-        for(int i=0;i<n;++i){
-            for(int j=i;j<n;++j){
-                int flag=1;
-                for(int k=1;k<n;++k){
-                    if(k>=i and k<=j)continue;
-                    // if(k==j+1)continue;
-                    if(k==j+1){
-                        if(i>0 and nums[k]<=nums[i-1]){
-                            flag=0;
-                            break;
-                        }
-                        continue;
-                    }
-                    if(nums[k]<=nums[k-1]){
-                        flag=0;
-                        break;
-                    }
-                
-                
-                }
-                
-                if(flag==1)ans++;
+/*
+Disscussion: section
+2970. Count the Number of Incremovable Subarrays I
+problem statement: 
+You are given a 0-indexed array of positive integers nums. A subarray of nums is called incremovable if nums becomes strictly increasing on removing the subarray. For example, the subarray [3, 4] is an incremovable subarray of [5, 3, 4, 6, 7] because removing this subarray changes the array [5, 3, 4, 6, 7] to [5, 6, 7] which is strictly increasing.Return the total number of incremovable subarrays of nums. Note that an empty array is considered strictly increasing. A subarray is a contiguous non-empty sequence of elements within an array.
+
+
+approach 1: Brute force appraoch 
+    1. use nested loops for iterating over arrays and subarrays. 
+    2. store elements from the starting pointer -1 to 0th element.
+    3. store elements from the end + 1 to (n-1) elements in an ending array and check whether it is increasing or not if yes then increment the answer and continue it till it reaches to finishing nested loops. 
+    4. return ans.
+
+
+*/
+    
+private: 
+    bool check(vector<int> cnums){
+        for(int i = 1; i < cnums.size(); i ++){
+            if(cnums[i] <= cnums[i-1]){
+                return false; 
             }
         }
-        return ans;
+        
+        return true; 
+    }
+    
+    
+public:
+    int incremovableSubarrayCount(vector<int>& nums) {
+        int result = 0; 
+        int n = nums.size(); 
+        for(int i = 0; i < nums.size(); i ++){
+            for(int j = i; j < (nums.size()); j ++){
+                vector<int> cnums; 
+                for(int k = 0; k < (i); k ++){
+                    cnums.push_back(nums[k]); 
+                }
+                
+                for(int k = (j+1); k < n; k ++){
+                    cnums.push_back(nums[k]); 
+                }
+                
+                if(check(cnums)){
+                    result ++; 
+                }
+            }
+        }
+        
+        return result; 
     }
 };
 
@@ -47,5 +73,45 @@ public:
         }
         
         return best;
+    }
+};
+
+
+class Solution {
+public:
+    long long incremovableSubarrayCount(vector<int>& nums) {
+        long long ans = 0; 
+        long long leftIndex = 0; 
+        long long rightIndex = nums.size()-1; 
+        long long n = nums.size(); 
+        
+        while((leftIndex + 1)< n && nums[leftIndex] < nums[leftIndex + 1]){
+            leftIndex ++; 
+        }
+        
+        while((rightIndex-1) >= 0 && nums[rightIndex] > nums[rightIndex - 1]){
+            rightIndex --; 
+        }
+        
+        if(leftIndex == (n-1)){
+            return (n*(n+1))/2; 
+        }
+        
+        
+        // left portion has not included 
+        ans = (n-rightIndex) + 1; 
+        int r = rightIndex; 
+        for(int i = 0; i <= leftIndex; i ++){
+            // int ubIndex = upper_bound(nums.begin()+rightIndex,nums.end(),nums[i]) - nums.begin(); 
+            // ans += (n-ubIndex + 1);
+            while(r < n && nums[i] >= nums[r]){
+                r ++; 
+            }
+            
+            ans += (n-r+1); 
+        }
+        
+        return ans;        
+        
     }
 };
