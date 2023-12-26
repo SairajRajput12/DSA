@@ -1,37 +1,63 @@
+#define mod 1000000007
 class Solution {
+    
+private: 
+    unordered_map<int,bool> mp;   
+    long long ans; 
+
+    // Function to store all possible fence lengths in the map
+    void store(vector<int> hFences, unordered_map<int,bool> &mp) {
+        for(int i = 0; i < hFences.size(); i++) {
+            for(int j = i + 1; j < hFences.size(); j++) {
+                int length = hFences[j] - hFences[i]; 
+                mp[length] = true; 
+            }
+        }
+    }
+    
+    // Function to find the common elements between unordered map and possible widths
+    void solve(vector<int> hFences, unordered_map<int,bool> &mp, long long &ans) {
+        for(int i = 0; i < hFences.size(); i++) {
+            for(int j = i + 1; j < hFences.size(); j++) {
+                int length = hFences[j] - hFences[i]; 
+                if(mp.find(length) != mp.end()) {
+                    ans = max(ans, 1ll * length);  // we are just storing the common length 
+                }
+            }
+        }
+    }
+    
+    void steps(vector<int> &vFences,vector<int> &hFences,int m,int n){
+        // Step 2: Include the 1 and fence number into the array for calculating the possible fence height and width, respectively 
+        hFences.push_back(1); 
+        hFences.push_back(m); 
+        
+        vFences.push_back(1); 
+        vFences.push_back(n); 
+        
+        // Step 3: Sort both sets of fences 
+        sort(hFences.begin(), hFences.end());
+        sort(vFences.begin(), vFences.end()); 
+    }
+    
 public:
-    int maximizeSquareArea(int m, int n, vector<int>& H, vector<int>& V) {
-        int mod = 1E9 + 7;
-        
-        // also push boundries of vertical and horizontal frence
-        H.push_back(1), H.push_back(m);
-        V.push_back(1), V.push_back(n);
-        
-        // sort all horizontal frence and vertical frence
-        sort(H.begin(), H.end());
-        sort(V.begin(), V.end());
-        
-        // calculate all possible horizontal length for area with removing some h_frence
-        unordered_set<int> h_len;
-        for(int i = 0; i < H.size(); i++) {
-            for(int j = i + 1; j < H.size(); j++) {
-                h_len.insert(H[j] - H[i]);
-            }
+    // Main function to maximize square area
+    int maximizeSquareArea(int m, int n, vector<int>& hFences, vector<int>& vFences) {
+        // Step 1: Check if the given figure is already a square; if yes, remove all fences and return the whole area as the answer 
+        if(m == n) {
+            return ((m - 1) * (n - 1))%mod; 
         }
         
-        long long ans = -1;
+        steps(vFences,hFences,m,n); 
         
-         // calculate all possible vertical length for area with removing some h_frence
-        for(int i = 0; i < V.size(); i++) {
-            for(int j = i + 1; j < V.size(); j++) {
-                int v_len = V[j] - V[i];
-                // horizontal length match to vertical length then we make square with length v_len
-                if(h_len.count(v_len)) ans = max(ans, v_len * 1ll * v_len);
-            }
-        }
+        // Step 4: Store all possible lengths in the map 
+        store(hFences, mp);
         
-        
-        return ans % mod;
+        // Step 5: Go for vertical fences
+        ans = -1; 
+        solve(vFences, mp, ans);
+            
+        return (ans == -1) ? ans : (ans * ans) % mod; // to avoid integer overflow we are calculating area here by taking the mod
     }
 };
 
