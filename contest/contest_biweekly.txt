@@ -30,49 +30,99 @@ private:
         return true; 
     }
     
-    
-public:
-    int incremovableSubarrayCount(vector<int>& nums) {
-        int result = 0; 
-        int n = nums.size(); 
-        for(int i = 0; i < nums.size(); i ++){
-            for(int j = i; j < (nums.size()); j ++){
-                vector<int> cnums; 
-                for(int k = 0; k < (i); k ++){
+    void solve(int &result,int index,vector<int> &nums){
+        if(index >= nums.size()){
+            return; 
+        }
+        vector<int> cnums; 
+        for(int i = index; i < nums.size(); i ++){
+            vector<int> cnums; 
+                for(int k = 0; k < (index); k ++){
                     cnums.push_back(nums[k]); 
                 }
                 
-                for(int k = (j+1); k < n; k ++){
+                for(int k = (i+1); k < nums.size(); k ++){
                     cnums.push_back(nums[k]); 
                 }
                 
                 if(check(cnums)){
                     result ++; 
                 }
-            }
         }
+
+        solve(result,index+1,nums); 
+    }   
+    
+    
+public:
+    int incremovableSubarrayCount(vector<int>& nums) {
+    // approach 1: brute
+//         int result = 0; 
+//         int n = nums.size(); 
+//         for(int i = 0; i < nums.size(); i ++){
+//             for(int j = i; j < (nums.size()); j ++){
+//                 vector<int> cnums; 
+//                 for(int k = 0; k < (i); k ++){
+//                     cnums.push_back(nums[k]); 
+//                 }
+                
+//                 for(int k = (j+1); k < n; k ++){
+//                     cnums.push_back(nums[k]); 
+//                 }
+                
+//                 if(check(cnums)){
+//                     result ++; 
+//                 }
+//             }
+//         }
         
+//         return result;
+        int result = 0; 
+        int index = 0; 
+        solve(result,index,nums); 
         return result; 
     }
 };
 
 
 class Solution {
-public:
-    long long largestPerimeter(vector<int>& nums) {
-        long long best=-1;
-        int n=nums.size();
-        sort(begin(nums),end(nums));
-        long long cur=1LL*nums[0]+nums[1];
-        
-        for(int i=2;i<n;++i){
-            if(cur>nums[i]){
-                best=1LL*cur+nums[i];
-            }
-            cur+=nums[i];
+/*
+Disscussion: 
+    1. first add 2 elements and start iterating from 2nd element 
+    2. if addition of 2 elements > 3rd elements then take max between them 
+    3. iterate it until you reached to the last element
+*/
+    void solve(long long &ans,long long &prefix,int index,vector<int> &nums){
+        if(index >= nums.size()){
+            return; 
         }
         
-        return best;
+        if(prefix > nums[index]){
+            ans = max(ans,nums[index] + prefix); 
+        }
+        prefix = prefix + nums[index]; 
+        solve(ans,prefix,index+1,nums); 
+    }
+public:
+    long long largestPerimeter(vector<int>& nums) {
+//         sort(nums.begin(),nums.end());
+//         long long ans = 0; 
+//         long long prefix = nums[0] + nums[1]; 
+//         for(int i = 2; i < nums.size(); i ++){
+//             if(prefix > nums[i]){
+//                 ans = max(ans,prefix + nums[i]); 
+//             }
+//             prefix += nums[i];  
+//         }
+        
+//         return (ans == 0) ? -1 : ans;
+        
+        // approach 2: using recursion 
+        sort(nums.begin(),nums.end());
+        long long ans  = 0; 
+        long long prefix = nums[0] + nums[1]; 
+        solve(ans,prefix,2,nums); 
+        return (ans == 0) ? -1 : ans; 
     }
 };
 

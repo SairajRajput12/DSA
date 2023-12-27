@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    void solve(TreeNode* root,int &ans,int cnt,int h,int &max_d){
+        if(root == NULL){
+            ans = min(cnt,ans); 
+        }
+
+        if (root->left == NULL && root->right == NULL) {
+            ans = min(cnt, ans);
+            max_d = min(max_d,h); 
+            return;
+        }
+
+
+        if(root -> left != NULL){
+            solve(root->left,ans,cnt+1,h+1,max_d); 
+        }
+
+        if(root -> right != NULL){
+            solve(root->right,ans,cnt+1,h+1,max_d); 
+        }
+
+    }
+public:
+    int minDepth(TreeNode* root) {
+        if(root == nullptr){
+            return 0; 
+        }
+        int ans = INT_MAX; 
+        int cnt = 1; 
+        int h = 0; 
+        int max_d = INT_MAX; 
+        solve(root,ans,cnt,h,max_d);  
+        cout << "minimum height is: " << max_d << " number of nodes in that path is: " << ans << endl; 
+        return ans; 
+    }
+};
