@@ -1,0 +1,44 @@
+class Solution {
+    void solve(vector<int> &inorder,TreeNode* root){
+        if(root == NULL){
+            return; 
+        }
+        solve(inorder,root->left); 
+        inorder.push_back(root->val); 
+        solve(inorder,root->right); 
+    }
+
+    bool check(vector<int> inorder){
+        for(int i = 1; i < inorder.size(); i ++){
+            if(inorder[i] <= inorder[i-1]){
+                return false; 
+            }
+        }
+        return true; 
+    }
+
+    bool valid(TreeNode* root, long min, long max) {
+        if (!root) {
+            return true;
+        }
+        if (root -> val <= min || root -> val >= max) {
+            return false;
+        }
+        return valid(root -> left, min, root -> val) && valid(root -> right, root -> val, max);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        // inorder traversal nikalo and check it is sorted or not 
+
+        // appraoch 1: 
+        // vector<int> inorder; 
+        // solve(inorder,root); 
+        // if(check(inorder)){
+        //     return true; 
+        // }
+        // return false; 
+
+        // approach 2: 
+        return valid(root, LONG_MIN, LONG_MAX);
+    }
+};
