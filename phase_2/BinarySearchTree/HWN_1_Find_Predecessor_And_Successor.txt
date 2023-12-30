@@ -1,37 +1,36 @@
-
 pair<int, int> predecessorSuccessor(TreeNode *root, int key)
 {
-    // Write your code here.
-    int pred = -1;
-    int succ = -1;
+    int predecessor = -1;
+    int successor = -1;
 
-    TreeNode* temp = root;
-    while(temp && temp->data != key){
-        if(temp->data > key){
-            succ = temp->data;
-            temp = temp->left;
+    // Initializing temporary node with head.
+    TreeNode *temp = root;
+    // step 1: find the key 
+    while(temp && temp -> data != key){
+        if(temp -> data < key){
+            predecessor = temp -> data; 
+            temp = temp -> right; 
         }
         else{
-            pred = temp->data;
-            temp = temp->right;
+            successor = temp -> data; 
+            temp = temp -> left; 
         }
     }
 
     if(temp){
-        // predecessor
-        TreeNode* leftTree = temp->left;
-        while(leftTree){
-            pred = leftTree->data;
-            leftTree = leftTree->right;
+    // step 2: find the maximum element from the left subtree
+        TreeNode * temp1 = temp -> left; 
+        while(temp1){
+            predecessor = temp1 -> data; 
+            temp1 = temp1 -> right; 
         }
-
-        // successor
-        TreeNode* rightTree = temp->right;
-        while(rightTree){
-            succ = rightTree->data;
-            rightTree = rightTree->left;
-        }
+    // step 2: find the minimum element from the right subtree
+        TreeNode * temp2 = temp -> right; 
+        while(temp2){
+            successor = temp2 -> data; 
+            temp2 = temp2 -> left; 
+        }   
     }
-
-    return {pred, succ};
+    return make_pair(predecessor, successor);
 }
+
