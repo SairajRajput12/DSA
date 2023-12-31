@@ -1,0 +1,180 @@
+// problem 1
+
+class Solution {
+public:
+    bool hasTrailingZeros(vector<int>& nums) {
+        int cnt = 0; 
+        for(int i = 0; i < nums.size(); i ++){
+            if(nums[i]%2 == 0){
+                cnt ++; 
+            }
+        }
+        
+  
+      if(cnt >= 2){
+            return true; 
+        }
+        return false; 
+    }
+};
+
+
+// problem 2
+class Solution {
+
+    unordered_map<string,int> mp; 
+    void solve(string dummy,unordered_map<string,int> &mp,int &ans,string str,string &longestSubstring){
+            // if string not found 
+            // then store it's occurence in map    
+            if(mp.find(dummy) != mp.end()){
+                return; 
+            }    
+            int count = 0;
+            for (int i = 0; i < str.length(); i++) {
+              if (str[i] == dummy[0]) {
+                int j = 1;
+                while (j < dummy.length() && str[i + j] == dummy[j]) {
+                  j++;
+                }
+                if (j == dummy.length()) {
+                  count++;
+                }
+              }
+            }
+            
+            if(count >= 3){
+                mp[dummy] = dummy.size(); 
+                // cout << dummy << " "<<longestSubstring << endl; 
+                if(mp[dummy] >= mp[longestSubstring]){
+                    cout << longestSubstring << " " << dummy << " "<<count << endl; 
+                    longestSubstring = dummy; 
+                    ans = dummy.size(); 
+                }
+            }              
+    }
+public:
+    int maximumLength(string s) {
+        int ans = -1; 
+        string longestSubstring = ""; 
+        for(int i = 0; i < s.size(); i ++){
+            for(int j = i; j < s.size(); j ++){
+                string dummy = ""; 
+                int cnt = i; 
+                while(cnt <= j){
+                    dummy += s[j]; 
+                    cnt ++; 
+                }
+                // cout << longestSubstring << " " << dummy << endl; 
+                solve(dummy,mp,ans,s,longestSubstring); 
+            }
+        }
+        
+        return (ans < 0)? -1: (ans); 
+    }
+};
+
+
+// problem 3
+class Solution {
+    // bool check(string s,int start,int end,string str){
+    //     string dummy = ""; 
+    //     int x = start; 
+    //     while(x <= end){
+    //         dummy += s[x];
+    //         x ++; 
+    //     }
+    //     cout << dummy << endl; 
+        
+    //     int count = 0;
+    //   for (int i = 0; i < str.length(); i++) {
+    //     if (str[i] == dummy[0]) {
+    //       int j = 1;
+    //       while (j < dummy.length() && str[i + j] == dummy[j]) {
+    //         j++;
+    //       }
+    //       if (j == dummy.length()) {
+    //         count++;
+    //       }
+    //     }
+    //   }
+        
+    //     if(count >= 3){
+    //         return true; 
+    //     }
+    //     return false; 
+    // }
+public:
+    int maximumLength(string s) {
+        // int longestSubstringLength = -1; 
+        // int count = 0; 
+        // string sample = s; 
+        // sort(s.begin(), s.end()); 
+        // cout << s << endl; 
+        // int start = 0,end = 0;
+        // while(start < s.size()){
+        //     if(s[start] == s[end]){
+        //         // yes it satisfies one of our condition 
+        //         if(check(s,start,end,sample) == true){
+        //             // it occured thrice  
+        //             cout << "inside the desicion block" << endl; 
+        //             if((end-start+1) >= longestSubstringLength){
+        //                 longestSubstringLength = end - start + 1; 
+        //             }
+        //         }
+        //         end ++; 
+        //     }
+        //     else{
+        //         start = end; 
+        //     }
+            
+        // }
+        
+        // return longestSubstringLength; 
+
+        int n = s.size(); 
+        int count = 0; 
+        char prev = s[0];
+        int ans = -1; 
+        string str = ""; 
+        map<string,int> mpp; 
+        for(int i = 0; i < n; i ++){
+            if(s[i] == prev){
+                str += s[i]; 
+            }
+            else{
+                mpp[str] ++; 
+                str = ""; 
+                prev = s[i];
+                str += s[i]; 
+            }
+        }
+
+        mpp[str] ++; 
+        for(auto it: mpp){
+            int sz = it.first.size(); 
+            int f = it.second; 
+            string sp = it.first; 
+            if(f >= 3){
+                ans = max(ans,sz); 
+            }
+
+            if(f == 2){
+                ans = max(ans,sz-1); 
+            }
+
+            if(f == 1){
+                sp.pop_back(); 
+                if((mpp[sp] + 2) >= 3){
+                    ans = max(ans,sz-1); 
+                }
+                ans = max(ans,sz-2); 
+            }
+        }
+
+        if(ans == 0)
+            return -1; 
+
+        return ans; 
+    }
+    
+};
