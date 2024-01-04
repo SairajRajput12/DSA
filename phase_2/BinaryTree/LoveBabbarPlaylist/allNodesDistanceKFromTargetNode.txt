@@ -1,0 +1,128 @@
+class Solution {
+private:
+// vector<int> ans;   
+// map<TreeNode*, TreeNode*> parent;  // son=>parent  
+// set<TreeNode*> visit;    //record visied node
+    
+    // void solve(vector<int> &ans, TreeNode* temp, int k, TreeNode* target) {
+    //     if (temp == NULL) {
+    //         return;
+    //     }
+
+    //     if (k == 0 && temp != target) {
+    //         ans.push_back(temp->val);
+    //     }
+
+    //     solve(ans, temp->left, k - 1, target);
+    //     solve(ans, temp->right, k - 1, target);
+    // }
+
+unordered_map<TreeNode*,TreeNode*> mp;
+
+    void inorder(TreeNode* root){
+        if(root == NULL){
+            return;
+        }
+        if(root -> left != NULL){
+            mp[root->left] = root; 
+        }
+
+        inorder(root->left); 
+        if(root->right != NULL){
+            mp[root->right] = root; 
+        }
+        inorder(root->right); 
+    }
+
+
+    void BFS(vector<int> &result,int k,TreeNode* target){
+        queue<TreeNode*> q; 
+        q.push(target); 
+        unordered_set<int> visited; 
+        visited.insert(target->val); 
+        int level = 0; 
+
+        while(!q.empty()){
+            int n = q.size(); 
+            if(k == 0){
+                break; 
+            }
+
+            while(n --){
+                TreeNode* temp = q.front(); 
+                q.pop(); 
+
+
+                if(temp -> left != NULL and !visited.count(temp->left->val)){
+                    q.push(temp->left); 
+                    visited.insert(temp->left->val); 
+                }
+
+
+                if(temp -> right != NULL and !visited.count(temp->right->val)){
+                    q.push(temp->right); 
+                    visited.insert(temp->right->val); 
+                }
+
+                if(mp.count(temp) and !visited.count(mp[temp] -> val)){
+                    q.push(mp[temp]); 
+                    visited.insert(mp[temp] -> val); 
+                }
+            }
+            k --; 
+        }
+
+        while(!q.empty()){
+            TreeNode* temp = q.front(); 
+            q.pop(); 
+            result.push_back(temp->val); 
+        }
+    }
+
+
+
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        // vector<int> ans;
+        // solve(ans, target, k, target);
+
+        // int cnt = 0;
+        // int dis = -1; // Initialize dis to -1
+        // queue<TreeNode*> q;
+        // q.push(root);
+
+        // while (!q.empty()) {
+        //     int size = q.size();
+        //     for (int i = 0; i < size; i++) {
+        //         TreeNode* temp = q.front();
+        //         q.pop();
+
+        //         if (temp == target) {
+        //             dis = cnt;
+        //         }
+
+        //         if (temp->left != NULL) {
+        //             q.push(temp->left);
+        //         }
+
+        //         if (temp->right != NULL) {
+        //             q.push(temp->right);
+        //         }
+        //     }
+        //     cnt++;
+        // }
+
+        // if (dis >= k) {
+        //     return ans;
+        // }
+
+        // solve(ans, root, k - dis, target);
+        // return ans;
+        
+        // appraoch 2: 
+        inorder(root); 
+        vector<int> result; 
+        BFS(result,k,target); 
+        return result; 
+    }
+};

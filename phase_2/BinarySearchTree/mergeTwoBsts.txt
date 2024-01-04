@@ -1,0 +1,290 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX_HEIGHT 100000
+
+// Tree Node
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+
+
+
+
+// Function to Build Tree
+Node* buildTree(string str)
+{
+   // Corner Case
+   if(str.length() == 0 || str[0] == 'N')
+       return NULL;
+
+   // Creating vector of strings from input
+   // string after spliting by space
+   vector<string> ip;
+
+   istringstream iss(str);
+   for(string str; iss >> str; )
+       ip.push_back(str);
+
+   // Create the root of the tree
+   Node* root = new Node(stoi(ip[0]));
+
+   // Push the root to the queue
+   queue<Node*> queue;
+   queue.push(root);
+
+   // Starting from the second element
+   int i = 1;
+   while(!queue.empty() && i < ip.size()) {
+
+       // Get and remove the front of the queue
+       Node* currNode = queue.front();
+       queue.pop();
+
+       // Get the current node's value from the string
+       string currVal = ip[i];
+
+       // If the left child is not null
+       if(currVal != "N") {
+
+           // Create the left child for the current node
+           currNode->left = new Node(stoi(currVal));
+
+           // Push it to the queue
+           queue.push(currNode->left);
+       }
+
+       // For the right child
+       i++;
+       if(i >= ip.size())
+           break;
+       currVal = ip[i];
+
+       // If the right child is not null
+       if(currVal != "N") {
+
+           // Create the right child for the current node
+           currNode->right = new Node(stoi(currVal));
+
+           // Push it to the queue
+           queue.push(currNode->right);
+       }
+       i++;
+   }
+
+   return root;
+}
+
+
+
+// } Driver Code Ends
+/*
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution
+{
+    private: 
+    void solve(Node* root,vector<int> &temp){
+        if(root == NULL){
+            return; 
+        }
+
+        solve(root->left,temp); 
+        temp.push_back(root->data); 
+        solve(root->right,temp); 
+    }
+    
+    Node* constructTreeFromInorder(vector<int> &sorted,int start,int end){
+        if(start > end){
+            return NULL; 
+        }
+
+        int mid = start + (end - start)/2; 
+        Node* temp = new Node(sorted[mid]); 
+        temp -> left = constructTreeFromInorder(sorted,start,mid-1); 
+        temp -> right = constructTreeFromInorder(sorted,mid+1,end); 
+        return temp;
+    }
+    
+    void solve(Node* root,Node* &head,Node* prev){
+        if(root == NULL){
+            return; 
+        }
+        solve(root->right,head,prev); 
+        
+        root -> right = head; 
+        if(head != NULL){
+            head -> left = root;
+        }
+        head = root; 
+        solve(root->left,head,prev); 
+    }
+    
+    Node* mergeLinkedList(Node* h1,Node* h2){
+        Node*  head = NULL; 
+        Node*  tail = NULL; 
+        
+        while(h1 != NULL and h2 != NULL){
+            if(h1 -> data < h2 -> data){
+                if(head == NULL){
+                    head = h1; 
+                    tail = h1; 
+                    h1 = h1 -> right; 
+                }else{
+                    tail -> right = h1; 
+                    h1 -> left = tail; 
+                    tail = h1; 
+                    h1 = h1 -> right; 
+                }
+            }
+            else{
+                if(head == NULL){
+                    head = h2; 
+                    tail = h2; 
+                    h2 = h2 -> right; 
+                }
+                else{
+                    tail -> right = h2; 
+                    h2 -> left = tail; 
+                    tail = h2; 
+                    h2 = h2 -> right; 
+                }
+            }
+        }
+        
+        while(h1 != NULL){
+            tail -> left = h1;
+            h1 -> right = tail; 
+            tail = h1; 
+            h1 = h1 -> right; 
+        }
+        
+        while(h2 != NULL){
+            tail -> right = h2; 
+            h2 -> left = tail; 
+            tail = h2; 
+            h2 = h2 -> right; 
+        }
+        
+        return head; 
+    }
+    
+    
+    public:
+    //Function to return a list of integers denoting the node 
+    //values of both the BST in a sorted order.
+    vector<int> merge(Node *root1, Node *root2)
+    {
+        // 1. store the bst'2 inorder in new bst 
+        // vector<int> inorder1; 
+        // vector<int> inorder2; 
+        // solve(root1,inorder1); 
+        // solve(root2,inorder2); 
+        
+        
+        // // 2. merge all of them in the sorted order 
+        // vector<int> answer; 
+        // int size = inorder1.size() + inorder2.size(); 
+        // int index = 0; 
+        // int leftIndex = 0; 
+        // int rightIndex = 0;
+        // while(leftIndex < inorder1.size() and rightIndex < inorder2.size())
+        // {   
+        //     if(inorder1[leftIndex] < inorder2[rightIndex]){
+        //         answer.push_back(inorder1[leftIndex]); 
+        //         leftIndex ++; 
+        //     }
+        //     else if(inorder1[leftIndex] > inorder2[rightIndex]){
+        //         answer.push_back(inorder2[rightIndex]); 
+        //         rightIndex ++; 
+        //     }
+        //     else{
+        //         answer.push_back(inorder1[leftIndex]); 
+        //         answer.push_back(inorder2[rightIndex]); 
+        //         leftIndex ++; 
+        //         rightIndex ++; 
+        //     }
+        // }
+    
+        // while(rightIndex < inorder2.size()){
+        //     answer.push_back(inorder2[rightIndex]);  
+        //     rightIndex ++; 
+        // }
+    
+        // while(leftIndex < inorder1.size()){
+        //     answer.push_back(inorder1[leftIndex]);  
+        //     leftIndex ++; 
+        // }
+
+        // // 3. create new bst from that vector 
+        // // int start = 0; 
+        // // int end = answer.size()-1; 
+        // // Node* ans = constructTreeFromInorder(answer,start,end); 
+        // return answer; 
+        
+        
+        // approach 2: using the linked list: 
+        // question 1: convert a bst to the sorted linked list 
+            // Node* head1 = NULL; 
+            // Node* head2 = NULL; 
+            // Node* prev1 = NULL; 
+            // Node* prev2 = NULL; 
+            // solve(root1,head1,prev1); 
+            // solve(root2,head2,prev2);
+        
+        // question 2: merge both of the linked list 
+            // Node* ans = mergeLinkedList(head1,head); 
+            
+        // question 3: construct the bst from the linked list 
+        // question 4: return the sorted linked list
+        
+        
+    
+       
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+
+   int t;
+   string tc;
+   getline(cin, tc);
+   t=stoi(tc);
+   while(t--)
+   {
+        string s; 
+       getline(cin, s);
+       Node* root1 = buildTree(s);
+
+       getline(cin, s);
+       Node* root2 = buildTree(s);
+    
+       // getline(cin, s);
+       Solution obj;
+       vector<int> vec = obj.merge(root1, root2);
+       for(int i=0;i<vec.size();i++)
+            cout << vec[i] << " ";
+        cout << endl;
+       ///cout<<"~"<<endl;
+   }
+   return 0;
+}
+// } Driver Code Ends

@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    void solve(TreeNode* root,vector<int> &temp){
+        if(root == NULL){
+            return; 
+        }
+
+        solve(root->left,temp); 
+        temp.push_back(root->val); 
+        solve(root->right,temp); 
+    }
+
+    TreeNode* constructTreeFromInorder(vector<int> &sorted,int start,int end){
+        if(start > end){
+            return NULL; 
+        }
+
+        int mid = start + (end - start)/2; 
+        TreeNode* temp = new TreeNode(sorted[mid]); 
+        temp -> left = constructTreeFromInorder(sorted,start,mid-1); 
+        temp -> right = constructTreeFromInorder(sorted,mid+1,end); 
+        return temp;
+    }
+
+public:
+    TreeNode* canMerge(vector<TreeNode*>& trees) {
+        // approach : 
+        // 1. store the bst'2 inorder in new bst 
+
+        // vector<vector<int>> inorder;
+        // for(int i = 0; i < trees.size(); i ++){
+        //     vector<int> temp; 
+        //     solve(trees[i],temp); 
+        //     inorder.push_back(temp); 
+        // }
+        // // 2. merge all of them in the sorted order 
+        // vector<int> sorted; 
+        // for(int i = 0; i < inorder.size(); i ++){
+        //     for(int j = 0; j < inorder[i].size(); j ++){
+        //         sorted.push_back(inorder[i][j]); 
+        //     }
+        // }
+
+        // sort(sorted.begin(),sorted.end()); 
+        
+        
+        // // 3. create new bst from that vector 
+        // int start = 0; 
+        // int end = sorted.size()-1; 
+        // TreeNode* ans = constructTreeFromInorder(sorted,start,end); 
+        // return ans; 
+    
+        // approach 2: 
+        // 
+
+    }
+};
