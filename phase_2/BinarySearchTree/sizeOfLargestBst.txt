@@ -1,0 +1,102 @@
+/*
+    Following is Binary Tree Node structure:
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+*/
+
+class Info{
+    public: 
+        int maxi; 
+        int mini; 
+        bool isBST; 
+        int size; 
+};
+
+
+
+bool check(TreeNode* root,int min,int max){
+    if(root == NULL){
+        return true; 
+    }
+
+    if (root -> data <= min || root -> data >= max) {
+            return false;
+        }
+    
+    return check(root -> left, min, root -> data) && check(root -> right, root -> data, max);
+}
+
+void sizeOfBst(TreeNode* root,int &size){
+    if(root == NULL){
+        return; 
+    }
+
+    sizeOfBst(root->left,size); 
+    size = size + 1; 
+    sizeOfBst(root->right,size); 
+}
+
+void solve(int &ans,TreeNode* root){
+    if(root == NULL){
+        return; 
+    }
+    if(check(root,INT_MIN,INT_MAX)){
+        // yes the given root of the binary tree is bst 
+        int size = 0; 
+        sizeOfBst(root,size);
+        ans = std::max(ans,size); 
+    }
+
+    solve(ans,root->left); 
+    solve(ans,root->right); 
+}
+
+
+Info ans(TreeNode * root,int &size){
+    if(root == NULL){
+        return {INT_MIN,INT_MAX,true,0}; 
+    }
+
+    Info left = ans(root->left,size); 
+    Info right = ans(root->right,size); 
+
+    Info currentNode; 
+    currentNode.size = left.size + right.size + 1; 
+    currentNode.maxi = max(root->data,right.maxi); 
+    currentNode.mini = min(left.mini,root->data); 
+
+
+    if(left.isBST && right.isBST && (root->data > left.maxi && root->data < right.mini)){
+        currentNode.isBST = true; 
+
+    }
+    else{
+        currentNode.isBST = false;
+    }
+
+    if(currentNode.isBST){
+        size = max(size,currentNode.size); 
+    }
+
+    return currentNode; 
+}
+
+int largestBST(TreeNode * root){
+    // Write your code here.
+    // approach 1: brute force approach 
+    // int ans = -1; 
+    // solve(ans,root); 
+    // return ans; 
+
+    // approach 2: using efficient 
+    int size = 0; 
+    Info temp = ans(root,size); 
+    return size; 
+}
