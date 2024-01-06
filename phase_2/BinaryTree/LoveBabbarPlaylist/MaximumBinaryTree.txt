@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+
+    int getMax(vector<int> &nums,int start,int end){
+        int index = 0; 
+        int max = INT_MIN; 
+        for(int i = start;i <= end; i ++){
+            if(max < nums[i]){
+                index = i; 
+                max  = nums[i]; 
+            }
+        }
+
+        return index; 
+    }
+
+    TreeNode* solve(vector<int> &nums,int start,int end,int &cnt){
+        if(start > end or start < 0 or end < 0 or start >= nums.size() or end >= nums.size()){
+            return NULL; 
+        }
+
+        int maxIndex = getMax(nums,start,end);
+        TreeNode* root = new TreeNode(nums[maxIndex]); 
+        root -> left = solve(nums,start,maxIndex-1,cnt); 
+        root -> right = solve(nums,maxIndex+1,end,cnt); 
+        return root; 
+    }
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        // algorithm: 
+        // 1. find the maximum element in the reference nums vector
+        // 2. marked it as the visited 
+        // 3. increment the counter 
+        // 4. do it recursively 
+        // 5. attach left and right subtree to the root node 
+        // return the root node  
+        int cnt = 0;
+        return solve(nums,0,nums.size()-1,cnt); 
+    }
+};
