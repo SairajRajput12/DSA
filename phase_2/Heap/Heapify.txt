@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+
+void heapify(vector<int> &arr,int i,int size){
+    int left = 2*i + 1; 
+    int right = 2*i + 2; 
+    int smallest = i; 
+
+    if(left < size and arr[left] < arr[smallest]){
+        smallest = left; 
+    }
+
+    if(right < size and arr[right] < arr[smallest]){
+        smallest = right; 
+    }
+
+    if(smallest != i){
+        swap(arr[smallest],arr[i]); 
+        heapify(arr,smallest,size); 
+    }
+}
+
+vector<int> buildMinHeap(vector<int> &arr)
+{
+    // Write your code here
+    int size = arr.size(); 
+    for(int i = (size/2)-1; i >= 0;i --){
+        heapify(arr,i,size); 
+    }
+    return arr; 
+}

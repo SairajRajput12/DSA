@@ -1,0 +1,51 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the Binary Tree node structure
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+
+void preorder(TreeNode<int>* root, int min, int max, bool &flag){
+
+if(!root) return;
+
+if(min == max) flag = true;
+
+preorder(root->left, min, root->data - 1, flag);
+
+preorder(root->right, root->data + 1, max, flag);
+
+}
+
+ 
+
+bool isDeadEnd(TreeNode<int>* root) {
+
+bool flag = false;
+
+preorder(root, 1, INT_MAX, flag);
+
+return flag;
+
+}
