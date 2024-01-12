@@ -1,0 +1,36 @@
+class Solution {
+    void heapify(vector<int> &nums,int i,int j){
+        int smallest = i; 
+        int leftChild = 2*i + 1; 
+        int rightChild = 2*i + 2;
+
+        if(leftChild < j and nums[leftChild] < nums[smallest]){
+            smallest = leftChild; 
+        }
+
+        if(rightChild < j and nums[rightChild] < nums[smallest]){
+            smallest = rightChild; 
+        }
+
+        if(smallest != i){
+            swap(nums[smallest],nums[i]); 
+            heapify(nums,smallest,j); 
+        }
+    }
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        // we will first sort the array 
+        // using heap 
+
+        for(int i = (nums.size()/2); i >= 0; i --){
+            heapify(nums,i,nums.size()); 
+        }
+
+        for(int i = (nums.size()-1); i >= 0; i --){
+            swap(nums[0],nums[i]); 
+            heapify(nums,0,i); 
+        }
+
+        return nums[k-1]; 
+    }
+};

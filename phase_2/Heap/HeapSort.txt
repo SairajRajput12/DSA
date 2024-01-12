@@ -1,39 +1,46 @@
 class Solution {
-private:
+private: 
+    void heapify(vector<int> &nums,int i,int j){
+        int largest = i; 
+        int leftChild = 2*i + 1; 
+        int rightChild = 2*i + 2; 
 
-    void heapify(vector<int> &arr, int i, int size) {
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
-        int smallest = i;
-
-        if (left < size and arr[left] > arr[smallest]) {
-            smallest = left;
+        if(leftChild < j and nums[largest] < nums[leftChild]){
+            largest = leftChild; 
         }
 
-        if (right < size and arr[right] > arr[smallest]) {
-            smallest = right;
+        if(rightChild < j and nums[largest] < nums[rightChild]){
+            largest = rightChild; 
         }
 
-        if (smallest != i) {
-            swap(arr[smallest], arr[i]);
-            heapify(arr, smallest, size);
+        if(largest != i){
+            swap(nums[largest],nums[i]); 
+            heapify(nums,largest,j); 
         }
     }
-
-    
-
 public:
-    vector<int> sortArray(vector<int> &nums) {
-        // using heap sort
-        for(int i = nums.size()/2-1; i >= 0; i --){
-            heapify(nums,i,nums.size());
+    vector<int> sortArray(vector<int>& nums) {
+        // steps: 
+        // step 1: first check whether the size of given array is 0 or not 
+        // if yes then return array as it is 
+        if(nums.size() == 0){
+            cerr << "you have entered the empty elemenet" << endl; 
+            return nums; 
         }
 
-        for(int i = nums.size()-1; i > 0; i --){
-            swap(nums[0],nums[i]); 
+        // step 2: now convert the normal heap into the  max heap  
+        int size = nums.size(); 
+        for(int i = (size)/2; i >= 0; i --){
+            heapify(nums,i,size); 
+        }
+
+        // step 3: now swap the array with the last element and build max heap upto the index of that last element. 
+
+        for(int i = nums.size()-1; i >= 0; i --){
+            swap(nums[i],nums[0]); 
             heapify(nums,0,i); 
         }
 
-        return nums;
+        return nums; 
     }
 };
