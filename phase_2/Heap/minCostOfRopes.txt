@@ -1,0 +1,65 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution
+{
+    public:
+    //Function to return the minimum cost of connecting the ropes.
+    long long minCost(long long arr[], long long n) {
+        // Your code here
+        // Approach: 
+        // i will create the min heap 
+        // it will return the minimum element in O(1). 
+        // get first first element and pop it and do same for second element 
+        // add both of them 
+        // store it in pq. 
+        
+        // create a min heap 
+        priority_queue<long long,vector<long long>,greater<long long>> pq; 
+        
+        for(int i = 0; i < n; i ++){
+            // pq mein sare element daldo 
+            pq.push(arr[i]); 
+        }
+        
+        long long cost = 0; 
+        while(pq.size() > 1){ 
+            // my question is why i have taken pq.size() > 1
+            // beacuse if i consider the case of pq.size() >= 1 then it means that we are also cosider to connect the single rope which will be meaning less and cause incorrect answer. 
+            long long a = pq.top(); 
+            pq.pop(); 
+            long long b = pq.top(); 
+            pq.pop(); 
+            
+            long long c = a + b; 
+            cost += c; 
+            pq.push(c); 
+        }
+        return cost; 
+        
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main() {
+    long long t;
+    cin >> t;
+    while (t--) {
+        long long n;
+        cin >> n;
+        long long i, a[n];
+        for (i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        Solution ob;
+        cout << ob.minCost(a, n) << endl;
+    }
+    return 0;
+}
+
+// } Driver Code 

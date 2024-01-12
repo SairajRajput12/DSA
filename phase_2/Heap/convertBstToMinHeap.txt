@@ -1,0 +1,77 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+    
+    Following is the Binary Tree node structure:
+
+	class BinaryTreeNode {
+		
+	public :
+		int data;
+		BinaryTreeNode* left;
+		BinaryTreeNode* right;
+
+		BinaryTreeNode(int data) {
+		this -> left = NULL;
+		this -> right = NULL;
+		this -> data = data;
+		}
+	};
+
+*************************************************************/
+
+void inO(BinaryTreeNode* root,vector<int>& inorder){
+	if(root == NULL){
+		return; 
+	}
+
+	inO(root->left,inorder); 
+	inorder.push_back(root->data); 
+	inO(root->right,inorder); 
+}
+
+void changeG(BinaryTreeNode* &root,vector<int> &inorder,int &index){
+	if(root == NULL){
+		return; 
+	}
+	
+	root -> data = inorder[index ++]; 
+	changeG(root->left,inorder,index); 
+	changeG(root->right,inorder,index); 
+}
+
+void insertInHeap(BinaryTreeNode* &root,priority_queue<long long,vector<long long>,greater<long long>> &pq){
+	if(root == NULL){
+		return; 
+	}
+
+	insertInHeap(root->left,pq);
+	pq.push(root->data); 
+	insertInHeap(root->right,pq); 
+}
+
+void changeData(BinaryTreeNode* &root,priority_queue<long long,vector<long long>,greater<long long>> &pq){
+	if(root == NULL){
+		return; 
+	}
+
+	insertInHeap(root->left,pq);
+	root -> data = pq.top(); 
+	pq.pop(); 
+	insertInHeap(root->right,pq); 
+}
+
+
+BinaryTreeNode* convertBST(BinaryTreeNode* root)
+{
+	// Write your code here.
+	// appraoch 
+	// inorder traversal nikalo 
+	// fill the tree in the preorder way
+
+	// approach 1:  
+	vector<int> inorder; 
+	inO(root,inorder); 
+	int i = 0; 
+	changeG(root,inorder,i); 
+	return root; 	
+}
