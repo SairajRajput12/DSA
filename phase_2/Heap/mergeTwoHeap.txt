@@ -1,0 +1,47 @@
+#include <bits/stdc++.h> 
+
+void convert(vector<int> &arr,int i,int size){
+    int largest = i; 
+    int left = 2*i + 1; 
+    int right = 2*i + 2; 
+
+    if(left < size and arr[largest] < arr[left]){
+        largest = left; 
+    }
+
+    if(right < size and arr[largest] < arr[right]){
+        largest = right; 
+    }
+
+    if(largest != i){
+        swap(arr[largest],arr[i]); 
+        convert(arr,largest,size); 
+    }
+}
+
+vector<int> mergeHeap(int n, int m, vector<int> &arr1, vector<int> &arr2) {
+    // Write your code here 
+    // appraoch 1: brute force 
+    // 1. add all elements to the new array 
+    // 2. convert it to the max heap 
+
+    vector<int> ans; 
+    for(int i = 0; i < arr1.size(); i ++){
+        ans.push_back(arr1[i]); 
+    }
+
+    for(int i = 0; i < arr2.size(); i ++){
+        ans.push_back(arr2[i]); 
+    }
+
+    // now convert it to the max heap
+    // Start converting from the last non-leaf node
+    for(int i = (ans.size() / 2) - 1; i >= 0; i--){
+        convert(ans, i, ans.size()); 
+    }
+     
+    return ans; 
+
+    
+
+}
