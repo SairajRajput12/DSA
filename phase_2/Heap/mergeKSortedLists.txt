@@ -8,6 +8,15 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+ class compare{
+    public: 
+        bool operator()(ListNode* a,ListNode* b){
+            return a->val > b -> val; 
+        }
+ };
+
+
 class Solution {
     ListNode* solve(ListNode* head,ListNode* comparingWith){
         if(!head){
@@ -47,12 +56,99 @@ public:
         // return head -> next;       
 
     // approach 2: using recursion 
-        if(lists.size() == 0) return NULL; 
-        ListNode* head = lists[0]; 
-        for(int i = 1; i < lists.size(); i ++){
-            head = solve(head,lists[i]); 
+        // if(lists.size() == 0) return NULL; 
+        // ListNode* head = lists[0]; 
+        // for(int i = 1; i < lists.size(); i ++){
+        //     head = solve(head,lists[i]); 
+        // }
+        // return head; 
+    
+    // approach 3: love babbar's approach 
+        int j;
+        for(j = 0;j< lists.size();j++){
+            if(lists[j] != NULL)
+                break;
         }
+        if(j == lists.size()){ // all list empty
+            return NULL;
+        }
+
+        priority_queue<ListNode*,vector<ListNode*>,compare > minHeap;   
+        int k = lists.size(); 
+
+        if(k == 0){
+            return NULL; 
+        }
+
+        for(int i = 0; i < k; i ++){
+            if(lists[i] != NULL){
+                minHeap.push(lists[i]); 
+            }
+        }
+        ListNode*  head = new ListNode(0); 
+        ListNode*  tail = head; 
+        while(!minHeap.empty()){
+            ListNode* temp = minHeap.top(); 
+            minHeap.pop(); 
+
+            tail -> next = temp; 
+            tail = tail -> next; 
+
+            if(temp != NULL and temp -> next != NULL){
+                minHeap.push(temp -> next); 
+            }
+        }
+
+        return head -> next; 
+    }
+};
+
+/*
+class Solution {
+
+    void mereger2Listss(ListNode* h1,ListNode* h2){
+        if (!l1) return l2;
+        if (!l2) return l1;
+        ListNode* head = l1->val <= l2->val? l1 : l2;
+        head->next = l1->val <= l2->val ? merge2Lists(l1->next, l2) : merge2Lists(l1, l2->next);
+        return head;
+
+    }
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+    // approach 1: using minHeap 
+        // priority_queue<int,vector<int>,greater<int>> minHeap;  
+        // for(auto it: lists){
+        //     ListNode* head = it; 
+        //     while(head != NULL){
+        //         minHeap.push(head -> val); 
+        //         head = head -> next; 
+        //     }
+        // }
+
+        // ListNode* head = new ListNode(-1); 
+        // ListNode* curr = head; 
+
+        // while(!minHeap.empty()){
+        //     ListNode* newNode = new ListNode(minHeap.top()); 
+        //     minHeap.pop(); 
+        //     curr -> next= newNode; 
+        //     curr = curr -> next; 
+        // }
+
+        // return head -> next;       
+
+    // approach 2:   
+        if(lists.size() == 0) return NULL; 
+
+        ListNode* head = lists[0]; 
+
+        for(int i = 1; i < lists.size(); i ++){
+            head = merge2Lists(head,lists[i]); 
+        }
+
         return head; 
     }
 };
 
+*/  
