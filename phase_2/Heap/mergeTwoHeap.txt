@@ -41,7 +41,4 @@ vector<int> mergeHeap(int n, int m, vector<int> &arr1, vector<int> &arr2) {
     }
      
     return ans; 
-
-    
-
 }
