@@ -1,0 +1,19 @@
+Comparator Classes are used to compare the objects of user-defined classes. In order to develop a generic function use template, and in order to make the function more generic use containers, so that comparisons between data can be made.
+
+class comparator_class {
+public:
+	// Comparator function
+	bool operator()(object o1, object o2)
+	{
+
+		// There can be any condition
+		// implemented as per the need
+		// of the problem statement
+		return (o1.data_member
+				== o2.data_member);
+	}
+}
+
+
+Explanation: The above comparator function operator() class take two pair of objects at a time and return true if data members of the two operators are the same. There can be any condition as per the need of the problem in the comparator function. In the above example, the function returns true if data members are the same. Example 1: For implementing Linear Search on the array elements, searching an integer in a given array can be implemented easily. But searching any element on user defined data type can’t be implemented easily as in case of array. In this case, the comparator class is used to implement it. Below is the program for the same: 
+
