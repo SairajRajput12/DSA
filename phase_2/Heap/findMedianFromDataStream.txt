@@ -1,4 +1,173 @@
-class MedianFinder {
+// appraoch 1: using binary search 
+// this also gives TLE. 
+
+class MedianFinder{
+public: 
+    list<int> myList; 
+    // here i am using c++ linked list
+
+    void addNum(int num){
+        int start = 0, end = myList.size(),mid; 
+        while(start < end){
+            mid = start + (end - start)/2; 
+            list<int>::iterator it = myList.begin();
+            advance(it,mid);  // -> this function moves the pointer to the desired index
+            int midElement = *it; 
+            if(num < midElement){
+                end = mid; 
+            }
+            else{
+                start = mid + 1; 
+            }
+        }
+        list<int>::iterator it1 = myList.begin();
+        advance(it1, start);
+        myList.insert(it1, num);
+    }
+
+    double findMedian(){
+        int size = myList.size(); 
+        double median = 0; 
+        if(size%2 == 0){
+            int mid = myList.size()/2; 
+            list<int>::iterator it1 = myList.begin();
+            advance(it1,mid);  // -> this function moves the pointer to the desired index
+            int midElement1 = *it1; 
+
+            int mid1 = myList.size()/2-1; 
+            list<int>::iterator it2 = myList.begin();
+            advance(it2,mid1);  // -> this function moves the pointer to the desired index
+            int midElement2 = *it2;  
+
+            median = (midElement1 + midElement2)/2.0; 
+        }
+        else{
+            int mid = myList.size()/2; 
+            list<int>::iterator it1 = myList.begin();
+            advance(it1,mid);  // -> this function moves the pointer to the desired index
+            int midElement = *it1; 
+
+            median = midElement; 
+        }       
+
+        return median; 
+    }
+};
+
+
+// approach 2: using heaps
+// class MedianFinder {
+// public:
+// priority_queue<int> maxHeap; 
+// priority_queue<int,vector<int>,greater<int>> minHeap; 
+//     MedianFinder() {
+        
+//     }
+
+//     void addNum(int num) {
+//         if(maxHeap.empty() or maxHeap.top() > num)
+//         {
+//             // it represents the left region of the median 
+//             maxHeap.push(num); 
+//         }
+//         else{
+//             // it represents the right part
+//             minHeap.push(num); 
+//         }
+
+//         if(maxHeap.size() > minHeap.size() + 1){
+//             // the median of has size of it's right and left part less than or greater by 1. 
+//             int tol = maxHeap.top(); 
+//             minHeap.push(tol); 
+//             maxHeap.pop(); 
+//         }
+//         else if(minHeap.size() > maxHeap.size() + 1){
+//             // here i made an mistake by not using else if if i used else condition then it will cause error.
+//             int tol = minHeap.top(); 
+//             minHeap.pop(); 
+//             maxHeap.push(tol);
+//         }
+//     }
+    
+//     double findMedian() {
+//         if(maxHeap.size() == minHeap.size()){
+//             if(maxHeap.empty()){
+//                 return 0; 
+//             }
+//             else{ 
+//                 double avg =  (maxHeap.top() + minHeap.top())/2.0; 
+//                 return avg; 
+//             }
+//         }
+//         else{
+//             return (maxHeap.size() > minHeap.size()) ? maxHeap.top() : minHeap.top(); 
+//         }
+//     }
+// };
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
+ // approach 3: giving TLE:
+
+ /*
+ 
+ class MedianFinder {
+vector<double> ans; 
+public:
+    MedianFinder() {
+        
+    }
+
+    void insertionAstra(vector<double> &ans){
+        int round = ans.size(); 
+        for(int i = 1; i < round; i ++){
+            int temp = ans[i]; 
+            int j = i - 1; 
+            for(int j = (i-1); j >= 0; j --){
+                if(temp < ans[j]){
+                    ans[j+1] = ans[j]; 
+                }
+                else{
+                    break; 
+                }
+            }
+            ans[j+1] = temp; 
+        }
+    }
+    
+    void addNum(int num) {
+        if(ans.size() == 0){
+            ans.push_back(num); 
+        }
+        else{
+            ans.push_back(num); 
+            insertionAstra(ans); 
+        }
+    }
+    
+    double findMedian() {
+        if(ans.size()%2 == 0){
+            double first = ans[ans.size()/2];
+            double second = ans[ans.size()/2-1]; 
+            return (first+second)/2.0;
+        }
+        else{
+            return ((double)ans[ans.size()/2]); 
+        }
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */class MedianFinder {
 public:
 priority_queue<int> maxHeap; 
 priority_queue<int,vector<int>,greater<int>> minHeap; 
