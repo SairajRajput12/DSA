@@ -1,0 +1,104 @@
+class Solution {
+unordered_map<char,int> mp; 
+priority_queue<int> max; 
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        for(char c:tasks){
+            mp[c] ++; 
+        } 
+
+        for(auto c:mp){
+            max.push(c.second); 
+        }
+        int result = 0; 
+        while(!max.empty())
+        {
+            vector<int> tmp; 
+            int time = 0;
+            for(int i = 0; i < n+1; i ++){
+                if(!max.empty()){
+                    tmp.push_back(max.top()-1); 
+                    max.pop(); 
+                    time ++; 
+                }
+            }
+
+            for(auto t:tmp){
+                if(t){
+                    max.push(t); 
+                }
+            }
+            result += (max.empty()) ? time : n+1; 
+        }
+        return result; 
+    }
+};
+
+/*
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+bool cmp(const std::pair<char, std::pair<int, int>>& a, const std::pair<char, std::pair<int, int>>& b) {
+    return a.second.second < b.second.second;
+}
+
+class Solution {
+    std::map<char, std::pair<int, int>> freq;
+
+public:
+    int leastInterval(std::vector<char>& tasks, int n) {
+        if (n == 0) {
+            return tasks.size();
+        }
+
+        for (int i = 0; i < tasks.size(); i++) {
+            freq[tasks[i]].first++;
+        }
+
+        // char,<freq,idle> 
+        std::vector<std::pair<char, std::pair<int, int>>> freqVector(freq.begin(), freq.end());
+        
+        // Sort the vector of pairs using the custom comparison function
+        std::sort(freqVector.begin(), freqVector.end(), cmp);
+
+        int ans = 0;
+        for(auto& it : freqVector){
+            cout << it.first << " " << it.second.first << " " << it.second.second << endl; 
+        }
+
+        cout << "loop ended" << endl; 
+
+        while (!freqVector.empty()) {
+            auto it = freqVector.begin();
+            cout <<" before "<< it->first << " " << it->second.first << " " << it->second.second << endl; 
+            if (it->second.second == 0) {
+                ans = ans + 1;
+                it->second.second = n;
+                it->second.first--;
+                cout <<" before if"<< it->first << " " << it->second.first << " " << it->second.second << endl; 
+            } else {
+                ans = ans + (n - it->second.second);
+                // Update freq of all 
+                for (auto& it1 : freqVector) {
+                    if (it1.second.first == 0) {
+                        // Erase the element if frequency is 0
+                        freqVector.erase(std::remove(freqVector.begin(), freqVector.end(), it1), freqVector.end());
+                    } else {
+                        it1.second.first--;
+                    }
+                    cout <<" before "<< it->first << " " << it->second.first << " " << it->second.second << endl; 
+                }
+            }
+            // Sort the vector of pairs again after updates
+            std::sort(freqVector.begin(), freqVector.end(), cmp);
+            cout <<" after " <<it->first << " " << it->second.first << " " << it->second.second << endl; 
+        }
+
+        return ans;
+    }
+};
+
+
+*/
