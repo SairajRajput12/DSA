@@ -1,0 +1,59 @@
+class compare{
+public: 
+     bool operator()(pair<int,int> &lhs, pair<int,int> &rhs) {
+        return lhs.second > rhs.second; // Change to lhs > rhs for a max heap
+     }
+};
+
+class Solution { 
+private: 
+    int getMax(map<int,int> &mp){
+        int maxValue = INT_MIN; 
+        int maxKey = 0; 
+        for(const auto &pair : mp){
+            if(maxValue < pair.second){
+                maxValue = pair.second; 
+                maxKey = pair.first; 
+            }
+        }
+
+        mp.erase(maxKey); 
+        return maxKey; 
+    }
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // appraoch 1: using map 
+        // map<int,int> mp;  
+        // for(int i = 0; i < nums.size(); i ++){
+        //     mp[nums[i]] ++; 
+        // }
+
+        // vector<int> ans; 
+        // while(k > 0){
+        //     int maxValue = getMax(mp); 
+        //     ans.push_back(maxValue); 
+        //     k --; 
+        // }
+
+        // return ans; 
+
+        // appraoch 2: using heap  O(NlogN)
+        priority_queue<pair<int,int>>pq;
+        unordered_map<int,int>mpp;
+        
+        for(auto i : nums){
+            mpp[i] ++; 
+        }
+
+        for(auto i : mpp){
+            pq.push({i.second,i.first}); 
+        }
+
+        vector<int> ans; 
+        while(k -- && !pq.empty()){
+            ans.push_back(pq.top().second); 
+            pq.pop(); 
+        }
+        return ans; 
+    }
+};
