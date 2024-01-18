@@ -1,0 +1,24 @@
+void solve(vector<vector<int>> &ans,int n,int source,int helper,int destination)
+{
+    if(n == 1){
+        vector<int> temp{source,destination}; 
+        ans.push_back(temp); 
+        return; 
+    }
+
+    solve(ans,n-1,source,destination,helper);  
+    vector<int> temp{source,destination}; 
+    ans.push_back(temp);
+    solve(ans,n-1,helper,source,destination); 
+}
+
+vector<vector<int>> towerOfHanoi(int n)
+{
+    // Write your code here.
+    vector<vector<int>> ans; 
+    int source = 1; 
+    int helper = 2; 
+    int destination = 3; 
+    solve(ans,n,source,helper,destination);  
+    return ans;  
+}
