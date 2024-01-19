@@ -1,0 +1,115 @@
+class Solution {
+    void getGroup(vector<int> &temp,map<int,bool> freq,int groupSize,priority_queue<int,vector<int>,greater<int>> &q){
+        int x = 0; 
+        vector<int> recovery; 
+        while(x < groupSize && !q.empty()){
+            // 2 case
+            if(freq[q.top()] == false){
+                temp.push_back(q.top());  
+                freq[q.top()] = true; 
+                q.pop(); 
+            }
+            else if (freq[q.top()] == true) {
+                while (freq[q.top()] == true) {
+                    recovery.push_back(q.top());
+                    q.pop();
+                }
+
+                if (!q.empty()) {
+                    temp.push_back(q.top());
+                    freq[q.top()] = true; 
+                    q.pop();
+                }
+            }
+
+            x ++; 
+        }
+        
+        for(int i = 0; i < recovery.size(); i ++){
+            q.push(recovery[i]); 
+        }
+        
+    }
+public:
+    bool isNStraightHand(vector<int>& arr, int groupSize) {
+        // approach i tried
+        // if(arr.size()%groupSize != 0){
+        //     return false; 
+        // }
+        // priority_queue<int,vector<int>,greater<int>> q;  
+        // map<int,bool> freq; 
+        // for(int i = 0; i < arr.size(); i ++){
+        //     q.push(arr[i]);  
+        //     freq[arr[i]] = false; 
+        // }
+
+        // int no_of_groups = arr.size()/groupSize; 
+        // int x = 0; 
+        // while(x < no_of_groups){
+        //     vector<int> temp; 
+        //     getGroup(temp,freq,groupSize,q); 
+            
+        //     for(int i = 1; i < groupSize; i ++){ 
+        //         cout << temp[i] << " " << temp[i-1] << endl;
+        //         if(temp[i] - temp[i-1] != 1){
+        //             return false; 
+        //         }
+        //     }
+
+        //     x ++; 
+
+        // }
+
+        // return true; 
+
+
+        // correct appraoch 
+
+        if(arr.size()%groupSize != 0){
+            return false; 
+        }
+
+        map<int,int> freq; 
+        priority_queue<int,vector<int>,greater<int>> q;  
+        for(int i = 0; i < arr.size(); i ++){
+            freq[arr[i]] ++; 
+        }
+        
+
+        for(auto i : freq){
+            q.push(i.first); 
+        }
+
+        while(!freq.empty()){
+            int test = 0; 
+            vector<int> recovery; 
+            vector<int> testing; 
+            while(test < groupSize){
+                int min = q.top(); 
+                freq[q.top()] --; 
+                testing.push_back(min); 
+                if(freq[q.top()] > 0){
+                    recovery.push_back(q.top()); 
+                }
+                else{
+                    freq.erase(q.top()); 
+                }
+                q.pop(); 
+                test ++; 
+            }
+
+            for(int i = 1; i < testing.size(); i ++){
+                if(testing[i] - testing[i-1] != 1){
+                    return false; 
+                }
+            }
+
+            for(int i = 0; i < recovery.size(); i ++){
+                q.push(recovery[i]); 
+            }
+
+        }
+        return true; 
+    
+    }
+};

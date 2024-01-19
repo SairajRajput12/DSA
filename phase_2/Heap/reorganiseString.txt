@@ -1,0 +1,129 @@
+class node{
+public: 
+    char character;
+    int frequency; 
+    node(char c,int freq){
+        character = c; 
+        frequency = freq; 
+    }
+};
+
+class cmp{
+public: 
+    bool operator()(node* a,node* b){
+        return a->frequency < b->frequency;  // max heap condition
+    }
+};
+
+class Solution {
+public:
+    string reorganizeString(string s) {
+        // approach 1: version 1
+
+        // map<char,int> mp; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     mp[s[i]] ++; 
+        // }
+
+        // priority_queue<node*,vector<node*>,cmp> q; 
+        // for(auto it : mp){
+        //     node* n = new node(it.first,it.second); 
+        //     q.push(n); 
+        // }
+
+        // string answer = ""; 
+        // char prev; 
+        // int i = 0; 
+        // while(!q.empty()){
+        //     if(answer == ""){
+        //         answer = answer + q.top()->character; 
+        //         node* temp = q.top();  
+        //         q.pop(); 
+        //         temp -> frequency = temp -> frequency - 1; 
+        //         if(temp -> frequency > 0){
+        //             q.push(temp); 
+        //         }
+
+        //         prev = answer[i]; 
+        //         i ++; 
+        //     }
+        //     else{
+        //         if(prev == q.top()->character){
+                    
+        //             node* temp1 = q.top(); 
+        //             q.pop(); 
+        //             if (q.empty()) {
+        //                 return "";  // I forgot to add this condition
+        //             }
+        //             answer = answer + q.top()->character; 
+        //             node* temp2 = q.top();  
+        //             q.pop(); 
+        //             q.push(temp1); 
+
+        //             temp2 -> frequency = temp2 -> frequency - 1; 
+        //             if(temp2 -> frequency > 0){
+        //                 q.push(temp2); 
+        //             }
+
+        //             prev = answer[i]; 
+        //             i ++;
+        //         }
+        //         else{
+
+        //             answer = answer + q.top() -> character; 
+        //             node* temp = q.top(); 
+        //             q.pop(); 
+        //             temp -> frequency = temp -> frequency - 1; 
+        //             if(temp -> frequency > 0){
+        //                 q.push(temp); 
+        //             }
+
+        //             prev = answer[i]; 
+        //             i ++; 
+        //         }
+        //     }
+        // }
+        // return answer; 
+
+        // approach 2: version 2:
+        string res="";
+        unordered_map<char,int> mp;
+        priority_queue<pair<int,char>>pq; // he queue min pan nahi and max pan nahi
+        
+        for(auto x: s)
+            mp[x]+=1;
+        
+        for(auto m: mp)
+            pq.push(make_pair(m.second,m.first));
+        
+        while(pq.size()>1){
+            auto top1= pq.top();
+            pq.pop();
+            auto top2 = pq.top();
+            pq.pop();
+            
+            res+=top1.second;
+            res+=top2.second;
+            
+            top1.first -=1;
+            top2.first -= 1;
+            
+            if(top1.first > 0)
+                pq.push(top1);
+            
+            if(top2.first > 0)
+                pq.push(top2);
+        }
+        
+        if(!pq.empty()){
+            if(pq.top().first > 1)
+                return "";
+            
+            else
+                res+=pq.top().second;
+        }
+        
+        return res; 
+
+    }
+};
