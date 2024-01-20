@@ -1,0 +1,218 @@
+class Twitter {
+
+class Tweet{
+    public: 
+        int id; 
+        int time; 
+        Tweet* next; 
+        Tweet(int id){
+            this -> id = id; 
+            time = timeStamp ++; 
+            next = NULL; 
+        }
+    }; 
+
+class User{
+public: 
+        int id; 
+        set<int> followed; 
+        Tweet* tweetHead;
+        
+        User(int id){
+            this -> id = id; 
+            userFollow(id); // first follow itself 
+            tweetHead = NULL; 
+        }
+
+        void userFollow(int id){
+            followed.insert(id); 
+        }
+
+        void userUnFollow(int id){
+            followed.erase(id); 
+        }
+
+        void post(int id){
+            Tweet* t = new Tweet(id); 
+            t->next  = tweetHead; 
+            tweetHead = t;  
+        }
+};
+
+
+class cmp{
+public: 
+    bool operator()(Tweet* a,Tweet* b){
+        return a->time < b-> time; 
+    }
+};
+
+static int timeStamp; 
+map<int,User*> userMap; 
+
+public:
+
+    Twitter() {
+        timeStamp = 0; 
+    }
+    
+    void postTweet(int userId, int tweetId) {
+        auto it = userMap.find(userId); 
+        if(it == userMap.end()){
+            // not found 
+            User* u = new User(userId);
+            userMap[userId] = u; 
+        }
+        userMap[userId]->post(tweetId); 
+    }
+    
+    vector<int> getNewsFeed(int userId) {
+        vector<int> ans; 
+        auto it = userMap.find(userId); 
+        if(it == userMap.end()){
+            // means it does not contains 
+            return ans; 
+        } 
+
+        set<int> users = userMap[userId]->followed; 
+        priority_queue<Tweet*,vector<Tweet*>,cmp> q; 
+        for(int user : users){
+             Tweet* t = userMap[user]->tweetHead; 
+             if(t != NULL){
+                 q.push(t); 
+             }
+        }
+
+        int n = 0; 
+        while(!q.empty() && n < 10){
+            Tweet* t = q.top(); 
+            q.pop(); 
+            ans.push_back(t->id); 
+            n ++; 
+            if(t -> next != NULL){
+                q.push(t -> next); 
+            }
+        }
+
+        return ans; 
+    }
+    
+    void follow(int followerId, int followeeId) {
+        auto it = userMap.find(followerId); 
+        if(it == userMap.end()){
+            User* u = new User(followerId); 
+            userMap[followerId] = u; 
+        }
+
+        it = userMap.find(followeeId); 
+        if(it == userMap.end()){
+            User* u = new User(followeeId); 
+            userMap[followeeId] = u; 
+        }
+
+        userMap[followerId]->userFollow(followeeId); 
+
+    }
+    
+    void unfollow(int followerId, int followeeId) {
+        auto  it1 = userMap.find(followerId); 
+        auto  it2 = userMap.find(followerId); 
+
+        if(it1 == userMap.end() || it2 == userMap.end()){
+            return; 
+        }
+        userMap[followerId]->userUnFollow(followeeId); 
+    }
+};
+int Twitter::timeStamp = 0;
+
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter* obj = new Twitter();
+ * obj->postTweet(userId,tweetId);
+ * vector<int> param_2 = obj->getNewsFeed(userId);
+ * obj->follow(followerId,followeeId);
+ * obj->unfollow(followerId,followeeId);
+ */
+
+ // #include <iostream>
+// #include <vector>
+// #include <unordered_set>
+// #include <map>
+
+// class Twitter {
+//     std::map<int, std::vector<int>> followers;
+//     std::map<int, std::vector<int>> userActivity;
+//     std::unordered_set<int> uniqueTweets;
+
+// public:
+//     Twitter() {}
+
+//     void postTweet(int userId, int tweetId) {
+//         // Check if tweet ID is unique
+//         if (uniqueTweets.count(tweetId) > 0) {
+//             return; // Duplicate tweet ID
+//         }
+
+//         uniqueTweets.insert(tweetId);
+//         userActivity[userId].insert(userActivity[userId].begin(), tweetId);
+
+//         // Update followers' feeds
+//         for (int followerId : followers[userId]) {
+//             userActivity[followerId].insert(userActivity[followerId].begin(), tweetId);
+//         }
+//     }
+
+//     std::vector<int> getNewsFeed(int userId) {
+//         std::vector<int> ans;
+//         int requirements = 0;
+
+//         // Tweets from followed users
+//         for (int followerId : followers[userId]) {
+//             ans.insert(ans.end(), userActivity[followerId].begin(), userActivity[followerId].end());
+//         }
+
+//         // Tweets from users who follow the current user
+//         for (auto it = followers.begin(); it != followers.end(); ++it) {
+//             if (it->first == userId) {
+//                 continue;
+//             }
+
+//             if (std::find(it->second.begin(), it->second.end(), userId) != it->second.end()) {
+//                 ans.insert(ans.end(), userActivity[it->first].begin(), userActivity[it->first].end());
+//             }
+//         }
+
+//         // Limit the number of tweets in the answer
+//         std::vector<int> answer;
+//         for (int i = 0; i < ans.size() && requirements < 10; ++i) {
+//             answer.push_back(ans[i]);
+//             ++requirements;
+//         }
+
+//         return answer;
+//     }
+
+//     void follow(int followerId, int followeeId) {
+//         followers[followerId].emplace_back(followeeId);
+//     }
+
+//     void unfollow(int followerId, int followeeId) {
+//         auto it = std::find(followers[followerId].begin(), followers[followerId].end(), followeeId);
+//         if (it != followers[followerId].end()) {
+//             followers[followerId].erase(it);
+//         }
+//     }
+// };
+
+// // Your Twitter object will be instantiated and called as such:
+// // Twitter* obj = new Twitter();
+// // obj->postTweet(userId, tweetId);
+// // std::vector<int> param_2 = obj->getNewsFeed(userId);
+// // obj->follow(followerId, followeeId);
+// // obj->unfollow(followerId, followeeId);
+
+
+
+// another approach: 
