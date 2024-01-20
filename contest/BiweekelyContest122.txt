@@ -1,0 +1,73 @@
+// problem 1: 
+class Solution {
+public:
+    int minimumCost(vector<int>& nums) {
+        priority_queue<int,vector<int>,greater<int>> q; 
+        int c1 = nums[0]; 
+        for(int i = 1; i < nums.size(); i ++){
+            q.push(nums[i]); 
+        }
+        
+        int c2 = q.top(); 
+        q.pop(); 
+        int c3 = q.top(); 
+        return c1 + c2 + c3; 
+    }
+};
+
+// problem 2: 
+class Solution {
+private: 
+    bool isPossible(int x,int y){
+        int cnt1 = 0; 
+        int cnt2 = 0; 
+        while(x > 0){
+            cnt1 += (x&1); 
+            x >>= 1; 
+        }
+        
+        while(y > 0){
+            cnt2 += (y&1); 
+            y >>= 1; 
+        }
+        
+        return (cnt1 == cnt2); 
+    }    
+    
+    bool isSorted(vector<int> &nums){
+        for(int i = 1; i < nums.size(); i ++){
+            if(nums[i] < nums[i-1]){
+                return false;        
+            }
+        }
+        
+        return true; 
+    }
+    
+public:
+    bool canSortArray(vector<int>& nums) {
+        // appraoach: 
+        // first sort the array using bubble sort algo 
+        // only swap the elements when you figured out both of the elements have the same set bits and next element is smaller than the former 
+        // check wheather the element is sorted or not 
+        int i,j,temp; 
+        int n = nums.size(); 
+        for(i = 0; i < (nums.size()-1); i ++){
+            for(j = 0; j <  (n - i - 1); j ++){
+                if(nums[j] > nums[j+1]){
+                    // yes i figured it out 
+                    // now check both of them have same set bits 
+                    if(isPossible(nums[j],nums[j+1])){
+                        // cout << "swapped" << nums[j] << " " << nums[j+1]<< endl; 
+                        swap(nums[j],nums[j+1]); 
+                    }
+                }
+            }
+        }
+        
+        
+        
+        return isSorted(nums); 
+
+    }
+};
