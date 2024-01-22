@@ -1,0 +1,85 @@
+class Solution {
+public:
+    int minimumPushes(string word) {
+        // if (word.length() <= 8) {
+        //     return word.length();
+        // }
+
+        // int buddy_slots = word.length() - 8;
+        // sort(word.begin(), word.end());
+        // int x = 0;
+        
+        // int res = 0;
+        // map<int, string> mp;
+        
+        // // no. of sequential characaters required = 2*buddy_slots 
+        // int sequential_characters = 2*buddy_slots; 
+        // int ind = 1;
+        //     string temp = "";
+        //     int key = 0; 
+        //     while(sequential_characters > 0 and ind < word.size()){
+        //         temp = word[ind-1];
+        //         if(word[ind] - word[ind-1] == 1){
+        //             temp += word[ind]; 
+        //         }
+        //         else{
+        //             // means sequence is break 
+        //             mp[key] = temp; 
+        //             sequential_characters -= temp.size(); 
+        //             key ++; 
+        //         }
+                
+        //         cout << temp << endl; 
+                
+        //         ind ++; 
+        //     }
+
+
+
+        // for (auto& it : mp) {
+        //     string& x = it.second;
+        //     cout << x << endl; 
+        //     for (int i = 0; i < x.size(); i++) {
+        //         res = res + (i + 1);
+        //     }
+        // }
+        // res = res + 8;
+        // return res;
+    
+
+        unordered_map<char,int> mp; 
+        for(char c : word){
+            mp[c] ++; 
+        }
+
+        // i got the word with the frequencies 
+        vector<int> v; 
+        for(auto it : mp) 
+        {
+            v.push_back(it.second); 
+        }
+
+        sort(v.begin(),v.end()); 
+        reverse(v.begin(),v.end());  
+        int ans = 0; 
+        int cnt = 0; 
+        for(auto p : v){
+            cnt ++; 
+            if(cnt <= 8){
+                ans += 1*p; 
+            }
+            else if(cnt > 8 and cnt <= 16)
+            {
+                ans += 2*p; 
+            }
+            else if(cnt > 16 and cnt <= 24){
+                ans += 3*p; 
+            }
+            else{
+                ans += 4*p; 
+            }
+        }
+
+        return ans; 
+    }
+};
