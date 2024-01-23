@@ -1,37 +1,125 @@
-#include <iostream>
-#include <vector>
-#include <string>
+class Node{
+public:    
+    Node* children[26]; 
+    char data; 
+    bool isTerminal; 
+    int childCount; 
 
-using namespace std;
+    Node(char data){
+        this -> data = data; 
+        for(int i = 0; i < 26; i ++){
+            this -> children[i] = NULL; 
+        }
+        this -> childCount = 0; 
+        isTerminal = false; 
+    }
+};
+
+
+// create the class called trie 
+class Trie{
+public: 
+    Node* ans; 
+    Trie(char ch){
+        ans = new Node(ch); 
+    }
+
+    void insert(string x){
+        insertUtil(x,ans); 
+    }
+
+    void insertUtil(string x,Node* root){
+        if(x.length() == 0){
+            root->isTerminal = true; 
+            return; 
+        }
+
+        char ch = x[0]; 
+        int index = ch - 'a'; 
+        
+        // now check that the node is filled or not 
+        Node* child; 
+        if(root -> children[index] == NULL){
+            child = new Node(ch); 
+            root->childCount ++; // i will increment the count of the node
+            root->children[index] = child; 
+        }
+        else{
+            child = root->children[index]; 
+        }
+        insertUtil(x.substr(1),child);
+    }
+
+    void lcp(string test,string &ans1){
+        for(int i = 0; i < test.size(); i ++){
+            char ch = test[i]; 
+            int index = ch - 'a'; 
+            if(ans -> childCount == 1){
+                ans1 += ch; 
+                int index = ch - 'a'; 
+                ans = ans -> children[index]; 
+            }
+            else{
+                break; 
+            }
+
+            if(ans -> isTerminal == true){
+                break; 
+            }
+        }
+    }
+
+
+
+    
+
+};
+
 
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        if (strs.empty()) {
-            return ""; // Return an empty string if the vector is empty
+        // if (strs.empty()) {
+        //     return ""; // Return an empty string if the vector is empty
+        // }
+
+        // string toCompare = strs[0];
+        // string answer = "";
+
+        // for (int i = 0; i < toCompare.size(); i++) {
+        //     answer += toCompare[i];
+        //     bool isValid = true;
+
+        //     for (int j = 1; j < strs.size(); j++) {
+        //         if (strs[j].find(answer) != 0) {
+        //             isValid = false;
+        //             break;
+        //         }
+        //     }
+
+        //     if (!isValid) {
+        //         answer.pop_back();
+        //         break;
+        //     }
+        // }
+
+        // return answer;
+
+        // approach 2: using trie 
+        Trie* t = new Trie('\0'); 
+        for(int i = 0; i < strs.size(); i ++){
+            if(strs[i] == ""){
+                return ""; 
+            }
+            else{
+                t->insert(strs[i]);
+            }
         }
 
-        string toCompare = strs[0];
-        string answer = "";
-
-        for (int i = 0; i < toCompare.size(); i++) {
-            answer += toCompare[i];
-            bool isValid = true;
-
-            for (int j = 1; j < strs.size(); j++) {
-                if (strs[j].find(answer) != 0) {
-                    isValid = false;
-                    break;
-                }
-            }
-
-            if (!isValid) {
-                answer.pop_back();
-                break;
-            }
-        }
-
-        return answer;
+        string initial = strs[0]; 
+        string ans = "";
+        t->lcp(initial,ans); 
+        return ans; 
     }
 };
 
