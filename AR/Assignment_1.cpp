@@ -3,11 +3,11 @@ using namespace std;
 
 class Node{
 public: 
-    char character; 
+    string character; 
     int frequency; 
     Node* left; 
     Node* right; 
-    Node(char character,int frequency){
+    Node(string character,int frequency){
         this -> character = character; 
         this -> frequency = frequency; 
         this -> left = NULL; 
@@ -25,12 +25,13 @@ public:
 
 class HaufmanCoding{
 public: 
-map<char,int> freq; 
+map<string,int> freq; 
 priority_queue<Node*,vector<Node*>,cmp> q; 
 
     void initialiseMap(string x){
         for(char m : x){
-            freq[m] ++;
+            // cout << string(1,m) << endl; 
+            freq[string(1,m)] ++;
         }
     }
 
@@ -51,7 +52,7 @@ priority_queue<Node*,vector<Node*>,cmp> q;
             Node* min2 = q.top(); 
             q.pop(); 
 
-            Node* newNode = new Node((min1 -> character + min2 -> character),(min1 -> frequency + min2 -> frequency)); 
+            Node* newNode = new Node("IN",(min1 -> frequency + min2 -> frequency)); 
             newNode -> left = min1; 
             newNode -> right = min2; 
             q.push(newNode); 
@@ -74,7 +75,7 @@ int main(){
         for(int i = 0; i < size; i ++){
             Node* temp = pq.front(); 
             pq.pop(); 
-            cout << temp -> frequency << " "; 
+            cout << temp -> frequency << " ("<<temp->character<<") "; 
             if(temp -> left != NULL){
                 pq.push(temp -> left); 
             }
