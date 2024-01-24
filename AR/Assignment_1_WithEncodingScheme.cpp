@@ -42,8 +42,6 @@ priority_queue<Node*,vector<Node*>,cmp> q;
         }
     }
 
-
-
     Node* constructHaufmanTree(string s){
         initialiseMap(s); 
         initialiseMinHeap(); 
@@ -63,7 +61,32 @@ priority_queue<Node*,vector<Node*>,cmp> q;
         return q.top(); 
     }
 
-    
+    void getEncode(string temp,Node* ans,string answer,string &x){
+        if(ans->left == NULL and ans -> right == NULL and ans -> character != temp){
+            return; 
+        }
+
+        if(ans -> left == NULL and ans -> right == NULL and ans -> character == temp){
+            x = answer; 
+            return; 
+        }
+
+        // answer = answer + "0"; 
+        getEncode(temp,ans->left,answer+"0",x); 
+        // answer = answer + "1"; 
+        getEncode(temp,ans->right,answer+"1",x); 
+    }
+
+    map<string,string> getAns(map<string,int> freq){
+        map<string,string> temp; 
+        for(auto it : freq){
+            Node* topQ = q.top(); 
+            string ansS = ""; 
+            getEncode(it.first,topQ,"",ansS); 
+            temp[it.first] = ansS; 
+        }
+        return temp; 
+    }
 };
 
 int main(){
@@ -90,6 +113,9 @@ int main(){
         cout << endl; 
      }
 
-     
+     map<string,string> answer = h.getAns(h.freq);  
+     for(auto it : answer){
+        cout << it.first << " -> " << it.second << endl; 
+     }
   return 0;
 }
