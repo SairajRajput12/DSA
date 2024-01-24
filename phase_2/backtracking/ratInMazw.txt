@@ -1,0 +1,59 @@
+#include <bits/stdc++.h> 
+
+bool isSafe(int x, int y, int n, vector<vector<bool>> &visited, vector<vector<int>> &arr) {
+    return (x >= 0 && x < n && y >= 0 && y < n && visited[x][y] == 0 && arr[x][y] == 1);
+}
+
+
+void solve(vector<string> &ans,vector<vector<bool>> &visited,int row,int col,string temp,int n,vector<vector<int>> &arr)
+{
+    if(row == (n-1) and col == (n-1)){
+        ans.push_back(temp); 
+        return; 
+    }
+
+    // kya mein down jaa sakta hu ?? 
+    if (isSafe(row + 1, col, n, visited, arr)) {
+        visited[row][col] = 1; 
+        solve(ans, visited, row + 1, col, temp + "D", n, arr); 
+        visited[row][col] = 0; 
+    }
+
+    if(isSafe(row,col-1,n,visited,arr))
+    {
+        visited[row][col] = 1; 
+        // temp.push_back('L'); 
+        solve(ans,visited,row,col-1,temp+"L",n,arr); 
+        // temp.pop_back('L'); 
+        visited[row][col] = 0; 
+    }
+    if(isSafe(row,col+1,n,visited,arr))
+    {
+        visited[row][col] = 1; 
+        // temp.push_back('D'); 
+        solve(ans,visited,row,col+1,temp+"R",n,arr); 
+        // temp.pop_back('D'); 
+        visited[row][col] = 0; 
+    }
+    if(isSafe(row-1,col,n,visited,arr))
+    {
+        visited[row][col] = 1; 
+        // temp.push_back('D'); 
+        solve(ans,visited,row-1,col,temp+"U",n,arr); 
+        // temp.pop_back('D'); 
+        visited[row][col] = 0; 
+    }
+
+}
+
+vector < string > searchMaze(vector < vector < int >> & arr, int n) {
+    // Write your code here.
+    vector<string> ans; 
+    if(arr[0][0] == 0){
+        return ans; 
+    }
+    vector<vector<bool>> visited(n,vector<bool>(n,0)); 
+    string temp = ""; 
+    solve(ans,visited,0,0,temp,n,arr); 
+    return ans; 
+}

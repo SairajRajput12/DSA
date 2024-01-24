@@ -1,0 +1,119 @@
+class Node{
+public: 
+    Node* children[26]; 
+    char data; 
+    bool isTerminal; 
+    int score; 
+    Node(char data){
+        this -> data = data; 
+        for(int i = 0; i < 26; i ++){
+            this -> children[i] = NULL; 
+        }
+        this -> isTerminal = false; 
+        this -> score = 0; 
+    }
+};
+
+
+
+class Trie{
+public: 
+Node* ans; 
+    Trie(char ch){
+        ans = new Node(ch); 
+    }
+
+    void insertUtility(string x,Node* ans){
+        // base case 
+        if(x.length() == 0){
+            ans -> isTerminal = true; 
+            return; 
+        }
+
+        int index = x[0] - 'a'; 
+        Node* child; 
+        if(ans->children[index] != NULL){
+            child = ans->children[index]; 
+        }
+        else{
+            child = new Node(x[0]); 
+            ans->children[index] = child; 
+        }
+
+        insertUtility(x.substr(1),child); 
+    }
+
+    void insert(string x){
+        insertUtility(x,ans); 
+    }
+};
+
+
+class MapSum {
+public:
+// using map 
+map<string,int> mp; 
+Trie* t; 
+// approach 2 using trie: 
+
+    MapSum() {
+        t = new Trie('\0'); 
+    }
+    
+    void insert(string key, int val) {
+        // approach 1:
+        //  mp[key] = val; 
+
+        // approach 2: using trie 
+        t->insert(key); 
+        Node* root = t->ans; 
+        for(char c : key){
+            root = root -> children[c-'a']; 
+        }
+
+        root -> score = val; 
+    }
+    
+    int sum(string prefix) {
+        // approach 1: 
+        // int sumE = 0; 
+        // for(auto it : mp){
+        //     if(it.first.find(prefix) == 0)
+        //     {
+        //         sumE += it.second; 
+        //     }
+        // }
+        
+        // return sumE;
+        int ans = 0; 
+        Node* root = t->ans; 
+        for(char c : prefix){
+            if(!root->children[c-'a']){
+                return 0; 
+                // means prefix is not found
+            }
+
+            root = root -> children[c-'a']; 
+        }
+
+        helper(root,ans); 
+        return ans; 
+    }
+    
+    void helper(Node* root,int &ans){
+        ans = ans + root->score; 
+        for(int i = 0; i < 26; i ++){
+            if(root->children[i]){
+                helper(root->children[i],ans);
+            }
+        }
+    }
+
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */
