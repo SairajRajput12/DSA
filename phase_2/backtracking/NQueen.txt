@@ -1,0 +1,77 @@
+class Solution {
+private: 
+bool isSafe(int row, int col, const std::vector<std::string>& temp) {
+    int n = temp.size();
+
+    // Check if the position is within the bounds of the chessboard
+    if (row < 0 || col < 0 || row >= n || col >= temp[0].size()) {
+        return false;
+    }
+
+    // Check horizontally
+    if (temp[row].find("Q") != string::npos) {
+        // "Q" exists in the string
+        return false;
+    }
+
+    for (int i = 0; i != row; ++i){
+            if (temp[i][col] == 'Q'){
+                return false;
+            }
+    }
+
+    // Check vertically
+    for (int i = (row-1),j=col-1; i >= 0 and j >= 0; --i,--j) {
+        if (temp[i][j] == 'Q') {
+            // "Q" exists in the column
+            return false;
+        }
+    }
+
+    // Check diagonally (left-down to right-down)
+    for(int i = (row-1),j=col+1; i >= 0 and j < n; -- i,++ j){
+        if(temp[i][j] == 'Q'){
+            return false; 
+        }
+    }
+    // The position is safe
+    return true;
+}
+
+    void solve(int test,vector<vector<string>> &ans,vector<string> &temp,int row,int col,int n)
+    {
+        if(test == n){
+            ans.push_back(temp); 
+            return; 
+        }
+
+        // first step 
+        // row -> indicates string number 
+        // col -> indicates string index 
+        for(int i = 0; i < n; i ++){
+            if(isSafe(test,i,temp)){
+                temp[test][i] = 'Q'; 
+                // test ; 
+                solve(test+1,ans,temp,test+1,0,n);  // Fix: Pass the updated test value and start from column 0
+                temp[test][i] = '.';  
+                // test ++; 
+            }
+}
+
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        int test = 0; 
+        vector<vector<string>> ans; 
+        vector<string> temp; 
+        for(int i = 0; i < n; i ++){
+            string x = ""; 
+            for(int j = 0;j < n; j ++){
+                x += ".";
+            }
+            temp.push_back(x); 
+        } 
+        solve(test,ans,temp,0,0,n); 
+        return ans; 
+    }isValid
+};
