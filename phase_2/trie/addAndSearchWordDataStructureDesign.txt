@@ -1,0 +1,119 @@
+class Node{
+public: 
+    Node* children[26]; 
+    char data; 
+    bool isTerminal; 
+
+    Node(char data){
+        this -> data = data; 
+        for(int i = 0; i < 26; i ++){
+            this -> children[i] = NULL; 
+        }
+        this -> isTerminal = false; 
+    }
+};
+
+class Trie{
+public: 
+Node* ans; 
+    Trie(char ch){
+        ans = new Node(ch);
+    }
+
+    void insertUtility(string x,Node* root)
+    {
+        if(x.size() == 0)
+        {
+            root->isTerminal = true;
+            return;
+        }
+
+        Node* child;
+        int index = x[0] - 'a';
+        if(root->children[index] == NULL)
+        {
+            child = new Node(x[0]);
+            root->children[index] = child;
+        }
+        else{
+            child = root->children[index]; 
+        }
+        insertUtility(x.substr(1),child); 
+    }
+
+    void insert(string x)
+    {
+        insertUtility(x,ans);
+    }
+
+    void createString(string check,string &ans1){
+        Node* temp = ans; 
+        bool found = false; 
+        string prefix = ""; 
+        for(int i = 0; i < check.size(); i ++){
+            int index = check[i] - 'a'; 
+            if(temp->children[index] == NULL){
+                found = false; 
+                break; 
+            }
+
+            prefix += check[i]; 
+            temp = temp -> children[index]; 
+
+            if(temp -> isTerminal){
+                found = true; 
+                break; 
+            }
+        }
+
+        if(found == true){
+            ans1 += prefix; 
+        }
+        else{
+            ans1 += check; 
+        }
+    }
+};
+
+class WordDictionary {
+public:
+Trie* x; 
+    WordDictionary() {
+        x  = new Trie('\0');    
+    }
+    
+    void addWord(string word) {
+        x -> insert(word); 
+    }
+    
+    bool check(Node* root,string word,int index){
+        if(index == word.size()){
+            return root->isTerminal; 
+        }
+        
+        if(word[index] == '.'){
+            for(int i = 0; i < 26; i ++){
+                if(root->children[i] and check(root->children[i],word,index+1)){
+                    return true; 
+                }
+            }
+        }
+        else{
+                if((root->children[word[index]-'a']) and check(root->children[word[index]-'a'],word,index+1)){
+                    return true; 
+                }
+        }
+        return false; 
+    }
+    
+    bool search(string word) {
+        return check(x->ans,word,0); 
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */

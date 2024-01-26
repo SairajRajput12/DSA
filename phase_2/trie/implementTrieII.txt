@@ -1,0 +1,206 @@
+#include <bits/stdc++.h> 
+
+struct TrieNode
+{
+	TrieNode *childern[26];
+	int wordCount;
+	int prefixCount;
+    bool isTerminal = false; 
+
+	TrieNode()
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			childern[i] = NULL;
+		}
+		wordCount = 0;
+		prefixCount = 0;
+        isTerminal = true; 
+	}
+	~TrieNode()
+    {
+        for (int i = 0; i < 26; i++)
+        {
+            if (childern[i] != NULL)
+            {
+                delete childern[i];
+            }
+        }
+        // isTerminal = false; 
+    }
+};
+class Trie{
+	public:
+
+	// Declare a variable root that denotes the root of the Trie.
+	TrieNode *root;
+
+	// Initialize the Trie.
+	Trie()
+	{
+		root = new TrieNode();
+	}
+	~Trie()
+	{
+		delete root;
+	}
+
+    void insertUtility(string word,TrieNode* root){
+        if(word.length() == 0){
+            root->isTerminal = true; 
+            root->wordCount ++; 
+            return; 
+        }
+
+        TrieNode* child; 
+        int index = word[0] - 'a'; 
+        if(root->childern[index] == NULL){
+            root->childern[index] = new TrieNode(); 
+            child = root->childern[index]; 
+        }
+        else{
+            child = root->childern[index]; 
+        }
+
+        root->prefixCount ++; 
+        insertUtility(word.substr(1),child); 
+    }
+
+	// In this function we are inserting the word into our Trie.
+	void insert(string &word)
+	{
+		TrieNode *curr = root;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+			int index = word[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+			{
+				curr->childern[index] = new TrieNode();
+			}
+			curr = curr->childern[index];
+			curr->prefixCount++;
+		}
+		curr->wordCount++;
+	}
+
+	int countWordsEqualTo(string &word)
+	{
+		TrieNode *curr = root;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+			int index = word[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+			{
+				return 0;
+			}
+			curr = curr->childern[index];
+		}
+		return curr->wordCount;
+	}
+
+	int countWordsStartingWith(string &word)
+	{
+		TrieNode *curr = root;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+			int index = word[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+			{
+				return 0;
+			}
+			curr = curr->childern[index];
+		}
+		return curr->prefixCount;
+	}
+
+	// In this function we are removing the word from "TRIE".
+	void erase(string &word)
+	{
+		TrieNode *curr = root;
+		TrieNode *toBeDeleted = NULL;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+			int index = word[i] - 'a';
+
+			// Store the parent of current character.
+			TrieNode *parent = curr;
+			curr = curr->childern[index];
+
+			// If we are removing the given word then subtract 1 from the prefixCount.
+			curr->prefixCount--;
+
+			if (toBeDeleted != NULL)
+			{
+				toBeDeleted = NULL;
+			}
+
+			if (curr->prefixCount == 0)
+			{
+				if (toBeDeleted == NULL)
+				{
+					parent->childern[index] = NULL;
+				}
+				toBeDeleted = curr;
+			}
+		}
+
+		curr->wordCount--;
+		if (toBeDeleted != NULL)
+		{
+			toBeDeleted = NULL;
+		}
+	}
+};
+
+
+
+
+
+
+
+// #include <bits/stdc++.h> 
+// class Trie{
+
+//     public:
+//     unordered_map<string,int>mp;
+//     Trie(){
+//     }
+
+//     void insert(string &word){
+//         mp[word]++;
+//     }
+
+//     int countWordsEqualTo(string &word){
+//         if(mp.find(word)!=mp.end()) return mp[word];
+//         return 0;
+//     }
+
+//     int countWordsStartingWith(string &w){
+//         int cnt=0;
+//         for(auto i:mp){
+//             string s=i.first;
+//             if(s.compare(0,w.size(),w)==0) cnt+=mp[s];
+//         }
+//         return cnt;
+//     }
+
+//     void erase(string &word){
+//         mp[word]--;
+//         if(mp[word]==0) mp.erase(word);
+//     }
+// };
+
+
+
+

@@ -1,0 +1,88 @@
+class Node{
+public: 
+    Node* arr[2]; 
+    bool isTerminal; 
+    Node(){
+        this -> arr[0] = NULL; 
+        this -> arr[1] = NULL; 
+        this -> isTerminal = false; 
+    }
+};
+
+class Solution {
+public:
+Node* newNode; 
+
+    void insert(int x){ // to insert each element into the trie 
+        Node* t = newNode; 
+        // Approach 1: using bit set
+        // bitset<32> bs(x);
+        // for(int j = 31; j >= 0; j --){
+        //     if(t->arr[bs[j]] == NULL){
+        //         t->arr[bs[j]] = new Node(); 
+        //     }
+        //     t = t->arr[bs[j]];
+        // }
+
+        // approach 2: using simple calculation 
+        for(int i = 31; i >= 0; i --){
+            int bit = (x >> i)&1; 
+            if(t->arr[bit] == NULL){
+                t->arr[bit] = new Node(); 
+            } 
+            t = t->arr[bit]; 
+        }
+    }
+
+    int getMax(int num){
+        Node* node = newNode; 
+        int maxSum = 0; 
+        for(int i = 31; i >= 0; i --){
+            int bit = (num >> i) & 1; 
+            if(node->arr[!bit] != NULL){
+                maxSum = maxSum | (1 << i); 
+                node = node -> arr[!bit];  
+            }
+            else{
+                node = node -> arr[bit]; 
+            }
+        }
+
+        return maxSum; 
+    }
+
+
+
+    int findMaximumXOR(vector<int>& nums) {
+        // approach 1: TLE
+        // int ans = INT_MIN; 
+        // for(int i = 0; i < nums.size(); i ++){
+        //     int x = nums[i]; 
+        //     for(int j = 0; j < nums.size(); j ++){
+        //         int y = nums[j]; 
+        //         int sam = x^y; 
+        //         ans = max(sam,ans); 
+        //     }
+        // }
+        // return ans;
+
+        // approach 2: how i can optimize it ?? 
+        // newNode = new Node(); 
+        // for(auto n : nums){
+        //     insert(n); 
+        // }
+
+        // int ans = 0; 
+        // for(auto n : nums){
+        //     ans = max(ans,getMax(n)); 
+        // }
+
+        // return ans;
+
+        // approach 3: using bit set  
+        
+
+
+    }
+
+};
