@@ -1,0 +1,87 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+
+
+class Node{
+public: 
+    Node* arr[26]; 
+    char data; 
+    bool isTerminal; 
+    int countOfSubstring; 
+    Node(char data)
+    {
+        this-> data = data; 
+        for(int i = 0; i < 26; i ++){
+            this -> arr[i] = NULL; 
+        }
+        this -> isTerminal = false; 
+        this -> countOfSubstring = 0; 
+    }
+};
+
+class Trie{
+public: 
+Node* ans; 
+    Trie(){
+        ans = new Node('\0'); 
+    }
+
+    void insertUtility(string m,Node* root,char start){
+        if(m.size() == 0){
+            int index = start-'a'; 
+            ans -> arr[index] -> countOfSubstring ++;  
+            root->isTerminal = true; 
+            return; 
+        }
+        int index = m[0] - 'a'; 
+        Node* child; 
+        if(root->arr[index] == nullptr){
+            // means we have to create the new pointer 
+            child = new Node(m[0]); 
+            root->arr[index] = child; 
+        }
+        else{
+            child = root->arr[index]; 
+        }
+
+        insertUtility(m.substr(1),child,start); 
+    }
+
+    void insert(string x){
+        insertUtility(x,ans,x[0]); 
+    }
+};
+
+int countDistinctSubstrings(string &s)
+{
+    //    Write your code here.
+    Trie* t = new Trie(); 
+    unordered_set<string> p; 
+    for(int i = 0; i < s.size(); i ++){
+        for(int j = i; j < s.size(); j ++){
+            int len = j - i + 1; 
+            string h = s.substr(i,len); 
+            p.insert(h); 
+        }
+    }    
+
+    for(auto it : p){
+        string k = it;  
+        // cout << "string genrated" << k << endl;
+        t->insert(k); 
+    }
+
+
+
+    Node* r = t->ans; 
+    int answer = 0; 
+    for(int i = 0; i < 26; i ++){
+        if(r->arr[i] != NULL){
+            answer += r->arr[i]->countOfSubstring; 
+        }
+    }
+
+    answer ++; 
+    return answer; 
+
+}

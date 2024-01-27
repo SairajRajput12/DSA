@@ -1,0 +1,199 @@
+class Node{
+    public: 
+    Node* children[26]; 
+    bool isTerminal; 
+    char data; 
+    string word;
+    Node(char data){
+        this -> data = data; 
+        for(int i = 0; i < 26; i ++){
+            this -> children[i] = nullptr; 
+        }
+        this -> isTerminal = false; 
+        this -> word = ""; 
+    }
+};
+
+class Trie{
+public: 
+    Node* ans; 
+
+    Trie(){
+        ans = new Node('\0'); 
+    }
+
+    void insert(string x){
+        Node* root = ans; 
+        for(auto c : x){
+            if(root -> children[c-'a'] == nullptr){
+                // create new node 
+                root -> children[c-'a'] = new Node(c); 
+            }
+            root = root -> children[c-'a']; 
+        }
+        root -> isTerminal = true; 
+        root -> word = x; 
+    }
+};
+
+
+
+
+
+class Solution {
+private: 
+    
+    bool solve(int row,int col,vector<vector<char>> &board,string word,int index){
+        if(index == word.size()){
+            return true; 
+        }
+        
+        if(row < 0 or col < 0 or row >= board.size() or col >= board[row].size() or board[row][col] == '.' or word[index] != board[row][col])
+        {
+            return false; 
+        }
+        
+        
+        int x[] = {0,0,-1,1}; 
+        int y[] = {-1,1,0,0}; 
+        bool found = false; 
+        board[row][col] = '.'; 
+        
+        for(int i = 0; i < 4; i ++){
+            found = found || solve(row+x[i],col+y[i],board,word,index+1); 
+        }
+        board[row][col] = word[index]; 
+        return found;      
+    }
+    
+    bool search(string word,vector<vector<char>> board){
+        for(int i = 0; i < board.size(); i ++){
+            for(int j = 0; j < board[0].size(); j ++){
+                if(solve(i,j,board,word,0))
+                {
+                    return true; 
+                }
+            }
+        }
+        return false; 
+    }
+
+    bool isItMatched(string &word,vector<vector<char>> &board)
+    {
+        Trie* t = new Trie(); 
+        t -> insert(word); 
+        Node* root = t -> ans; 
+        for(int i = 0; i < board.size(); i ++){
+            for(int j = 0;j < board[0].size();j ++){
+                if(isItTrue(board,i,j,word,root) == true){
+                    return true; 
+                }
+            }
+        }
+
+        return false; 
+    }
+
+    bool isItTrue(vector<vector<char>>& board,int row,int col,string word,Node* root){
+        if(row < 0 or col < 0 or row >= board.size() or col >= board[row].size() or board[row][col] == '.')
+        {
+            return false; 
+        }
+
+        char temp = board[row][col]; 
+        int index = temp - 'a'; 
+        if(root -> children[index] == nullptr)
+        {
+            return false; 
+        }
+
+        // means our node exist go to that node 
+        root = root -> children[index]; 
+        if(root -> isTerminal == true)
+        {
+            return true; 
+        }
+
+        int x[] = {0,0,-1,1}; 
+        int y[] = {-1,1,0,0}; 
+        bool found = false; 
+        board[row][col] = '.'; 
+        for(int i = 0; i < 4; i ++){
+            found = found || isItTrue(board,row+x[i],col+y[i],word,root); 
+        }
+        board[row][col] = temp; 
+        return found;         
+    }
+
+    void getSolution(vector<vector<char>> &board,vector<string> &ans,int row,int col,Node* root){
+        if(row < 0 or col < 0 or row >= board.size() or col >= board[0].size() or board[row][col] == '.')
+        {
+            return; 
+        }
+
+        int index = board[row][col] - 'a'; 
+        if(root -> children[index] == nullptr){
+            return; 
+        }
+
+        root = root -> children[index]; 
+        if(root -> isTerminal == true){
+            ans.push_back(root->word); 
+            root -> isTerminal = false; 
+        }
+
+        int x[] = {0,0,-1,1}; 
+        int y[] = {-1,1,0,0}; 
+        char initial_character = board[row][col];
+        board[row][col] = '.'; 
+        for(int i = 0; i < 4 ;i ++){
+            int newRow = row + x[i]; 
+            int newCol = col + y[i]; 
+            getSolution(board,ans,newRow,newCol,root); 
+        }
+        board[row][col] = initial_character; 
+    }
+
+
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+
+        // approach 1 : using backtracking
+        // vector<string> ans; 
+        // for(int i = 0; i < words.size(); i ++){
+        //     if(search(words[i],board)){
+        //         ans.push_back(words[i]); 
+        //     }
+        // }
+        // return ans; 
+
+        // approach 2: using trie + backtracking 
+        // this code takes more time 
+        // vector<string> ans;  
+        // for(string word  : words){
+        //     if(isItMatched(word,board)){
+        //         ans.push_back(word); 
+        //     }
+        // }
+
+        // return ans; 
+
+        // approach 2:  optimised code 
+        Trie* t = new Trie();  
+        for(auto word : words)
+        {
+            t -> insert(word); 
+        }
+
+        vector<string> answer; 
+        for(int i = 0; i < board.size(); i ++){
+            for(int j = 0; j < board[0].size(); j ++){
+                getSolution(board,answer,i,j,t->ans);
+            }
+        }
+        return answer; 
+    }
+
+
+
+};

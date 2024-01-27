@@ -1,0 +1,227 @@
+class Node{
+public: 
+    Node* arr[58]; 
+    char data; 
+    bool isTerminal; 
+
+    Node(char data){
+        this -> data = data; 
+        for(int i = 0; i < 58; i ++){
+            arr[i] = nullptr; 
+        }
+        this -> isTerminal = false; 
+    }
+}; 
+
+class Trie{
+public: 
+Node* ans; 
+
+    Trie(){
+        ans = new Node('\0'); 
+    }
+
+    void insert(string word){
+        Node* current = ans; 
+        for(auto &c : word){
+            int index = c - 'A'; 
+            if(current -> arr[index] == nullptr){
+                current -> arr[index] = new Node(c); 
+            } 
+            current = current -> arr[index]; 
+        }
+
+        current -> isTerminal = true;
+    }
+};
+
+
+
+
+class Solution {
+
+    bool isSafe(int newRow, int newCol, char initial_character, vector<vector<char>> &board, string word) {
+         // when my move is safe
+        // first it should match with my initial character  
+        // second it should not be out of range move 
+
+        if (newRow < 0 || newCol < 0 || newRow >= board.size() || newCol >= board[0].size()) {
+            return false;
+        }
+
+        // if(visited[newRow][newCol] != 0){
+        //     return false; 
+        // }
+        
+        if (board[newRow][newCol] != initial_character) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    bool search(int row,int col,vector<vector<char>> &board,string word,int index)
+    {
+        // my initial code -> was giving TLE: 
+        // if(word.size() == 0){ 
+        //     // means i got all pairs
+        //     cout << "i go to base condition" << endl; 
+        //     return true;  
+        // }
+
+        // char initial_character = word[0];
+        // cout << word << endl;  
+        // // search in down side 
+        // if(isSafe(row-1,col,initial_character,board,word)){
+        //     cout << "matched first case" << endl; 
+        //     // visited[row][col] = 1; 
+        //     board[row][col] = '*'; 
+        //     if(search(row-1,col,board,word.substr(1))){
+        //         return true; 
+        //     } 
+        //     board[row][col] = initial_character; 
+        //     // visited[row][col] = 0; 
+        // }
+
+        // // search in Left side 
+        // if(isSafe(row,col-1,initial_character,board,word)){
+        //     cout << "matched second case" << endl;
+        //     // visited[row][col] = 1; 
+        //     board[row][col] = '*'; 
+        //     if(search(row,col-1,board,word.substr(1))){
+        //         return true; 
+        //     } 
+        //     board[row][col] = initial_character; 
+        //     // visited[row][col] = 0; 
+        // }
+
+        // // search in Right side 
+        // if(isSafe(row,col+1,initial_character,board,word)){
+        //     cout << "matched third case" << endl; 
+        //     // visited[row][col] = 1; 
+        //     board[row][col] = '*'; 
+        //     if(search(row,col+1,board,word.substr(1))){
+        //         return true; 
+        //     } 
+        //     board[row][col] = initial_character; 
+        //     // visited[row][col] = 0; 
+        // }
+
+        // // search in Up Side 
+        // if(isSafe(row+1,col,initial_character,board,word)){
+        //     cout << "matched last case" << endl; 
+        //     // visited[row][col] = 1; 
+        //     board[row][col] = '*'; 
+        //     if(search(row+1,col,board,word.substr(1))){
+        //         return true; 
+        //     } 
+        //     board[row][col] = initial_character; 
+        //     // visited[row][col] = 0; 
+        // }
+
+        // return false; 
+
+        // code 2 : optimised backtracking code: 
+        if(index == word.size()){
+            // means i found all of the characters  
+            return true; 
+        }
+
+        if(word.size() == 1 and word[index] == board[row][col]){
+            return true; 
+        }
+
+        if(row >= board.size() || col >= board[0].size() || row < 0 || col < 0 || board[row][col] == '.' || word[index] != board[row][col]) return false; 
+
+        int x[] = {0,0,-1,1}; 
+        int y[] = {-1,1,0,0}; 
+        board[row][col] = '.'; // mark it as visited 
+        bool found = false; 
+        for(int h = 0; h < 4; h ++){
+            found = found || search(row+x[h],col+y[h],board,word,index+1); 
+        }
+        board[row][col] = word[index];      
+        return found; 
+    }
+
+
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        // approach 1: using backtracking
+        // step 1: first find set of the indexes of the initial character of an word in the string 
+        // vector<vector<int>> visited(board.size(), vector<int>(board[0].size(), 0));
+        
+        // for(int i = 0; i < board.size(); i ++){
+        //     for(int j = 0; j < board[i].size(); j ++){
+        //         if(board[i][j] == word[0]){
+        //             // yes means store it in the indexes array 
+        //             if(search(i,j,board,word,0) == true){
+        //                 return true; 
+        //             }
+        //             // visited[i][j] = 0;
+        //         }
+        //     }
+        // }
+
+        // return false;
+
+        // approach 2: using trie
+        // step 1: first insert the word into the trie which we want to search 
+        Trie* t = new Trie(); 
+
+        // step 2: now find the match for each character of the matrix in the trie 
+        t -> insert(word); 
+        for(int i = 0; i < board.size(); i ++){
+            for(int j = 0; j < board[i].size(); j ++){
+                if(word[0] == board[i][j]){
+                    if(solve(i,j,board,t->ans) == true){
+                        return true; 
+                    }
+                }
+            }
+        }
+
+        // means there is no combination from word the 2D matrix that matches target string word. 
+        return false; 
+    }
+
+    bool solve(int row,int col,vector<vector<char>> &board,Node* node){
+        int m = board.size(); 
+        int n = board[0].size(); 
+
+        // first check our current position is safe or not 
+        if(row < 0 or col < 0 or row >= m or col >= n or board[row][col] == '.'){
+            return false; 
+        }
+
+        // means now we are in safe position 
+        char charInBoard = board[row][col]; 
+        int index = charInBoard - 'A'; 
+
+        if(node -> arr[index] == nullptr){
+            // if the node of particular combination does not exist means that is not matching so revert back
+            return false; 
+        }
+
+        // means node exist in trie. now go to the next node 
+        node = node -> arr[index]; 
+        if(node->isTerminal){
+            // there is only one terminal node in our node of only target node if it is then return true means found 
+            return true; 
+        }
+
+        int x[] = {0,0,-1,1}; 
+        int y[] = {-1,1,0,0}; 
+        bool found = false; 
+        board[row][col] = '.'; 
+
+        for(int i = 0; i < 4; i ++){
+            found = found || solve(row+x[i],col+y[i],board,node); 
+        }
+
+        board[row][col] = charInBoard; 
+        return found; 
+    }
+
+};
