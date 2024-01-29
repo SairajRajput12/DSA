@@ -1,0 +1,172 @@
+class Solution {
+public:
+int DR[4]={1, 0, -1, 0};
+int DC[4]={0, -1, 0, 1};
+
+
+    bool isValid(vector<vector<char>> &grid,vector<vector<bool>> &vis,int i,int j){
+        // check whether our next step out of the matrix or not 
+        int m = grid[0].size(); 
+        int n = grid.size(); 
+        if (i >= 0 && j >= 0 && i < n && j < m && grid[i][j] == '1' && !vis[i][j]) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    void visitIsland(vector<vector<char>>& grid,vector<vector<bool>> &visited,int row,int col)
+    {
+        // mark the current block of the island as visited
+        grid[row][col] = true; 
+
+
+        // now whether the going down is valid move or not 
+        if(isValid(grid,visited,row-1,col)){
+            // if yes then go down and explore more moves recursively
+            visitIsland(grid,visited,row-1,col); 
+        }
+
+        // now whether the going up is valid move or not 
+        if(isValid(grid,visited,row+1,col)){
+            // if yes then go up and explore more moves recursively
+            visitIsland(grid,visited,row+1,col); 
+        }
+
+        // now whether the going left is valid move or not 
+        if(isValid(grid,visited,row,col-1)){
+            // if yes then go left and explore more moves recursively
+            visitIsland(grid,visited,row,col-1); 
+        }
+
+        // now whether the going right is valid move or not 
+        if(isValid(grid,visited,row,col+1)){
+            // if yes then go right and explore more moves recursively
+            visitIsland(grid,visited,row,col+1); 
+        }
+    }
+
+    int approach1(vector<vector<char>>& grid){
+        // appraoch 1: using recursion 
+        
+        // step 1: declare boolean 2D vector representing whether the node is visited or not 
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        int numberOfIslands = 0; 
+
+        // step 2: iterate through each element and mark all surrounding 1 as visited and increment the ans and return the ans 
+        for(int i = 0; i < grid.size(); i ++){
+            for(int j = 0; j < grid[i].size(); j ++){
+                if(grid[i][j] == '1' and !visited[i][j]){
+                    // we can start from that square 
+                    visitIsland(grid,visited,i,j); 
+                    numberOfIslands ++; 
+                    // visit whole island and by marking it as visited and incrementing number of island
+                }
+            }
+        }
+
+        // step 3: return the answer 
+        return numberOfIslands; 
+    }
+
+    void dfs(vector<vector<char>> &grid,int visited[],int node){
+        visited[node] = 1; 
+        for(auto it : grid[node]){
+            if(!visited[it]){
+                dfs(grid,visited,it); 
+            }
+        }
+    }
+
+    bool isValid(int i, int j, vector<vector<char>>& grid) {
+        if(i<0 || j<0 || i>=grid.size() || j>=grid[0].size())
+            return false;
+        return true;
+    }
+    
+
+    void bfs(int row,int col,vector<vector<int>> &visited,vector<vector<char>> &grid){
+        grid[row][col] = '0'; 
+        queue<pair<int,int>> q; 
+        q.push({row,col}); 
+
+        while(!q.empty()){
+            int row = q.front().first; 
+            int col = q.front().second; 
+            q.pop(); 
+
+            for(int i = 0; i < 4; i ++){
+                int nrow = row + DR[i]; 
+                int ncol = col + DC[i]; 
+
+                if(!isValid(nrow,ncol,grid)){
+                    continue; 
+                }
+
+                if(grid[nrow][ncol] == '1'){
+                    q.push({nrow,ncol}); 
+                    grid[nrow][ncol] = '0'; 
+                }
+            }
+        }
+    }
+
+    int approach2(vector<vector<char>>& grid){
+        // appraoch 2: using Graph (own approach)
+        // step 1: create the adjacency list 
+        // step 1.1: calculate number of the nodes
+        int numberOfNodes = grid.size(); 
+        vector<int> adjsl[numberOfNodes]; 
+        int visited[numberOfNodes];
+        
+        for(int i = 0; i < numberOfNodes; i ++){
+            visited[i] = 0; 
+        }
+
+        int numberOfIsland = 0; 
+
+        // step 2: now add all the nodes inside the adjsl 
+        for(int i = 0; i < grid.size(); i ++){
+            for(int j = 0;j < grid[i].size(); j ++){
+                if(grid[i][j] == '1' and i != j){
+                    adjsl[i].push_back(j); 
+                    adjsl[j].push_back(i); 
+                }
+            }
+        }
+
+        // step 3: now do bfs traversal through each node of the adjacency list 
+        for(int i = 0; i < numberOfNodes; i ++){
+            if(!visited[i]){
+                numberOfIsland ++; 
+                dfs(grid,visited,i);
+            }
+        }
+
+        return numberOfIsland; 
+
+        // correct appraoch: 
+        // int n = grid.size(); 
+        // int m = grid[0].size(); 
+        // int cnt = 0; 
+        // vector<vector<int>> visited(n, vector<int>(m, 0)); 
+        // for(int i = 0; i < n; i ++){
+        //     for(int j = 0; j < m; j ++){
+        //         if(grid[i][j] == '1'){
+        //             cnt ++; 
+        //             bfs(i,j,visited,grid); 
+        //         }
+        //     }
+        // }
+
+        // return cnt;
+    }
+    
+    int numIslands(vector<vector<char>>& grid) {
+        // approach 1: using recursion 
+        // return approach1(grid); 
+
+        // approach 2: using dfs/graph approach 
+        return approach2(grid); 
+    }
+};

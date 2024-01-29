@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int findCenter(vector<vector<int>>& edges) {
+        // create the graph 
+
+        // for the star graph the number of the nodes  = numeber of the edges + 2
+        
+        int n = edges.size();; 
+        vector<vector<int>> graph(n+2);
+        for(int i = 0; i < edges.size(); i ++){
+            graph[edges[i][0]].push_back(edges[i][1]); 
+            graph[edges[i][1]].push_back(edges[i][0]);
+        }
+
+        // now go through each node
+        int center = 0; 
+        for(int i = 1; i <= (n+1); i ++){
+            if(graph[i].size() == n){
+                return i; 
+            }
+        }
+        return 0; 
+    }
+};
