@@ -1,0 +1,181 @@
+class Node{
+public: 
+    Node* children[26]; 
+    char data; 
+    bool isTerminal; 
+    string w; 
+    int wordIndex;   
+    Node(char data){
+        this -> data = data;
+        for(int i = 0; i < 26; i ++){
+            this -> children[i] = nullptr; 
+        }
+        this -> isTerminal = false;
+        this -> w = ""; 
+        this -> wordIndex = 0;  
+    }
+};
+
+// now let us create the trie class 
+class Trie{
+public: 
+Node* ans; 
+
+    Trie(){
+        ans = new Node('\0'); 
+    }
+
+    // create insert function 
+    void insert(string word,int index){
+        Node* root = ans; 
+        reverse(word.begin(),word.end());     
+        for(char c : word){
+            int index = c - 'a'; 
+            if(root -> children[index] == nullptr){
+                // agar child node exist nahi karta then paida karlo. 
+                root -> children[index] = new Node(c); 
+            }
+            root = root -> children[index]; 
+            root -> w += c; 
+        }
+
+        ans -> wordIndex = index; 
+        ans -> children[word[0]-'a']->w = word; 
+        root -> isTerminal = true; 
+    }
+
+    // now my stretrgy will be to insert the string the in the reverse order
+    bool pallindromeExist(string word,vector<vector<int>> &answer,int index){
+        unordered_map<char,int> isItPallindrome; 
+        int indexToFind = word[0] - 'a'; 
+        Node* root = ans; 
+        if(root -> children[indexToFind]->w == word)
+        {   
+            return true; 
+        }
+
+        // means abb to traverse karna padega which will take O(N)
+        for(char c : word){
+            isItPallindrome[c] ++; 
+        }
+
+        string m = root -> children[indexToFind] -> w; 
+        for(char c : m){
+            isItPallindrome[c] ++; 
+        }
+
+        // i have created hashmap 
+        
+        for(auto it : isItPallindrome){
+            if(it.second != 2){
+                return false; 
+            }
+        }
+
+        vector<int> temp; 
+        temp.push_back(index); 
+        temp.push_back(root->children[index]->wordIndex); 
+        answer.push_back(temp); 
+        return true;         
+    }
+};
+
+class Solution {
+public:
+
+    bool isItPair(string m,string n)
+    {
+        string newForm = m + n; 
+        cout << newForm << endl; 
+        int START = 0, END = newForm.size()-1; 
+        while(START < END){
+            if(newForm[START] == newForm[END]){
+                START ++; 
+                END --; 
+            }
+            else{
+                return false; 
+            }
+        }
+        return true; 
+    }
+
+    bool isItPallindrome(string newForm)
+    {
+        int START = 0, END = newForm.size()-1; 
+        while(START < END){
+            if(newForm[START] != newForm[END]){
+                return false; 
+            }
+            START ++; 
+            END --; 
+        }
+        return true; 
+    }
+
+
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        // approach 1: brute force (TLE)
+        // vector<vector<int>> ans;  
+        // for(int i = 0; i < words.size(); i ++){
+        //     for(int j = i+1; j < words.size(); j ++){
+        //         string s1 = words[i] + words[j]; 
+        //         string s2 = words[j] + words[i]; 
+
+        //         if(isItPallindrome(s1)){
+        //             ans.push_back({i,j}); 
+        //         }
+
+        //         if(isItPallindrome(s2)){
+        //             ans.push_back({j,i}); 
+        //         }
+        //     }
+           
+        // }
+
+        // return ans;
+
+        // approach 2: using hashmap 
+        
+        // step 1: declaration   
+        vector<vector<int>> ans; 
+        unordered_map<string,int> mp; // by the way this map will store the string in reverse for along with their indexes 
+
+        // step 2: now add all string with reverse and their indexes 
+        for(int i = 0; i < words.size(); i ++){
+            string w = words[i]; 
+            reverse(w.begin(),w.end()); 
+            mp[w] = i; 
+        }
+
+        if(words.size() < 2){
+            return ans; 
+        }
+
+        // step 3: now get prefix and suffix for a string if the suffix is present and prefix is pallindrome then add it in the 2d vector 
+        // same goes in reverse 
+
+        for(int i = 0; i < words.size(); i ++){
+            for(int j = 0; j <= words[i].size(); j ++){
+                string st1 = words[i].substr(0,j); 
+                string st2 = words[i].substr(j); 
+
+                // now for prefix find is it present in map or not if present then check whether the suffix is pallindrome or not 
+                // check whether is it of same word or not 
+
+                if(mp.count(st1) and isItPallindrome(st2) and mp[st1] != i){
+                    ans.push_back({i,mp[st1]});
+                }
+
+                // now check for the suffix and if the suffix is present then check whether the prefix is pallindrome or not 
+                if(!st1.empty() and mp.count(st2) and isItPallindrome(st1) and mp[st2] != i){
+                    ans.push_back({mp[st2],i}); 
+                }
+
+            }
+        }
+
+        // jar mi prefix shodhat asel tar suffix pallindrome hava or jar mi suffix shodhat asel tar prefix pallindrome hava,
+        return ans;
+    }
+};
