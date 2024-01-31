@@ -5,7 +5,7 @@ vector<int> Encode;
 
 int main(){
      // enter the project name 
-    cout << "I am batman " << endl;  
+    // cout << "I am batman " << endl;  
 
     string input = "wabbabwabbabwabbabwabbabw"; 
     string current = "";
@@ -20,7 +20,7 @@ int main(){
         else{
             Encode.push_back(dictionary[current]); 
             dictionary[temp] = dictionary.size(); 
-            current = (1,c); 
+            current = string(1,c); 
         }
     }
 

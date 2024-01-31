@@ -1,0 +1,117 @@
+class Solution {
+public:
+
+    bool isValid(int x,int y,vector<vector<int>> &image,int color,int colorGiven){
+        if(x < 0 or y < 0 or x >= image.size() or y >= image[0].size() or image[x][y] != colorGiven or image[x][y] == color)
+        {
+            return false; 
+        }
+        return true; 
+    }
+
+    void approach1(vector<vector<int>> &image,int x,int y,int colorToAdd,int colorGiven){
+
+        int newX = x - 1; 
+        int newY = y; 
+        if(isValid(newX,newY,image,colorToAdd,colorGiven)){
+            image[newX][newY] = colorToAdd; 
+            approach1(image,newX,newY,colorToAdd,colorGiven); 
+        }
+
+        newX = x; 
+        newY = y-1;
+
+        if(isValid(newX,newY,image,colorToAdd,colorGiven)){
+            image[newX][newY] = colorToAdd; 
+            approach1(image,newX,newY,colorToAdd,colorGiven); 
+        }
+
+        newX = x; 
+        newY = y+1;
+
+        if(isValid(newX,newY,image,colorToAdd,colorGiven)){
+            image[newX][newY] = colorToAdd; 
+            approach1(image,newX,newY,colorToAdd,colorGiven); 
+        }
+
+        newX = x+1; 
+        newY = y;
+
+        if(isValid(newX,newY,image,colorToAdd,colorGiven)){
+            image[newX][newY] = colorToAdd; 
+            approach1(image,newX,newY,colorToAdd,colorGiven); 
+        }
+    }
+
+    void dfs(int row, int col, vector<vector<int>>& ans, vector<vector<int>>& image, int color, int initialColor,int delRow[],int delCol[]) {
+        ans[row][col] = color;
+        int n = image.size(); 
+        int m = image[0].size(); 
+        for (int i = 0; i < 4; i++) {
+            int nrow = row +  delRow[i];
+            int ncol = col + delCol[i];
+
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && image[nrow][ncol] == initialColor && ans[nrow][ncol] != color /*last condition was giving me error*/) { 
+                // enter the condition carefully 
+                dfs(nrow, ncol, ans, image, color, initialColor,delRow,delCol);
+            }
+        }
+    }
+
+      /*
+    void dfs(int row, int col, vector<vector<int>>& ans, vector<vector<int>>& image, int color, int initialColor,int delRow[],int delCol[]) {
+        ans[row][col] = color;
+        int n = image.size(); 
+        int m = image[0].size(); 
+
+        for(int i = 0;i<4;i++) {
+            int nrow = row + delRow[i]; 
+            int ncol = col + delCol[i]; 
+            // check for valid coordinate 
+            // then check for same initial color and unvisited pixel
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol < m && 
+            image[nrow][ncol] == initialColor && ans[nrow][ncol] != color) {
+                dfs(nrow, ncol, ans, image, color, initialColor,delRow, delCol); 
+            }
+        }
+
+    }
+    */
+
+    void dfs(vector<vector<int>> &image,int row,int col,int delRow[],int delCol[],int initialColor,int color,vector<vector<int>> &ans)
+    {
+        ans[row][col] = color; 
+
+        for(int i = 0; i < 4; i ++){
+            int newRow = row + delRow[i]; 
+            int newCol = col + delCol[i]; 
+
+            if(newRow >= 0 and newRow < image.size() and newCol >= 0 and newCol < image[0].size() and image[newRow][newCol] == initialColor and ans[newRow][newCol] != color){
+                dfs(image,newRow,newCol,delRow,delCol,initialColor,color,ans); 
+            }
+        }
+    }
+
+
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        // approach 1: using recursion
+        // int colorPresent = image[sr][sc]; 
+        // image[sr][sc] = color; // first color that given block beacuse above code is making color to every block except itself
+        // approach1(image,sr,sc,color,colorPresent); 
+        // return image; 
+
+        // approach 2: using striver bhaiya ki approach 
+        // using BFS 
+        int delRow[] = {0,0,-1,1}; 
+        int delCol[] = {-1,1,0,0}; 
+        int initialColor = image[sr][sc]; 
+        vector<vector<int>> ans = image; 
+        dfs(image,sr,sc,delRow,delCol,initialColor,color,ans); 
+        return ans;
+    }
+};
+
+
+
+
+
