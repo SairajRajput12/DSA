@@ -1,0 +1,87 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+
+class Graph {
+    bool bfs(int node,vector<int> adj[],int visited[]){
+        queue<pair<int,int>> q;
+        q.push({node,-1});
+        visited[node] = 1; 
+
+        while(!q.empty()){
+            int parent = q.front().second; 
+            int src = q.front().first;  
+            q.pop(); 
+
+            for(auto neighbour : adj[node]){
+                if(!visited[neighbour]){
+                    q.push({neighbour,src}); 
+                    visited[neighbour] = 1; 
+                }
+                else if(visited[src] and parent != neighbour){
+                    return true; 
+                }
+            }
+        }
+        return false; 
+    }
+
+    bool solve(int node,int visited[],vector<int> adj[],int parent){
+        visited[node] = 1; 
+        for(auto it : adj[node])
+        {
+            if(!visited[it] and parent != it){
+                if(solve(it,visited,adj,node) == true)
+                {
+                    return true; 
+                } 
+            }
+            else if(visited[node] and  parent != it){
+                if(node != parent)
+                {
+                    return true; 
+                } 
+            }
+        }
+
+        return false; 
+    }
+
+public:
+    bool detectCycle(int V, vector<int> adj[]) {
+        // Write your code here
+
+        // using bfs
+        // int visited[V] = {0};
+        // // create adjacency list
+        // for(int i = 0; i < V; i ++){
+        //     if(!visited[i]){
+        //         bool ans = bfs(i,adj,visited); 
+        //         if(ans){
+        //             return true; 
+        //         }
+        //     }
+        // }
+        // return false; 
+
+        // using dfs 
+        int visited[V] = {0};
+        // for handling connected components
+        for(int i = 0; i < V; i ++){
+            if(!visited[i]){
+                if(solve(i,visited,adj,-1)){
+                    return true; 
+                }
+            }
+        } 
+
+        return false; 
+    }
+};
+
+
+
+
+
+
+
+

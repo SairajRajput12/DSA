@@ -15,6 +15,7 @@ public:
     }
 };
 
+
 class cmp{
 public: 
     bool operator()(Node* a,Node* b){
@@ -87,6 +88,34 @@ priority_queue<Node*,vector<Node*>,cmp> q;
         }
         return temp; 
     }
+
+    void decode(Node* root, string encoded, string &decoded, int &index) {
+        if (root == nullptr)
+            return;
+
+        // If leaf node is found
+        if (!root->left && !root->right) {
+            decoded += root->character;
+            return;
+        }
+
+        index++;
+
+        if (encoded[index] == '0')
+            decode(root->left, encoded, decoded, index);
+        else
+            decode(root->right, encoded, decoded, index);
+    }
+
+    string decompress(string encoded, Node* root) {
+        string decoded = "";
+        int index = -1;
+        while (index < (int)encoded.size() - 2) {
+            decode(root, encoded, decoded, index);
+        }
+        return decoded;
+    }
+
 };
 
 int main(){
@@ -117,5 +146,11 @@ int main(){
      for(auto it : answer){
         cout << it.first << " -> " << it.second << endl; 
      }
+
+     cout << "Decompressed string is : " << endl; 
+     string encoded = "001101001001110101001011010";
+     string decoded = h.decompress(encoded, ans);
+     cout << "Decompressed string is: " << decoded << endl;
+
   return 0;
 }

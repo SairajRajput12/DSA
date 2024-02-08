@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 unordered_map<string,int> dictionary; 
+map<int,string> dict; 
 vector<int> Encode; 
 
 int main(){
@@ -28,11 +29,27 @@ int main(){
         dictionary[current] = dictionary.size(); 
     }
 
+    for(auto it : dictionary){
+        dict[it.second] = it.first; 
+    }
+
     cout << "Encoded data : " << endl; 
     for(int m : Encode){
         cout << m << " "; 
     }
     cout << endl; 
+
+    string decoded;
+    for(int i = 0; i < Encode.size(); i++) {
+        int code = Encode[i];
+        if(dict.find(code) != dict.end()) {
+            decoded += dict[code];
+        }
+    }
+
+    cout << "Decoded data : " << endl; 
+    cout << decoded << endl;
+
 
   return 0;
 }
