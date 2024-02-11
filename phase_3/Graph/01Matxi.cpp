@@ -1,3 +1,6 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+
 class Solution {
 
     bool isJayaz(int row,int col,int m,int n){
