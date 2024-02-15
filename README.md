@@ -47,10 +47,6 @@ Contributions to this repository are welcome! If you'd like to contribute a new 
 4. Push to the branch (`git push origin feature/new-algorithm`).
 5. Open a pull request.
 
-## License
-
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-Feel free to customize and expand this template according to your repository's specific needs and contents.
