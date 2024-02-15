@@ -1,4 +1,3 @@
-Certainly! Here's a basic template you can use for your README.md file in your GitHub repository for DSA (Data Structures and Algorithms):
 
 ---
 
