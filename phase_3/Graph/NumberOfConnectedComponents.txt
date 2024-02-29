@@ -1,0 +1,39 @@
+class Solution {
+public:
+    void dfs(int &x,int node,vector<int> adj[],vector<int> &visited,int &c)
+    {
+        visited[node] = 1; 
+        x ++; 
+        c += adj[node].size(); 
+        for(auto it : adj[node]){
+            if(!visited[it]){
+                dfs(x,it,adj,visited,c);
+            }
+        }
+    }
+
+    int countCompleteComponents(int n, vector<vector<int>>& edges) {
+        vector<int> adj[n]; 
+        for(auto it : edges){
+            adj[it[0]].push_back(it[1]); 
+            adj[it[1]].push_back(it[0]); 
+        }
+
+        // now check whether the each component is connected or not 
+        vector<int> visited(n,0); 
+        int ans = 0; 
+        for(int i = 0; i < n; i ++)
+        {
+            if(!visited[i]){
+                // means edge is not visited
+                int numberOfNodes = 0; 
+                int countChild = 0;
+                dfs(numberOfNodes,i,adj,visited,countChild);
+                if(numberOfNodes*(numberOfNodes-1) == countChild){
+                    ans ++; 
+                }               
+            }
+        }
+        return ans; 
+    }
+};
