@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    bool isItPallindrome(int start,int end,string &temp)
+    {
+        while(start < end){
+            // cout << "inside loop" << endl; 
+            if(temp[start] != temp[end]){
+                return false; 
+            }
+            start ++; 
+            end --; 
+        }
+        return true; 
+    }
+
+    string longestPalindrome(string s) {
+
+        // Approach 1: using brute force: kripiya iss approach ko mat use kijiye
+        // string ans = ""; 
+        // string temp = ""; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     for(int j = 0; j <= i; j ++){
+        //         int start = j; 
+        //         int end = i-j;  
+        //         if(isItPallindrome(j,i,s) and s.substr(start,end+1).size() > ans.size()){
+        //             ans = s.substr(start,end+1); 
+        //         }
+        //     }
+        // }
+        // return ans; 
+
+        // appraoch 2: using map 
+        
+    }
+};
