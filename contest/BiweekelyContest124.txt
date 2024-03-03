@@ -1,0 +1,104 @@
+class Solution {
+public:
+    int maxOperations(vector<int>& nums) {
+        if(nums.size() < 2){
+            return 0; 
+        }   
+        
+        int sum = nums[0] + nums[1]; 
+        int ans = 1; 
+        int i = 2; 
+        while(i < nums.size()){
+            if((i+1) < nums.size() and (nums[i] + nums[i+1]) == sum){
+                ans ++; 
+            }
+            else{
+                break; 
+            }
+            i += 2; 
+        }
+        return ans;        
+    }
+};
+
+class Solution {
+    
+    public String lastNonEmptyString(String s) {
+        
+        int lent = s.length();
+        
+        int max = 0;
+        
+        HashMap<Character,Integer> h = new HashMap<>();
+        
+        HashMap<Character,Integer> lastInd = new HashMap<>();
+        
+        for(int i=0;i<lent;i++){
+            
+            char c= s.charAt(i);
+            
+            if(h.get(c) == null){
+                h.put(c,1);
+            }else{
+                int p = h.get(c);
+                p++;
+                h.put(c,p);
+            }
+            lastInd.put(c,i);
+        }
+        
+      //  System.out.println(h);
+        
+        List<Character> li = new ArrayList<>();
+        HashSet<Character> ht = new HashSet<>();
+        
+       for (Map.Entry<Character, Integer> entry : h.entrySet()) {
+            char key = entry.getKey(); // Corrected method name
+            int count = entry.getValue();
+            
+            if(count>max){
+                li = new ArrayList<>();
+                 ht = new HashSet<>();
+                max = count;
+                li.add(key);
+                ht.add(key);
+            }else if(count == max){
+                li.add(key);
+                 ht.add(key);
+            }
+            
+           
+        }
+        
+       // System.out.println(lastInd);
+        HashMap<Integer,Character> hp = new HashMap<>();
+        List<Integer> lk = new ArrayList<>();
+       for (Map.Entry<Character, Integer> entry : lastInd.entrySet()) {
+           
+           
+            char key = entry.getKey(); // Corrected method name
+            int count = entry.getValue();
+           if(ht.contains(key)){
+            lk.add(count);
+            hp.put(count,key);
+           }
+        }
+       
+        Collections.sort(lk);
+         // System.out.println(hp);
+        String ans = "";
+        
+        for(int i=0;i<lk.size();i++){
+            
+            int ind = lk.get(i);
+             //value = hp.get(ind);
+            // System.out.println(ind +" -= "+value);
+            char m = s.charAt(ind);
+            ans = ans + hp.get(ind)+"";
+        }
+        
+        return ans;
+        
+    }
+}
+
