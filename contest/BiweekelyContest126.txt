@@ -1,0 +1,137 @@
+# encrypted string
+
+class Solution {
+public:
+    vector<long long> unmarkedSumArray(vector<int>& nums, vector<vector<int>>& queries) {
+        // i will store the data in the hashmap in the sorted form
+        // it will include the value of the element and it includes visited or not, index 
+//         vector<pair<int,int>> p; 
+//         vector<int> visited; 
+//         for(int i = 0; i < nums.size(); i ++){
+//             int ind = i; 
+//             int e = nums[i]; 
+//             p.push_back({e,ind}); 
+//             pair<int,bool> p2; 
+//             p2.first = e; 
+//             p2.second = false; 
+//             visited.push_back(0); 
+//         }   
+        
+//         sort(p.begin(),p.end()); 
+//         vector<long long> answer; 
+//         for(int i = 0; i < queries.size(); i ++){
+//             auto it = queries[i]; 
+//             int ind = it[0]; 
+//             int ki = it[1]; 
+            
+//             visited[ind] = 1; 
+            
+//             int sum = 0;             
+//             while(ki != 0){
+//                 bool anp = true; 
+//                 auto it1 = p.begin();
+//                 int firstE = 0; 
+//                 int firstI = 0;
+//                 while(!anp){
+//                     int val = it1->first; 
+//                     int ind = it1->second;
+//                     it1 ++; 
+//                     if(visited[ind] == 1){
+//                         continue; 
+//                     }
+//                     else{
+//                         firstI = ind; 
+//                         firstE = val; 
+//                         anp = false; 
+//                     }
+//                 }
+                
+//                 int secondE = 0; 
+//                 int secondI = 0; 
+//                 for(int i = 0; i < visited.size(); i ++){
+//                     if(visited[i] == 0){
+//                         secondE = nums[i]; 
+//                         secondI = i; 
+//                     }
+//                 }
+                
+//                 if(secondE < firstE){
+//                     visited[secondI] = 1; 
+//                     sum += secondE; 
+//                 }
+//                 else{
+//                     visited[firstI] = 1; 
+//                     sum += firstE; 
+//                 }
+                
+                 
+//                 ki --; 
+//             }           
+//             answer.push_back(sum);
+//         }
+//         return answer; 
+        vector<long long> ans; 
+        long long sum = 0; 
+        set<pair<int,int>> s; 
+        
+        for(int i = 0; i < nums.size(); i ++){
+            s.insert({nums[i],i}); 
+            sum += nums[i]; 
+        }
+        
+        for(int i = 0; i < queries.size(); i ++){
+            int ind = queries[i][0]; 
+            int ki = queries[i][1]; 
+            
+            sum -= nums[ind]; 
+            nums[ind] = 0; 
+            
+            while(s.size() and ki){
+                auto [ele,i1] = *s.begin(); 
+                s.erase({ele,i1});
+                if(nums[i1]){
+                    sum -= nums[i1]; 
+                    nums[i1] = 0; 
+                    ki --; 
+                }
+            }
+            
+            ans.push_back(sum); 
+        }
+        return ans; 
+    }
+};
+
+
+# 2nd problem
+
+class Solution {
+public:
+    
+    int getSum(int i){
+        int maxD = 0; 
+        int m = i; 
+        while(m != 0){
+            maxD = max(maxD,m%10); 
+            m = m/10; 
+        }
+        
+        m = i; 
+        int enc = 0; 
+        while(m != 0){
+            enc = enc*10 + maxD; 
+            m = m / 10; 
+        }
+        
+        return enc; 
+    }
+    
+    int sumOfEncryptedInt(vector<int>& nums) {
+        int sum = 0; 
+        for(int i = 0; i < nums.size(); i ++){
+            int cursum = getSum(nums[i]); 
+            sum += cursum; 
+        }
+        return sum; 
+    }
+};

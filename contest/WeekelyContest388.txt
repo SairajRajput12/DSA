@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int minimumBoxes(vector<int>& apple, vector<int>& capacity) {
+        int ans = 0; 
+        sort(capacity.begin(),capacity.end()); 
+        int sum = 0; 
+        for(int i = 0; i < apple.size(); i ++){
+            sum += apple[i]; 
+        }
+        int temp = 0; 
+        for(int i = capacity.size() - 1; i >= 0; i --){
+            if(temp >= sum){
+                break; 
+            }
+            temp = temp + capacity[i]; 
+            ans = ans + 1; 
+        }
+        return ans; 
+    }
+};
+
+class Solution {
+public:
+    long long maximumHappinessSum(vector<int>& happiness, int k) {
+        priority_queue<int> q; 
+        for(int i = 0; i < happiness.size(); i ++){
+            q.push(happiness[i]);
+        }
+        
+        int iter = 0; 
+        long long ans = 0; 
+        while(iter < k){
+            int e = q.top() - iter; 
+            if(e < 0){
+                ans = ans + 0; 
+            }
+            else{
+                ans = ans + e; 
+            }
+            
+            
+            iter ++; 
+            q.pop(); 
+            // cout << ans << " " << e << endl; 
+        }
+        return ans; 
+    }
+};
+
