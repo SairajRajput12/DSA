@@ -46,9 +46,7 @@ int minimumSpanningTree(vector<vector<int>>& edges, int n)
           pq.push({edW,adjNode}); 
         }
     }
-
   }
-
   return sum; 
 }
 
