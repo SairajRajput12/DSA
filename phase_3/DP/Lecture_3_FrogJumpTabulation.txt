@@ -1,0 +1,62 @@
+#include <bits/stdc++.h> 
+
+int f1int(int ind,vector<int> &heights){
+    if(ind == 0){
+        return 0; 
+    }
+
+    int left = f1int(ind-1,heights) + abs(heights[ind]-heights[ind-1]); 
+    int right = INT_MAX; 
+    if(ind  > 1){
+        right = f1int(ind-2,heights) + abs(heights[ind]-heights[ind-2]); 
+    }
+    return min(left,right); 
+}
+
+
+int f2int(int ind,vector<int> &heights,vector<int> &dp){
+    if(ind == 0){
+        return 0; 
+    }
+
+    if(dp[ind] != -1){
+        return dp[ind]; 
+    }
+
+    int left = f2int(ind-1,heights,dp) + abs(heights[ind]-heights[ind-1]); 
+    int right = INT_MAX; 
+    if(ind  > 1){
+        right = f2int(ind-2,heights,dp) + abs(heights[ind]-heights[ind-2]); 
+    }
+
+    dp[ind] = min(left,right); 
+    return dp[ind]; 
+}
+
+
+int frogJump(int n, vector<int> &heights)
+{
+    // Write your code here.
+    // brute force and simple recursive solution 
+    // return f1int(n-1,heights); 
+
+    // dp solution: 
+    // vector<int> dp(n+1,-1); 
+    // return f2int(n-1,heights,dp); 
+
+    // using tabulation 
+    int k = 0, m = 0;  
+    int curri = 0;
+    for(int i = 1; i < n; i ++){
+        int le = k + abs(heights[i]-heights[i-1]);
+        int ri = INT_MAX; 
+        if(i > 1){
+            ri = m + abs(heights[i]-heights[i-2]); 
+        } 
+
+        curri = min(le,ri); 
+        m = k; 
+        k = curri; 
+    }
+    return k;
+}
