@@ -1,0 +1,52 @@
+#include <bits/stdc++.h> 
+
+int f1int(int ind,vector<int> &heights){
+    if(ind == 0){
+        return 0; 
+    }
+
+    int left = f1int(ind-1,heights) + abs(heights[ind]-heights[ind-1]); 
+    int right = INT_MAX; 
+    if(ind  > 1){
+        right = f1int(ind-2,heights) + abs(heights[ind]-heights[ind-2]); 
+    }
+    return min(left,right); 
+}
+
+
+int f2int(int ind,vector<int> &heights,vector<int> &dp){
+    if(ind == 0){
+        return 0; 
+    }
+
+    if(dp[ind] != -1){
+        return dp[ind]; 
+    }
+
+    int left = f2int(ind-1,heights,dp) + abs(heights[ind]-heights[ind-1]); 
+    int right = INT_MAX; 
+    if(ind  > 1){
+        right = f2int(ind-2,heights,dp) + abs(heights[ind]-heights[ind-2]); 
+    }
+
+    dp[ind] = min(left,right); 
+    return dp[ind]; 
+}
+
+
+int frogJump(int n, vector<int> &heights)
+{
+    // Write your code here.
+    // brute force and simple recursive solution 
+    // return f1int(n-1,heights); 
+
+    // dp solution: 
+    vector<int> dp(n+1,-1); 
+    return f2int(n-1,heights,dp); 
+}
+
+int main(int argc, char const *argv[])
+{
+    /* code */
+    return 0;
+}
