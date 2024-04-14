@@ -1,0 +1,156 @@
+class Solution {
+public:
+unordered_map<int,bool> mp;
+
+    bool solve(int index,int initialStep,vector<int> &stones){
+        if(index == stones.size()-1){
+            // base case
+            return true; 
+        }
+
+        int ind[] = {-1,0,1}; 
+        bool call = false; 
+        for(int i = 0; i < 3; i ++){
+            int newStep = initialStep + ind[i]; 
+            if(newStep > 0 and find(stones.begin(), stones.end(), stones[index] + newStep) != stones.end()){
+                if (solve(distance(stones.begin(), find(stones.begin(), stones.end(), stones[index] + newStep)), newStep, stones)) {
+                    return true;
+                }
+            } 
+        }
+
+        return false; 
+    }
+
+    bool func(int i, int jumps, vector<int> &stones, vector<vector<int>> &dp){
+        if(i==stones.size()-1)
+            return true;
+            
+        if(dp[i][jumps] != -1)
+            return dp[i][jumps];
+        
+        bool ans=false;
+        for(int ind=i+1; ind<stones.size(); ind++){
+            if(stones[ind]-stones[i]>jumps+1)
+                break;
+            for(int t=-1; t<2; t++){
+                if(stones[ind]-stones[i]==jumps+t)
+                    ans = func(ind, jumps+t, stones, dp) || ans;
+            }
+        }
+    
+        return dp[i][jumps] = ans;
+    }
+
+    bool getAns(int index,int step,vector<int> &stones,int n,map<pair<int,int>,bool> &memo){
+        if(index > stones[n-1] or mp[index] == false){
+            return false; 
+        }
+
+        if(index == stones[n-1]){
+            return true; 
+        }
+
+        if(memo.find({index,step}) != memo.end()){
+            return memo[{index,step}]; 
+        }
+
+        bool isPossible; 
+        if(index == 0){
+            isPossible = getAns(index+1,1,stones,n,memo); 
+        }
+        else{
+            if(step - 1 > 0){
+                isPossible = getAns(index+(step-1),step-1,stones,n,memo); 
+            }
+
+            if(isPossible){
+                return true; 
+            }
+
+            isPossible = getAns(index+(step+1),step+1,stones,n,memo); 
+
+            if(isPossible){
+                return true; 
+            }
+
+            isPossible = getAns(index+(step),step,stones,n,memo); 
+            
+            if(isPossible){
+                return true; 
+            }            
+        }
+
+        memo[{index,step}] = isPossible; 
+        return isPossible; 
+    }
+
+    bool getResponse(vector<int> &stones,map<pair<int,int>,bool> &memo,int currentStep,int prevStep){
+        if(currentStep > stones[stones.size()-1] or mp[currentStep] == false){
+            return false; 
+        }
+
+        if(currentStep == stones[stones.size()-1]){
+            return true; 
+        }
+
+        if(memo.find({currentStep,prevStep}) != memo.end()){
+            return memo[{currentStep,prevStep}]; 
+        }
+
+        bool isPossible; 
+
+        if(currentStep == 0){
+            isPossible = getResponse(stones,memo,currentStep+1,1);  
+        }
+        else{
+            if(prevStep - 1 > 0){
+                isPossible = getResponse(stones,memo,currentStep + (prevStep-1),prevStep-1);  
+            }
+
+            if(isPossible){
+                return true; 
+            }    
+
+            isPossible = getResponse(stones,memo,currentStep +(prevStep + 1),prevStep+1); 
+            if(isPossible){
+                return true; 
+            }     
+
+            isPossible = getResponse(stones,memo,currentStep + prevStep,prevStep);  
+            if(isPossible){
+                return true; 
+            }
+
+            
+        }
+
+
+        memo[{currentStep,prevStep}] = isPossible; 
+        return isPossible; 
+    }
+
+
+
+    bool canCross(vector<int>& stones) {
+
+
+        // brute force approach
+        // int ind = 0; 
+        // int initial = 1; 
+
+        // if (stones[1] != 1) {
+        //     return false;
+        // }
+
+        // return solve(ind,initial,stones); 
+
+        // dynamic programmign solution 
+        for(auto it : stones){
+            mp[it] = true; 
+        }
+
+        map<pair<int,int>,bool> memo;
+        return getResponse(stones,memo,0,1);  
+    }
+};
