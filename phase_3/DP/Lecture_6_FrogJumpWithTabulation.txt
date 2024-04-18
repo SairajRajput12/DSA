@@ -1,0 +1,92 @@
+class Solution {
+public:
+    int f(int size,vector<int> &nums){
+        if(size == 0){
+            return nums[size]; 
+        }
+
+        if(size < 0){
+            return 0; 
+        }
+
+
+        int pick = nums[size] + f(size-2,nums);
+        int nonpick = f(size-1,nums);
+        return max(pick,nonpick); 
+    }
+
+    int f1(int size,vector<int> &nums,vector<int> &dp){
+        if(size == 0){
+            return nums[size]; 
+        }
+
+        if(size < 0){
+            return 0; 
+        }
+
+        if(dp[size] != -1){
+            return dp[size]; 
+        }
+
+        int pick = nums[size] + f1(size-2,nums,dp);
+        int nonpick = f1(size-1,nums,dp);
+        dp[size] = max(pick,nonpick); 
+        return max(pick,nonpick); 
+    }
+
+    int rob(vector<int>& nums) {
+        // int evenSum = 0,oddSum = 0; 
+        // for(int i = 0; i < nums.size(); i +=2){
+        //     evenSum += nums[i]; 
+        // }
+
+        // for(int i = 1; i < nums.size(); i += 2){
+        //     oddSum += nums[i]; 
+        // }
+
+        // int summax = 0; 
+        // int prevInd = 0; 
+        // for(int i = 1; i < nums.size(); i ++){
+        //     if(prevInd != )
+        // }
+
+        // return max(evenSum,oddSum); 
+
+        // not optmised appraoch 
+        // int n = nums.size(); 
+        // return f(n-1,nums); 
+
+        // optimised appraoch using dynamic programming memomization
+        // int n = nums.size(); 
+        // vector<int> dp(n,-1); 
+        // return f1(n-1,nums,dp); 
+
+        // using tabulation approach 
+        // int n = nums.size(); 
+        // vector<int> dp(n,-1); 
+        // dp[0] = nums[0];
+        // int neg = 0; 
+        // for(int i = 1; i < n; i ++){
+        //     int take = (i > 1 ? take + nums[i] + dp[i-2] :take + nums[i]); 
+        //     int nontake = dp[i-1]; 
+        //     dp[i] = max(take,nontake); 
+        // } 
+        // return dp[1]; 
+
+        // tabulation with space optimisation 
+        int prev = nums[0];
+        int prev2 = 0; 
+        for(int i = 1; i < nums.size(); i ++){
+            int take = nums[i]; 
+            if(i > 1){
+                take += prev2; 
+            }
+
+            int nontake = 0 + prev; 
+            int curi = max(nontake,take); 
+            prev2 = prev;
+            prev = curi; 
+        }
+        return prev; 
+    }
+};
