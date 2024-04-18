@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int f2(vector<int> &nums,int index,vector<int> &dp){
+        if(index == 0){
+            return nums[index]; 
+        }
+
+        if(index < 0){
+            return 0; 
+        }
+
+        if(dp[index] != -1){
+            return dp[index]; 
+        }
+
+        int pick = nums[index] + f2(nums,index-2,dp); 
+        int nonpick = f2(nums,index-1,dp);
+        dp[index] = max(pick,nonpick);  
+        return max(pick,nonpick);
+    }
+
+    int f(vector<int> nums,int size){
+        vector<int> dp(size,-1); 
+        return f2(nums,size-1,dp); 
+    }
+
+    int usingTabulation(vector<int> &nums){
+        int prev = nums[0]; 
+        int prev2 = 0; 
+        
+        for(int i = 1; i < nums.size(); i ++){
+            int take = nums[i]; 
+            if(i > 1){
+                take += prev2; 
+            } 
+            int cur = prev; 
+            int ans = max(take,cur); 
+            prev2 = prev; 
+            prev = ans; 
+        }
+        return prev; 
+    }
+
+    int rob(vector<int>& nums) {
+        vector<int> temp1; 
+        vector<int> temp2; 
+
+        if(nums.size() == 1){
+            return nums[0]; 
+        }
+
+        for(int i = 0; i < nums.size(); i ++){
+            if(i != 0){
+                temp1.push_back(nums[i]); 
+            }
+
+            if(i != nums.size()-1){
+                temp2.push_back(nums[i]); 
+            }
+        }
+
+        
+
+        // return (max(f(temp1,temp1.size()),f(temp2,temp2.size()))); 
+        return (max(usingTabulation(temp1),usingTabulation(temp2)));
+    }
+};
