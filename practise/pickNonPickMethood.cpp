@@ -1,3 +1,5 @@
+#include<bits/stdc++.h>
+using namespace std;
 class Solution {
     void solve(vector<vector<int>> &ans,vector<int> &sample,vector<int> &nums,int index){
         if(index == nums.size()){
@@ -28,3 +30,9 @@ public:
         return ans;    
     }
 };
+
+
+int main(){
+     // enter the project name
+  return 0;
+}
