@@ -1,0 +1,93 @@
+class Solution {
+public:
+    bool dfs(int source,int destination,vector<int> arr[],int visited[]){
+        visited[source] = 1; 
+        for(auto it : arr[source]){
+            if(it == destination){
+                return true; 
+            }
+            if(!visited[it]){
+                bool x = dfs(it,destination,arr,visited);
+                if(x){
+                    return true; 
+                }
+            }
+        }
+
+        return false; 
+    }
+
+    bool dfsx(int node,vector<int> adj[],vector<int> &visited,int destination){
+        visited[node] = 1; 
+        for(auto it : adj[node]){
+            if(it == destination){
+                return true; 
+            }
+
+            if(!visited[it]){
+                if(dfsx(it,adj,visited,destination) == true){
+                    return true; 
+                }
+            }
+        }
+        return false; 
+    }
+
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        // using dfs 
+        // if(edges.size() == 0){
+        //     return true; 
+        // }
+
+        // vector<int> arr[n]; 
+        // int visited[200000] = {0}; 
+        // for(auto it : edges){
+        //     int from = it[0]; 
+        //     int to = it[1]; 
+        //     arr[to].push_back(from); 
+        //     arr[from].push_back(to); 
+        // }
+        // dfs: 
+        // bool ans = dfs(source,destination,arr,visited); 
+        // return ans; 
+        // bfs: 
+        // queue<int> q; 
+        // q.push(source); 
+        // visited[source] = 1; 
+        // while(!q.empty()){
+        //     int curr = q.front(); 
+        //     q.pop(); 
+
+        //     if(curr == destination){
+        //         return true; 
+        //     }
+
+        //     for(auto &node : arr[curr]){
+        //         if(!visited[node]){
+        //             visited[node] = 1; 
+        //             q.push(node); 
+        //         }
+        //     }
+
+        // }
+
+        // return false; 
+
+        vector<int> adj[n]; 
+        vector<int> visited(n,0); 
+        if(edges.size() == 0){
+            return true; 
+        } 
+
+        for(auto it : edges){
+            int to = it[0]; 
+            int from = it[1]; 
+            adj[from].push_back(to);
+            adj[to].push_back(from); 
+        }
+
+        bool ans = dfsx(source,adj,visited,destination); 
+        return ans; 
+
+    }
+};
