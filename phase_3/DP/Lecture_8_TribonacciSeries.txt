@@ -43,13 +43,18 @@ public:
         // return solve(n,dp); 
 
         // using tabulation 
-        vector<int> dp(n+1,-1); 
+        if (n <= 1)
+            return n;
         
-        for(int i = 3; i < n; i ++){
-            dp[i] = dp[i-3] + dp[i-2] + dp[i-1]; 
-            dp[i-3] = dp[i-2]; 
-            dp[i-2] = dp[i-1]; 
-            dp[i-1] = dp[i];  
+        vector<int> fib(n+1,-1);
+        fib[0] = 0;
+        fib[1] = 1;
+        fib[2] = 1; 
+
+        for (int i = 3; i <= n; i++) {
+            fib[i] = fib[i-1] + fib[i-2] + fib[i-3];
         }
+
+        return fib[n];
     }
 };
