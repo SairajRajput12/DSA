@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int solve(int n,vector<int> &dp){
+        if(n <= 1){
+            return n; 
+        }
+
+        if(n == 2){
+            return (n-1); 
+        }
+
+        if(dp[n] != -1){
+            return dp[n]; 
+        }
+
+        dp[n] = solve(n-1,dp) + solve(n-2,dp) + solve(n-3,dp); 
+
+        return dp[n]; 
+    }
+
+    int tribonacci(int n) {
+        // appraoch 1: tabulation
+        // if(n < 1){
+        //     return n; 
+        // }
+
+        // if(n == 2){
+        //     return (n-1); 
+        // }
+
+        // long long first = 0,second = 1,third = 1; 
+        // long long fourth = first + second + third; 
+        // for(int i = 1; i < n; i ++){
+        //     fourth = first + second + third; 
+        //     first = second; 
+        //     second = third; 
+        //     third = fourth; 
+        // }
+        // return second; 
+
+        // using recursion with memisation 
+        // vector<int> dp(n+1,-1); 
+        // return solve(n,dp); 
+
+        // using tabulation 
+        vector<int> dp(n+1,-1); 
+        
+        for(int i = 3; i < n; i ++){
+            dp[i] = dp[i-3] + dp[i-2] + dp[i-1]; 
+            dp[i-3] = dp[i-2]; 
+            dp[i-2] = dp[i-1]; 
+            dp[i-1] = dp[i];  
+        }
+    }
+};
