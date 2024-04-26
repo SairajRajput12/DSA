@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void getWays(vector<vector<int>> &grid,int last,int col,int row,int &sum,vector<int> &possible,vector<vector<int>> &memo){
+        if(possible.size() >  grid.size()){
+            int sam = 0; 
+            for(int i = 0; i < grid.size(); i ++){
+                for(int j = 0; j < grid[0].size(); j ++){
+                    if(i != last){
+                        sam += grid[i][j]; 
+                    }
+                }
+            }
+            sum = max(sum,sam); 
+            return; 
+        }
+
+
+        // ok i think here i can use pick/non pick methood 
+        for(int i = 0; i < grid.size(); i ++){
+            for(int j = 0; j < grid[0].size(); j ++){
+                if(j != last){
+                    possible.push_back(grid[i][j]); 
+                    getWays(grid,i,j,i,sum,possible,memo);
+                }
+            }
+        }
+
+
+    }
+
+    int solve(vector<vector<int>>& grid,int col,int row,vector<vector<int>> &memo){
+        if(row == grid.size()-1){
+            return grid[row][col]; 
+        }
+        
+        if(memo[row][col] != -1){
+            return memo[row][col];
+        }
+
+        int mini = INT_MAX; 
+        for(int j = 0; j < grid[0].size(); j ++){
+            if(col != j){
+                mini = min(mini,solve(grid,j,row+1,memo)); 
+            }
+        }
+
+        memo[row][col] = mini + grid[row][col]; 
+        return mini + grid[row][col]; 
+    }
+
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        // approach 1: using backtracking 
+        // this will be top down approach
+        // int sum = INT_MAX; 
+        // vector<int> possible;
+        // getWays(grid,3,0,0,sum,possible); 
+        // return sum; 
+
+        // this approach gives TLE: so we will going to use memomiastion
+        // int ans = INT_MAX; 
+        // for(int i = 0; i < grid.size(); i ++){
+        //     ans = min(ans,solve(grid,i,0)); 
+        // }
+        // return ans;
+
+        // approach 2: using memomisation 
+        int ans = INT_MAX; 
+        vector<vector<int>> memo(grid.size(),vector<int>(grid[0].size(),-1)); 
+        for(int i = 0; i < grid.size(); i ++){
+            ans = min(ans,solve(grid,i,0,memo)); 
+        }
+        return ans; 
+    }
+};
