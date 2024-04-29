@@ -1,13 +1,7 @@
 class Solution {
 public:
     
-    bool solve(vector<vector<char>>& grid,int row,int col,int cnt){
-        
-        
-        return false; 
-    }
-    
-    bool canMakeSquare(vector<vector<char>>& grid) {
+    bool solve(vector<vector<char>>& grid){
         bool resp = false; 
         int cnt_b = 0; 
         
@@ -15,18 +9,10 @@ public:
             for(int col = 0; col < grid[0].size(); col ++){
                 
                 // cout << row << " " << col << endl; 
-                if(row == 0 and col == 0){
-                    // check for right part 
-                    // if(grid[row+1][col] == grid[row+1][col+1] and grid[row][col+1] == grid[row+1][col] and grid[row][col] == grid[row+1][col]){
-                    //     return true; 
-                    // }
-                    
+                if(row == 0 and col == 0){                    
                     if(grid[row+1][col] == grid[row+1][col+1] and grid[row][col+1] == grid[row+1][col]){
                         return true; 
-                    }
-                    
-
-                    
+                    }                    
                 }
                 
                 if(row != 0 and col == 0){
@@ -98,6 +84,32 @@ public:
         }
         
         return false; 
+    }
+    
+    bool canMakeSquare(vector<vector<char>>& grid) {
+        
+        // approach 1: using conditions 
+        // return solve(grid); 
+        // t.c => O(N^2) 
+        
+        // appraoach 2: consie code 
+        //         int n = grid.size(); 
+        //         int m = grid[0].size(); 
+
+        //         for(int i = 0; i <= n-2; i ++){
+        //             for(int j = 0; j <= m-2; j ++){
+        //                 if(isPossible(grid,i,j) == true){
+        //                     return true; 
+        //                 }
+        //             }
+        //         }
+
+        //         return false; 
+        
+        
+        
+        
+        
     }
 };
 
