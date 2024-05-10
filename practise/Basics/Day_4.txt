@@ -1,0 +1,50 @@
+//{ Driver Code Starts
+// Initial template for C++
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function template for C++
+
+class Solution {
+  public:
+    long long getAns(int cnt,int n){
+        if(cnt > n){
+            return 0; 
+        }
+        
+        long long answer = pow(cnt,3) + getAns(cnt+1,n); 
+        return answer; 
+    }
+  
+    long long sumOfSeries(long long n) {
+        // code here
+        
+        // TLE
+        // return getAns(1,n); 
+        
+        // Getting another approach 
+        // long long answer = 0; 
+        // long long cnt = 1; 
+        // while(cnt <= n){
+        //     answer = answer + pow(cnt,3); 
+        //     cnt ++; 
+        // }
+        // return answer; 
+        
+        return pow((n*(n+1.L)/2),2);
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        long long N;
+        cin >> N;
+        Solution ob;
+        cout << ob.sumOfSeries(N) << "\n";
+    }
+}
+// } Driver Code Ends
