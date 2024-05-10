@@ -1,0 +1,35 @@
+Problem statement
+You are given an integer ‘NUM’ . Your task is to find out whether this number is an Armstrong number or not.
+
+A k-digit number ‘NUM’ is an Armstrong number if and only if the k-th power of each digit sums to ‘NUM’.
+
+Example
+153 = 1^3 + 5^3 + 3^3.
+
+Therefore 153 is an Armstrong number.
+
+
+#include <bits/stdc++.h> 
+bool isArmstrong(int num) {
+    // Write your code here
+    int copy = num; 
+    int numberOfDigit = 0; 
+    while(copy != 0){
+        numberOfDigit ++; 
+        copy = copy/10; 
+    }
+
+    copy = num;
+    int computation = 0; 
+    while(copy != 0){
+        int digit = copy%10; 
+        computation += pow(digit,numberOfDigit); 
+        copy = copy/10; 
+    }
+
+    if(computation == num){
+        return true; 
+    }
+
+    return false; 
+}
