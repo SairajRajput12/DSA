@@ -110,3 +110,102 @@ public:
 
     }
 };
+
+class Solution {
+public:
+    double solve(double x,int n){
+        if(n == 0){
+            return 1.0; 
+        }
+        return x*solve(x,n-1); 
+    }
+
+    double myPow(double x, int n) {
+        // int sample = n; 
+        // if(n == INT_MAX){
+        //     return (x == 1) ? 1 : (x == -1) ? -1 : 0;
+        // }
+
+        // if(n == INT_MIN){
+        //     return (x == 1 || x == -1) ? 1 : 0;
+        // }
+
+        // double num = 1; 
+        // if(n >= 0){
+        //     num = solve(x,n);
+        // }
+        // else{
+        //     n = -n; // make it un negative
+        //     num = solve(x,n); 
+        //     num = 1.0/num; 
+        // }
+        // return num; 
+    
+        if(n == 0){
+            return 1; 
+        }
+
+        if(n < 0){
+            n = abs(n); 
+            x = 1/x; 
+        }
+
+        if(n%2 == 0){
+            return myPow(x*x,n/2); 
+        }
+        else{
+            return x*myPow(x,n-1); 
+        }
+    
+    }
+};
+
+
+// count good numbers 
+
+#define mod 1000000007
+class Solution {
+public:
+
+    void solve(int &answer,string sam,long long n,long long ind,int index){
+        if(ind > n){
+            return; 
+        }
+
+        if(ind%2 == 0 and index%2 == 0){
+            answer = answer + 1; 
+        }
+
+        if(ind%2 != 0 and (index == 2 or index == 3 or index == 5 or index == 7)){
+            answer = answer + 1; 
+        }
+
+        // put a character then go for recursive call and remove it 
+        for(int i = 0; i <= 9; i ++){
+            sam = sam + to_string(index); 
+            solve(answer,sam,n,ind+1,i); 
+            sam.pop_back();  
+        }
+    }
+
+    long long powe(long long x,long long y){
+        if(y == 0){
+            return 1; 
+        }
+
+        long long ans = powe(x,y/2); 
+        ans *= ans; 
+        ans = ans%mod; 
+        if(y%2 == 1){
+            ans *= x; 
+            ans = ans%mod; 
+        }
+        return ans; 
+    }
+
+    int countGoodNumbers(long long n) {
+        long long even_part = n/2+n%2; 
+        long long odd_part = n/2; 
+        return (powe(5,even_part)*powe(4,odd_part))%mod; 
+    }
+};
