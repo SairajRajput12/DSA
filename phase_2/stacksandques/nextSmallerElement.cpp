@@ -1,5 +1,5 @@
 #include<bits/stdc++.h> 
-
+using namespace std; 
 
 vector<int> nextSmallerElement(vector<int> &arr, int n)
 {
@@ -42,4 +42,10 @@ vector<int> nextSmallerElement(vector<int> &arr, int n)
         def.push(curr); 
     }
     return ans; 
+}
+
+int main(int argc, char const *argv[])
+{
+    /* code */
+    return 0;
 }

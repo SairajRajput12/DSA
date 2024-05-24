@@ -1,4 +1,5 @@
 #include <bits/stdc++.h> 
+using namespace std;
 
 void sortedInsert(stack<int> &stack,int m){
 	if(stack.empty()){
@@ -29,3 +30,10 @@ void sortStack(stack<int> &stack)
 	sortStack(stack); 
 	sortedInsert(stack,m); 
 }
+
+int main()
+{
+	/* code */
+	return 0;
+}
+
