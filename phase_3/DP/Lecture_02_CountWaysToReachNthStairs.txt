@@ -1,0 +1,85 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+
+#define mod 1000000007
+class Solution
+{
+    public:
+    //Function to count number of ways to reach the nth stair.
+    int ankiAndDenji(vector<int> &dp,int n){
+        if(n <  0){
+            return 0; 
+        }
+        
+        if(n == 0){
+            return 1; 
+        }
+        
+        if(dp[n] != -1){
+            return dp[n]; 
+        }
+        
+        dp[n] = (ankiAndDenji(dp,n-1) + ankiAndDenji(dp,n-2))%mod; 
+        return dp[n];
+    }
+    
+    int power(int n){
+        if(n < 0){
+            return 0; 
+        }
+        
+        if(n == 0){
+            return 1; 
+        }
+        
+        return power(n-1) + power(n-2); 
+    }
+    int countWays(int n)
+    {
+        // your code here
+        // recursion with dep
+        // vector<int> dp(n+1,-1); 
+        // return ankiAndDenji(dp,n);
+        
+        // approach 2: using recursion 
+        // return power(n);
+        
+        // appraoch 3: using tabulation 
+        if(n < 4){
+            return n; 
+        } 
+        
+        int prev = 3; 
+        int preprev = 2; 
+        for(int i = 4; i <= n; i ++){
+            int temp = (prev + preprev)%mod; 
+            preprev = prev; 
+            prev = temp; 
+        }
+        return prev; 
+    }
+};
+
+
+
+//{ Driver Code Starts.
+int main()
+{
+    //taking total testcases
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        //taking stair count
+        int m;
+        cin>>m;
+        Solution ob;
+        cout<<ob.countWays(m)<<endl; // Print the output from our pre computed array
+    }
+    return 0;
+}
+
+// } Driver Code Ends
