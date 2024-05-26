@@ -1,0 +1,40 @@
+// letter combination of number
+class Solution {
+public:
+    unordered_map<int,string> mp; 
+    void initialMap(){
+        mp[2] = "abc"; 
+        mp[3] = "def";
+        mp[4] = "ghi"; 
+        mp[5] = "jkl"; 
+        mp[6] = "mno"; 
+        mp[7] = "pqrs"; 
+        mp[8] = "tuv"; 
+        mp[9] = "wxyz"; 
+    }
+
+    void solve(string digits,int index,vector<string> &answer,string temp){
+        if(index >= digits.size()){
+            answer.push_back(temp); 
+            return; 
+        }
+
+        int digit = digits[index] - '0'; 
+        string found = mp[digit];
+        for(int i = 0; i < found.size(); i ++){
+            solve(digits,index+1,answer,temp+found[i]); 
+        }
+    }
+
+    vector<string> letterCombinations(string digits) {
+        // unordered_map<int,string> mp; 
+        initialMap(); 
+        string temp = ""; 
+        vector<string> answer; 
+        if(digits == ""){
+            return answer; 
+        }
+        solve(digits,0,answer,temp); 
+        return answer; 
+    }
+};

@@ -1,0 +1,56 @@
+// subsets - II 
+
+class Solution {
+    void solve(vector<int> &sample, vector<vector<int>> &ans, int index, vector<int>& nums) {
+        if(index >= nums.size()){
+            if( find(ans.begin(), ans.end(), sample) == ans.end()){
+                ans.push_back(sample);
+            }
+            return; 
+        }
+        
+        sample.push_back(nums[index]);
+        solve(sample, ans, index + 1, nums);
+        sample.pop_back();
+        solve(sample,ans,index+1,nums); 
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> ans; 
+        vector<int> sample; 
+        sort(nums.begin(),nums.end()); 
+        solve(sample,ans,0,nums); 
+        return ans; 
+    }
+};
+
+// combination sum - III 
+class Solution {
+    void solve(vector<int> &reference,vector<vector<int>>& ans,int sum,vector<int>& sample,int n,int index,int level) {
+
+            if(index >= reference.size()){
+                if(sum == n && sample.size() == level){
+                    ans.push_back(sample); 
+                }
+                return; 
+            }
+
+            // Include the current element
+            sample.push_back(reference[index]);
+            solve(reference, ans, sum + reference[index], sample, n, index + 1, level);
+            sample.pop_back();
+            solve(reference, ans, sum, sample, n, index + 1, level);
+            // Exclude the current element
+    }
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<int> reference={1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        vector<int> sample; 
+        vector<vector<int>> ans; 
+        int sum = 0; 
+        int index = 0; 
+        solve(reference,ans,sum,sample,n,index,k); 
+        return ans; 
+    }
+};

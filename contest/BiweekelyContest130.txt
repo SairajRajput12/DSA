@@ -1,0 +1,137 @@
+// problem 1: 
+class Solution {
+public:
+    bool satisfiesConditions(vector<vector<int>>& grid) {
+        for(int i = 0; i < grid.size(); i ++){
+            for(int j = 0; j < grid[0].size(); j ++){
+                if(i < (grid.size()-1) and grid[i][j] != grid[i+1][j]){
+                    return false; 
+                }
+                
+                if(j < (grid[0].size()-1) and grid[i][j] == grid[i][j+1]){
+                    return false; 
+                }
+            }
+        }
+            
+        return true; 
+    }
+};
+
+// problem 2: 
+class Solution {
+public:
+    
+    pair<bool,int> check(int length,vector<vector<int>> points,string s){
+        unordered_map<char,pair<int,int>> mp; 
+        int cnt = 0; 
+        for(int i = 0; i < points.size(); i ++){
+            int x = points[i][0];
+            int y = points[i][1]; 
+            
+            if(mp.find(s[i]) != mp.end()){
+                return {false,cnt-1}; 
+            }
+            
+            // 4 cases 
+            if(x > 0 and y > 0){
+                if(x >= length or y >= length){
+                    return {true,cnt}; 
+                }
+            }
+            
+            if(x > 0 and y < 0){
+                if(x >= length or y <= (-1*length)){
+                    return {true,cnt}; 
+                }
+            }
+            
+            
+            if(x < 0 and y > 0){
+                if(x <= (-1*length) or y >= (-1*length)){
+                    return {true,cnt}; 
+                }
+            }
+            
+            if(x < 0 and y < 0){
+                if(x <= (-1*length) or y <= (-1*length)){
+                    return {true,cnt}; 
+                }
+            }
+            
+            mp[s[i]] = {x,y};  
+            cnt ++; 
+        }
+        return {true,cnt}; 
+    }
+    
+    
+    
+    int maxPointsInsideSquare(vector<vector<int>>& points, string s) {
+        // points -> represent the co-ordinate of the point 
+        // s -> represents the tag on that point 
+        // A valid square is a square centered at the origin (0, 0), has edges parallel to the axes, and does not contain two points with the same tag. 
+        // Return the maximum number of points contained in a valid square.
+        // A point is considered to be inside the square if it lies on or within the square's boundaries.
+        // The side length of the square can be zero.
+        // int answer = 0;
+        // int maxLength = INT_MIN; 
+        // int freq = 0; 
+        // char ch = s[0]; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     if(s[i] == ch){
+        //         freq ++; 
+        //     }
+        // }
+
+        // if(freq == s.size()){
+        //     return 1; 
+        // }
+        
+    
+        // for(int i = 0; i < points.size(); i ++){
+        //     int y = points[i][1]; 
+        //     int x = points[i][0]; 
+        //     maxLength = max(maxLength,max(y,x)); 
+        // }
+        
+        // for(int i = 0; i <= maxLength; i ++){
+        //     int sample = 0; 
+        //     auto valid = check(i,points,s); // in case if square has same tagged then it will return false and eventually we will return the answer 
+        //     if(!valid.first){
+        //         continue; 
+        //     }
+            
+        //     sample = valid.second; 
+        //     answer = max(sample,answer);             
+        // }
+        
+        // return answer;
+        map<int,vector<char>> mp;
+        int ans = 0,i = 0; 
+        for(auto it : points){
+            int x = abs(it[0]); 
+            int y = abs(it[1]); 
+
+            mp[max(x,y)].push_back(s[i]); 
+            i ++; 
+        }
+
+        unordered_set<char> st; 
+        for(auto[it,v] : mp){
+            for(auto i : v){
+                cout << i << " "; 
+                if(st.find(i) == st.end()){
+                    st.insert(i); 
+                }
+                else{
+                    return ans; 
+                }
+            }
+
+            ans += v.size(); 
+            cout << "\n"; 
+        }
+        return ans;       
+    }
+};

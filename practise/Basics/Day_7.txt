@@ -1,0 +1,156 @@
+// genrate all binary strings 
+
+//{ Driver Code Starts
+//Initial Template for C++
+#include<bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+//User function Template for C++
+
+class Solution{
+public:
+    void solve(int num,int index,vector<string> &answer,string temp){
+        if(index >= num){
+            answer.push_back(temp); 
+            return; 
+        }
+        
+        temp.push_back('0'); 
+        solve(num,index+1,answer,temp); 
+        temp.pop_back(); 
+        if(temp[temp.size()-1] != '1'){
+            temp.push_back('1'); 
+            solve(num,index+1,answer,temp);
+        }
+    }
+
+    vector<string> generateBinaryStrings(int num){
+        //Write your code
+        vector<string> answer; 
+        solve(num,0,answer,""); 
+        return answer;
+    }
+};
+
+//{ Driver Code Starts.
+int main(){
+    int t = 1;
+    cin >> t;
+
+
+    while(t--){
+        //Input
+        int n; cin >> n;
+
+        Solution obj;
+        
+        vector<string> v = obj.generateBinaryStrings(n);
+        for(auto it:v) cout<<it<<" ";
+        cout << endl;
+    }
+
+    return 0;
+}
+
+// } Driver Code Ends
+
+// another code
+
+// better string 
+
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    void solve(string str,set<string> st1,int index,string temp){
+        if(index >= str.size()){
+            st1.insert(temp); 
+            return; 
+        }
+        
+        temp.push_back(str[index]); 
+        solve(str,st1,index+1,temp); 
+        temp.pop_back(); 
+        solve(str,st1,index+1,temp); 
+    }
+  
+    string betterString(string str1, string str2) {
+        // code here
+        // better string has more number of distinct subsequence 
+        // if both strings have equal count of distinct subsequence then return str1 
+        set<string> st1; 
+        set<string> st2;
+        
+        solve(str1,st1,0,""); 
+        solve(str2,st2,0,""); 
+        
+        if(st1.size() >= st2.size()){
+            return str1; 
+        }
+        return str2; 
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string str1, str2;
+        cin >> str1 >> str2;
+        Solution obj;
+        string ans = obj.betterString(str1, str2);
+        cout << ans << "\n";
+    }
+}
+
+// } Driver Code Ends
+
+// subset sum 
+bool solve(int n,int k,vector<int> a,int index,int sum){
+    if(sum > k){
+        return false; 
+    }
+
+    if(index == n and sum == k){
+        return true; 
+    }
+
+    if(index < n and sum == k){
+        return true; 
+    }
+
+    if(index == n){
+        return false; 
+    }
+
+    sum = sum + a[index]; 
+    if(solve(n,k,a,index+1,sum) == true){
+        return true; 
+    }
+
+    sum -= a[index];
+    if(solve(n,k,a,index+1,sum) == true){
+        return true; 
+    }
+    return false; 
+}
+
+bool isSubsetPresent(int n, int k, vector<int> &a)
+{
+    // Write your code here
+    return solve(n,k,a,0,0);
+}
+
+

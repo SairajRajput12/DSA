@@ -79,5 +79,40 @@ void SortedStack :: sort()
    s.pop(); 
    sort(); 
    sortedInsert(s,top); 
-   
+  
 }
+
+// genrate parenthesis 
+
+class Solution {
+public:
+
+    void solve(int n,string &am,int open,int close,vector<string> &answer){
+        if(open == n and close == n){
+            answer.push_back(am); 
+            return; 
+        }
+
+        if(close > open or close > n){
+            return; 
+        }
+
+        if(open > n){
+            return; 
+        }
+
+        am = am + "("; 
+        solve(n,am,open+1,close,answer); 
+        am.pop_back(); 
+        am = am + ")"; 
+        solve(n,am,open,close+1,answer); 
+        am.pop_back();
+    }
+
+    vector<string> generateParenthesis(int n) {
+        vector<string> answer;
+        string am = "";  
+        solve(n,am,0,0,answer); 
+        return answer; 
+    }
+};

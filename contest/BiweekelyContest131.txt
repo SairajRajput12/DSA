@@ -1,0 +1,50 @@
+// problem 1: 
+
+class Solution {
+public:
+    int duplicateNumbersXOR(vector<int>& nums) {
+        // vector<int> freq;  
+        unordered_map<int,int> freq;
+        for(int i = 0; i < nums.size(); i ++){
+            freq[nums[i]] ++; 
+        }
+        
+        int answer = 0; 
+        
+        for(auto it : freq){
+            if(it.second == 2){
+                answer = answer ^ it.first; 
+            }
+        }
+        
+        return answer; 
+    }
+};
+
+// problem 2: 
+class Solution {
+public:
+    vector<int> occurrencesOfElement(vector<int>& nums, vector<int>& queries, int x) {
+        vector<int> answer(queries.size(),-1); 
+        vector<int> check; 
+        for(int i = 0; i < nums.size(); i ++){
+            if(nums[i] == x){
+                check.push_back(i); 
+            }
+        }
+        
+        if(check.size() == 0){
+            return answer; 
+        }
+        
+        for(int i = 0; i < queries.size(); i ++){
+            if(queries[i] > check.size()){
+                answer[i] = -1; 
+            }
+            else{
+                answer[i] = check[queries[i]-1];
+            }
+        }        
+        return answer; 
+    }
+};
