@@ -1,0 +1,85 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution {
+  public:
+    int LightYagami(vector<int> &height,int n,int k,int index){
+        if(index >  height.size()){
+            return 0; 
+        }
+        
+        int answer = INT_MAX; 
+        for(int i = 1; i <= k; i ++){
+            int cst = 0; 
+            if(index + i < height.size()){
+                cst = LightYagami(height,n,k,(index+i)) + abs(height[index] - height[index+i]); 
+            }
+            answer = min(answer,cst); 
+        }
+        return answer; 
+    }
+    
+    int Lawlite(vector<int> &height, int n, int k, vector<int> &dp) {
+        if(n==0) return 0;
+        int ministeps=INT_MAX;
+        if(dp[n]!=-1) return dp[n];
+        for(int i=1;i<=k;i++){
+            if(n-i>=0) {
+                int jump=Lawlite(height,n-i,k,dp)+abs(height[n]-height[n-i]);
+                ministeps=min(ministeps,jump);
+            }
+        }
+        return dp[n]=ministeps;
+
+    }
+
+  
+    int minimizeCost(vector<int>& height, int n, int k) {
+        // Code 
+        
+        // appraoch 1: using recursion 
+        // return LightYagami(height,n,k,0); 
+        
+        // approach 2: using dynamic programming
+        // vector<int> dp(n+1,-1);
+        // return Lawlite(height,n-1,k,dp); 
+        
+        // appraoch 3: using tabulation 
+        vector<int> dp(n,0); 
+        dp[0] = 0; 
+        for(int i = 1; i < n; i ++){
+            int minStep = INT_MAX; 
+            for(int j = 1; j <= k;j ++){
+                if(i - j >= 0){
+                    int cst = dp[i-j] + abs(height[i] - height[i-j]); 
+                    minStep = min(minStep,cst); 
+                }
+            }
+            dp[i] = minStep; 
+        }
+        
+        return dp[n-1]; 
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N, K;
+        cin >> N >> K;
+        vector<int> arr(N);
+        for (int i = 0; i < N; i++) {
+            cin >> arr[i];
+        }
+        Solution obj;
+        cout << obj.minimizeCost(arr, N, K) << "\n";
+    }
+    return 0;
+}
+// } Driver Code Ends

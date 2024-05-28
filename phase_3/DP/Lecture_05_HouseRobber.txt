@@ -1,0 +1,238 @@
+// version 1: 
+class Solution {
+public:
+    int f(int size,vector<int> &nums){
+        if(size == 0){
+            return nums[size]; 
+        }
+
+        if(size < 0){
+            return 0; 
+        }
+
+
+        int pick = nums[size] + f(size-2,nums);
+        int nonpick = f(size-1,nums);
+        return max(pick,nonpick); 
+    }
+
+    int f1(int size,vector<int> &nums,vector<int> &dp){
+        if(size == 0){
+            return nums[size]; 
+        }
+
+        if(size < 0){
+            return 0; 
+        }
+
+        if(dp[size] != -1){
+            return dp[size]; 
+        }
+
+        int pick = nums[size] + f1(size-2,nums,dp);
+        int nonpick = f1(size-1,nums,dp);
+        dp[size] = max(pick,nonpick); 
+        return max(pick,nonpick); 
+    }
+
+    int makima(vector<int>& nums,int index){
+        if(index == nums.size()-1){
+            return nums[index]; 
+        }
+
+        if(index > nums.size()-1){
+            return 0; 
+        }
+
+        int left = nums[index] + makima(nums,index+2); 
+        int right = makima(nums,index+1); 
+        return max(left,right);
+    }
+
+    int Yoru(vector<int> &dp,vector<int> &nums,int index){
+        if(index == nums.size()-1){
+            return nums[index]; 
+        }
+
+        if(index > nums.size()-1){
+            return 0; 
+        }
+        if(dp[index] != -1){
+            return dp[index]; 
+        }
+
+        int left = nums[index] + Yoru(dp,nums,index+2); 
+        int right = Yoru(dp,nums,index+1);
+        dp[index] = max(left,right); 
+        return max(left,right); 
+    }
+
+    int rob(vector<int>& nums) {
+        // int evenSum = 0,oddSum = 0; 
+        // for(int i = 0; i < nums.size(); i +=2){
+        //     evenSum += nums[i]; 
+        // }
+
+        // for(int i = 1; i < nums.size(); i += 2){
+        //     oddSum += nums[i]; 
+        // }
+
+        // int summax = 0; 
+        // int prevInd = 0; 
+        // for(int i = 1; i < nums.size(); i ++){
+        //     if(prevInd != )
+        // }
+
+        // return max(evenSum,oddSum); 
+
+        // not optmised appraoch 
+        // int n = nums.size(); 
+        // return f(n-1,nums); 
+
+        // optimised appraoch using dynamic programming memomization
+        // int n = nums.size(); 
+        // vector<int> dp(n,-1); 
+        // return f1(n-1,nums,dp); 
+
+        // using tabulation approach 
+        // int n = nums.size(); 
+        // vector<int> dp(n,-1); 
+        // dp[0] = nums[0];
+        // int neg = 0; 
+        // for(int i = 1; i < n; i ++){
+        //     int take = (i > 1 ? take + nums[i] + dp[i-2] :take + nums[i]); 
+        //     int nontake = dp[i-1]; 
+        //     dp[i] = max(take,nontake); 
+        // } 
+        // return dp[1]; 
+
+        // tabulation with space optimisation 
+        // int prev = nums[0];
+        // int prev2 = 0; 
+        // for(int i = 1; i < nums.size(); i ++){
+        //     int take = nums[i]; 
+        //     if(i > 1){
+        //         take += prev2; 
+        //     }
+
+        //     int nontake = 0 + prev; 
+        //     int curi = max(nontake,take); 
+        //     prev2 = prev;
+        //     prev = curi; 
+        // }
+        // return prev;
+
+        // recursion 
+        // return makima(nums,0);
+
+        // using dynamic programming memoisation 
+        // vector<int> dp(nums.size()+1,-1); 
+        // return Yoru(dp,nums,0); 
+
+        // using tabulation
+        // vector<int> dp(nums.size()+1,-1); 
+        // dp[0] = nums[0];
+        // int neg = 0; 
+        // for(int i = 1; i < nums.size(); i ++){
+        //     int take = nums[i]; 
+        //     if(i > 1){
+        //         take += dp[i-2];
+        //     } 
+        //     int nontake = dp[i-1]; 
+        //     dp[i] = max(take,nontake); 
+        // }
+
+        // return dp[nums.size()-1]; 
+
+        // space optimised tabulation 
+        int prev = nums[0]; 
+        int prev1 = 0; 
+
+        for(int i = 0; i < nums.size(); i ++){
+            int take = nums[i]; 
+            if(i > 1){
+                take += prev1; 
+            }
+
+            int nontake = prev; 
+            int curi = max(take,nontake);
+            prev1 = prev;
+            prev = curi; 
+        }
+
+        return prev; 
+    }
+};
+
+// version 2: 
+class Solution {
+public:
+    int f2(vector<int> &nums,int index,vector<int> &dp){
+        if(index == 0){
+            return nums[index]; 
+        }
+
+        if(index < 0){
+            return 0; 
+        }
+
+        if(dp[index] != -1){
+            return dp[index]; 
+        }
+
+        int pick = nums[index] + f2(nums,index-2,dp); 
+        int nonpick = f2(nums,index-1,dp);
+        dp[index] = max(pick,nonpick);  
+        return max(pick,nonpick);
+    }
+
+    int f(vector<int> nums,int size){
+        vector<int> dp(size,-1); 
+        return f2(nums,size-1,dp); 
+    }
+
+    int usingTabulation(vector<int> &nums){
+        int prev = nums[0]; 
+        int prev2 = 0; 
+        
+        for(int i = 1; i < nums.size(); i ++){
+            int take = nums[i]; 
+            if(i > 1){
+                take += prev2; 
+            } 
+            int cur = prev; 
+            int ans = max(take,cur); 
+            prev2 = prev; 
+            prev = ans; 
+        }
+        return prev; 
+    }
+
+    int rob(vector<int>& nums) {
+        vector<int> temp1; 
+        vector<int> temp2; 
+
+        if(nums.size() == 1){
+            return nums[0]; 
+        }
+
+        for(int i = 0; i < nums.size(); i ++){
+            if(i != 0){
+                temp1.push_back(nums[i]); 
+            }
+
+            if(i != nums.size()-1){
+                temp2.push_back(nums[i]); 
+            }
+        }
+
+        
+
+        // return (max(f(temp1,temp1.size()),f(temp2,temp2.size())));
+        // return (max(usingTabulation(temp1),usingTabulation(temp2)));
+
+        int first = f(temp1,temp1.size()); 
+        int second = f(temp2,temp2.size()); 
+        return max(first,second); 
+    }
+};
