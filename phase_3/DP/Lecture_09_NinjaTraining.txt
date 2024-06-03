@@ -1,0 +1,90 @@
+int getAns(vector<vector<int>> &points,int day,int ind){
+    if(day == 0){
+        int maxi = 0; 
+        for(int i = 0; i < 3; i ++){
+            if(i != ind){
+                maxi = max(maxi,points[0][i]); 
+            }
+        }
+        return maxi;
+    }
+
+    int maxi = 0; 
+    for(int i = 0; i < 3;i ++){
+        int points1 = 0; 
+        if(i != ind){
+            points1 = points[day][i] + getAns(points,day-1,i); 
+            maxi = max(points1,maxi); 
+        }
+    }
+
+    return maxi; 
+}
+
+int getS(vector<vector<int>> &dp,vector<vector<int>> &points,int day,int ex){
+    if(day == 0){
+        int maxi = 0; 
+        for(int i = 0; i < 3; i ++){
+            if(i != ex){
+                maxi = max(maxi,points[0][i]); 
+            }
+        }
+        return maxi; 
+    }
+
+    if(dp[day][ex] != -1){
+        return dp[day][ex];
+    }
+
+    int maxi = 0; 
+    for(int i = 0; i < 3; i ++){
+        if(i != ex){
+            int points1 = points[day][i] + getS(dp,points,day-1,i); 
+            maxi = max(maxi,points1); 
+        }
+    }
+    dp[day][ex] = maxi; 
+    return maxi; 
+}
+
+
+
+
+int ninjaTraining(int n, vector<vector<int>> &points)
+{
+    // Write your code here. 
+    // using recursion
+
+    // int answer = getAns(points,n-1,3); 
+    // return answer;
+
+    // using dynamic programming 
+    // vector<vector<int>> dp(n,vector<int> (4,-1)); 
+    // return getS(dp,points,n-1,3); 
+
+    // using tabulation 
+    vector<vector<int>> dp(n,vector<int> (4,-1)); 
+    dp[0][0] = max(points[0][1],points[0][2]); 
+    dp[0][1] = max(points[0][2],points[0][0]); 
+    dp[0][2] = max(points[0][1],points[0][0]); 
+    dp[0][3] = max(points[0][0],max(points[0][1],points[0][2])); 
+    
+
+    for(int day = 1; day < n; day ++){
+        for(int last = 0; last < 4; last ++){
+            dp[day][last] = 0; 
+            int maxi = 0;
+            for(int task = 0; task < 3; task ++){
+                if(task != last){
+                    int point = points[day][task] + dp[day-1][task];
+                    maxi = max(maxi,point);
+                }
+            }
+            dp[day][last] = maxi; 
+        }
+    }
+    return dp[n-1][3];
+}
+
+
+
