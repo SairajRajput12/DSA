@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        // optimised approach using hashmap 
+        // unordered_map<char,int> mp; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     mp[s[i]] ++; 
+        // }
+        // int res = 0; 
+        // bool hasOdd = false; 
+        // for(auto it : mp){
+        //     int freq = it.second; 
+        //     if(freq%2 == 0){
+        //         res += freq; 
+        //     }
+        //     else{
+        //         res += freq-1;
+        //         hasOdd = true;  
+        //     }
+        // }
+        // if(hasOdd){
+        //     return res+1; 
+        // }
+        // return res; 
+
+        // counting odd char freq 
+        unordered_map<char,int> freq; 
+        int odd = 0; 
+        for(int i = 0; i < s.size(); i ++){
+            freq[s[i]] ++;   
+
+            if(freq[s[i]]%2 == 1){
+                odd ++; 
+            } 
+            else{
+                odd --; 
+            }
+        }
+
+        if(odd > 0){
+            return s.size()-odd+1; 
+        }
+        return s.size(); 
+    }
+};

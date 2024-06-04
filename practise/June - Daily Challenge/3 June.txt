@@ -1,0 +1,21 @@
+class Solution {
+    void solve(vector<char> &s,int index,int end){
+        if(index > end){
+            return; 
+        }
+
+        swap(s[index],s[end]); 
+        solve(s,index+1,end-1); 
+    }
+public:
+    void reverseString(vector<char>& s) {
+        // using recursion 
+        // solve(s,0,s.size()-1);  
+        int start = 0, end = s.size()-1; 
+        while(start < end){
+            swap(s[start],s[end]); 
+            start ++; 
+            end --; 
+        }
+    }
+};

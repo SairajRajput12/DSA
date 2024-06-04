@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int getSolve(string s,int index){
+        if(index >= s.size()){
+            return 0; 
+        }
+
+        int answer = abs(s[index]-s[index-1]) + getSolve(s,index+1); 
+        return answer; 
+    }
+
+    int scoreOfString(string s) {
+        // int answer = 0;
+        // for(int i = 1; i < s.size(); i ++){
+        //     // cout << s[i]-s[i-1] << endl; 
+        //     answer += abs((s[i]-s[i-1])); 
+        // }
+        // return answer; 
+    
+    
+        // return getSolve(s,1); 
+
+        int even = 0; 
+        int odd = 1; 
+        int answer = 0;
+        while(odd < s.size()){
+            answer = answer + abs(s[odd]-s[even]); 
+            even ++; 
+            odd ++; 
+        }    
+        return answer;
+    }
+};
