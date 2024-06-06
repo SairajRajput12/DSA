@@ -1,40 +1,104 @@
 class Solution {
 public:
-     
-    int getAns(vector<vector<int>> &matrix,int row,int col,vector<vector<int>> &dp){
-        if(row == (matrix.size()-1) and (col < (matrix[0].size()) and col >= 0)){
-            return matrix[row][col]; 
+    void getWays(vector<vector<int>> &grid,int last,int col,int row,int &sum,vector<int> &possible,vector<vector<int>> &memo){
+        if(possible.size() >  grid.size()){
+            int sam = 0; 
+            for(int i = 0; i < grid.size(); i ++){
+                for(int j = 0; j < grid[0].size(); j ++){
+                    if(i != last){
+                        sam += grid[i][j]; 
+                    }
+                }
+            }
+            sum = max(sum,sam); 
+            return; 
         }
 
-        if(row < 0 or row > (matrix.size()-1)){
-            return INT_MAX; 
+
+        // ok i think here i can use pick/non pick methood 
+        for(int i = 0; i < grid.size(); i ++){
+            for(int j = 0; j < grid[0].size(); j ++){
+                if(j != last){
+                    possible.push_back(grid[i][j]); 
+                    getWays(grid,i,j,i,sum,possible,memo);
+                }
+            }
         }
 
-        if(col < 0 or col > (matrix[row].size()-1)){
-            return INT_MAX; 
-        }
 
-        if(dp[row][col] != INT_MAX){
-            return dp[row][col]; 
-        }
-        int answer = INT_MAX; 
-        int g = matrix[row][col] + min(getAns(matrix,row+1,col-1,dp),min(getAns(matrix,row+1,col,dp),getAns(matrix,row+1,col+1,dp))); 
-        answer = min(answer,g);
-        dp[row][col] = answer; 
-        return answer; 
     }
 
-    int getPath(vector<vector<int>> &matrix){
-        int ans = INT_MAX; 
-        vector<vector<int>> dp(matrix.size()+1, vector<int>(matrix[0].size()+1, INT_MAX));
-        for(int i = 0; i < matrix[0].size(); i ++){
-            ans = min(ans,getAns(matrix,0,i,dp)); 
+    int solve(vector<vector<int>>& grid,int col,int row,vector<vector<int>> &memo){
+        if(row == grid.size()-1){
+            return grid[row][col]; 
         }
-        return ans; 
+        
+        if(memo[row][col] != -1){
+            return memo[row][col];
+        }
+
+        int mini = INT_MAX; 
+        for(int j = 0; j < grid[0].size(); j ++){
+            if(col != j){
+                mini = min(mini,solve(grid,j,row+1,memo)); 
+            }
+        }
+
+        memo[row][col] = mini + grid[row][col]; 
+        return mini + grid[row][col]; 
     }
 
-    int minFallingPathSum(vector<vector<int>>& matrix) {
-        int answer = getPath(matrix); 
-        return answer; 
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        // approach 1: using backtracking 
+        // this will be top down approach
+        // int sum = INT_MAX; 
+        // vector<int> possible;
+        // getWays(grid,3,0,0,sum,possible); 
+        // return sum; 
+
+        // this approach gives TLE: so we will going to use memomiastion
+        // int ans = INT_MAX; 
+        // for(int i = 0; i < grid.size(); i ++){
+        //     ans = min(ans,solve(grid,i,0)); 
+        // }
+        // return ans;
+
+        // approach 2: using memomisation 
+        // int ans = INT_MAX; 
+        // vector<vector<int>> memo(grid.size(),vector<int>(grid[0].size(),-1)); 
+        // for(int i = 0; i < grid.size(); i ++){
+        //     ans = min(ans,solve(grid,i,0,memo)); 
+        // }
+        // return ans;
+
+
+        // approach 3: using tabulation
+        vector<vector<int>> dp(grid.size(),vector<int> (grid[0].size(),-1));
+        for(int i=0;i<grid[0].size();i++){
+            dp[0][i]=grid[0][i];
+        }
+
+        int mini = INT_MAX; 
+        for(int i = 1; i < grid.size(); i ++){
+            for(int j = 0; j < grid.size(); j ++){
+                int ans = INT_MAX;
+                for(int k = 0; k < grid[0].size(); k ++){
+                    if(j == k){
+                        continue; 
+                    }
+                    ans = min(ans,grid[i][j]+dp[i-1][k]); 
+                } 
+                dp[i][j] = ans; 
+            }
+        }
+
+        for(int i=0;i<grid[0].size();i++){
+            mini=min(mini,dp[grid.size()-1][i]);
+        }
+
+        return mini;
+
+
+ 
     }
 };
