@@ -1,0 +1,40 @@
+class Solution {
+public:
+     
+    int getAns(vector<vector<int>> &matrix,int row,int col,vector<vector<int>> &dp){
+        if(row == (matrix.size()-1) and (col < (matrix[0].size()) and col >= 0)){
+            return matrix[row][col]; 
+        }
+
+        if(row < 0 or row > (matrix.size()-1)){
+            return INT_MAX; 
+        }
+
+        if(col < 0 or col > (matrix[row].size()-1)){
+            return INT_MAX; 
+        }
+
+        if(dp[row][col] != INT_MAX){
+            return dp[row][col]; 
+        }
+        int answer = INT_MAX; 
+        int g = matrix[row][col] + min(getAns(matrix,row+1,col-1,dp),min(getAns(matrix,row+1,col,dp),getAns(matrix,row+1,col+1,dp))); 
+        answer = min(answer,g);
+        dp[row][col] = answer; 
+        return answer; 
+    }
+
+    int getPath(vector<vector<int>> &matrix){
+        int ans = INT_MAX; 
+        vector<vector<int>> dp(matrix.size()+1, vector<int>(matrix[0].size()+1, INT_MAX));
+        for(int i = 0; i < matrix[0].size(); i ++){
+            ans = min(ans,getAns(matrix,0,i,dp)); 
+        }
+        return ans; 
+    }
+
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int answer = getPath(matrix); 
+        return answer; 
+    }
+};

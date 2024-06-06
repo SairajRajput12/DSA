@@ -1,0 +1,53 @@
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& arr, int groupSize) {
+        // correct approach  
+
+        if(arr.size()%groupSize != 0){
+            return false; 
+        }
+        vector<vector<int>> answer; 
+        unordered_map<int,int> mp; 
+        for(auto it : arr){
+            mp[it] ++; 
+        }
+
+        priority_queue<int,vector<int>,greater<int>> q; 
+        for(auto it : mp){
+            q.push(it.first); 
+        } 
+
+        vector<int> tmp; 
+        while(!q.empty()){
+            int test = 0; 
+            vector<int> recovery; 
+            vector<int> testing; 
+
+            while(test < groupSize){
+                int top = q.top(); 
+                q.pop(); 
+                mp[top] --; 
+                testing.push_back(top);
+                if(mp[top] > 0){
+                    recovery.push_back(top); 
+                }
+                else{
+                    mp.erase(top); 
+                }
+
+                test ++; 
+            }
+
+            for(int i = 1; i < testing.size(); i ++){
+                if(testing[i] - testing[i-1] != 1){
+                    return false; 
+                }
+            }
+
+            for(int i = 0; i < recovery.size(); i ++){
+                q.push(recovery[i]); 
+            }
+        }        
+        return true; 
+    }
+};
