@@ -1,0 +1,118 @@
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& nums, int k) {
+        // approach 1: using double loop 
+        // int count = 0; 
+        // for(int i = 0; i < nums.size(); i ++){
+        //     int c = 0; 
+        //     int cnt = 0;    
+        //     for(int j = i; j < nums.size(); j ++){
+        //         c += nums[j]; 
+        //         cnt ++;
+        //         if(abs(c)%k == 0){
+        //             count ++; 
+        //         }
+        //     }
+        // }
+
+        // return count; 
+
+        // approach 2: using cummulative sum -> this approach calculates sum in  O(1)
+        // i se j tak ka sum him O(N) mein nikal skte hai 
+        // using cummulative sum 
+        // e.g, 3 2 1 0 8 2 => ka cummulative sum 3 5 6 6 14 16 hoga
+        // ind 1 se 4 ka sum hum => nums[j] - nums[i-1] se nikal skte hai 
+        // nums[j] - nums[i-1] = 14 - 3 = 11 
+        // int count = 0;
+        
+        // for(int i = 1; i < nums.size(); i ++){
+        //     nums[i] += nums[i-1]; 
+        // }
+
+        // for(int i = 0; i < nums.size(); i ++){
+        //     for(int j = i; j < nums.size(); j ++){
+        //         int sum = (i==0) ? nums[j] : nums[j]-nums[i-1]; 
+        //         if(sum%k == 0){
+        //             count ++; 
+        //         }
+        //     }
+        // }
+        // return count; 
+
+        // approach 3: using optimal sum 
+        // modulo approach 
+        // 2 3 5 4 5 3 4 
+        // a b c d e f g 
+        // a se e tak ka sum on division with k gives remaindar x and same in case of a to c 
+        // then we can claim that remaining portion that is s2-s1 => d and will be pakka divisible by k 
+        // s1 = k*n  + x 
+        // s2 = k*n' + x 
+        // s1 - s2 = k(n-n')
+        // s1 - s2 = KN beacuse remaindar that is 0. x nahi aa raha iss expression matlab hamne mana x is 0. 
+
+        // map mein remaindar store karo with its count 
+        // 2 3 5  4  5  3  4   , k = 7
+        // 2 5 10 14 19 22 26 
+        // 2 5 3  0  5  1 5 
+        // remaindar  count 
+        //  2            1 
+        //  5            3 
+        //  3            1 
+        //  0            2 
+        //  1            1
+
+        // result = 1 + 2(5 sum 2 baar dekha hai) + 0(0 hamne dekha hai) 
+
+        // 2 -6  3  1 2 8 2 1 , k = 7
+        // 2 -4 -1  0 2 3 5 6 
+
+        //  2  -> 2  
+        //  0  -> 2 
+        // -4  -> 1 
+        // -1  -> 1  
+        //  3  -> 1 
+        //  5  -> 1 
+        //  6  -> 1
+
+        // result = 1 + 1 
+
+
+        // 7n-4 => 7n - 4 + 7 - 7 => 7(n-1) + 3 
+        // hum negative remaindar nahi store karenge
+        // 7n - 4 => 7(n-1) + 3 se nikalenge 
+        // 3 mila jab negative remaindar ko K mein joda. 
+        
+        // abb iss logic se firse dry run karte hai 
+        // 2 -6  3  1 2 8 2 1 , k = 7
+        // 2  3  6  0 2 3 5 6 
+
+        // updated table 
+        // 2 ->  2 
+        // 0 ->  2 
+        // 3 ->  2 
+        // 6 ->  2 
+        // 5 ->  1
+
+        // result = 1 + 1 + 1 + 1 => 4 
+
+        unordered_map<int,int> freq; 
+        int sum = 0; 
+        freq[0] = 1; 
+        int result = 0; 
+        for(auto it : nums){
+            sum += it; 
+            int rem = sum%k; 
+
+            if(rem < 0){
+                rem += k; 
+            }
+
+            if(freq.find(rem) != freq.end()){
+                result += freq[rem]; 
+            }
+
+            freq[rem] ++; 
+        }
+        return result;    
+    }
+};

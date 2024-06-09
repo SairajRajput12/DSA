@@ -1,0 +1,93 @@
+#include <bits/stdc++.h> 
+
+bool solve(int size,int k,vector<int> &arr,int index,int sum){
+    if(index == 0){
+        if(sum == k){
+            return true; 
+        }
+        return false; 
+    }
+
+    if(sum == k){
+        return true; 
+    }
+
+    bool first = solve(size,k,arr,index-1,sum + arr[index-1]); 
+    bool second = solve(size,k,arr,index-1,sum); 
+    return (first || second); 
+}
+
+bool solveWithM(int size,int k,vector<int> &arr,int index,int sum,vector<vector<int>> &dp){
+    if(index == 0){
+        if(sum == k){
+            return true; 
+        }
+        return false; 
+    }
+
+    if(sum == k){
+        return true; 
+    }
+
+    if(index < 0){
+        return false; 
+    }
+
+    if(sum > k){
+        return false; 
+    }
+
+    if(dp[index][sum] != -1){
+        return dp[index][sum]; 
+    }
+
+    bool first = solveWithM(size,k,arr,index-1,sum + arr[index-1],dp); 
+    bool second = solveWithM(size,k,arr,index-1,sum,dp); 
+    dp[index][sum] = first||second; 
+    return (first || second); 
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    // Write your code here.
+    // approach 1: using simple recursion 
+    // bool answer = solve(n,k,arr,arr.size(),0); 
+    // return answer; 
+
+    // approach 2: using memoisation 
+    // vector<vector<int>> dp(1001,vector<int>(1001,-1)); 
+    // bool answer = solveWithM(n,k,arr,arr.size(),0,dp); 
+    // return answer; 
+    vector<vector<bool>> dp(n, vector<bool>(k + 1, false));
+
+    // Base case: If the target sum is 0, we can always achieve it by taking no elements
+    for (int i = 0; i < n; i++) {
+        dp[i][0] = true;
+    }
+
+    // Base case: If the first element of 'arr' is less than or equal to 'k', set dp[0][arr[0]] to true
+    if (arr[0] <= k) {
+        dp[0][arr[0]] = true;
+    }
+
+    // Fill the DP array iteratively
+    for (int ind = 1; ind < n; ind++) {
+        for (int target = 1; target <= k; target++) {
+            // If we don't take the current element, the result is the same as the previous row
+            bool notTaken = dp[ind - 1][target];
+
+            // If we take the current element, subtract its value from the target and check the previous row
+            bool taken = false;
+            if (arr[ind] <= target) {
+                taken = dp[ind - 1][target - arr[ind]];
+            }
+
+            // Store the result in the DP array for the current subproblem
+            dp[ind][target] = notTaken || taken;
+        }
+    }
+
+    // The final result is stored in dp[n-1][k]
+    return dp[n - 1][k];
+
+
+}
