@@ -83,7 +83,7 @@ bool subsetSumToK(int n, int k, vector<int> &arr) {
 
             // Store the result in the DP array for the current subproblem
             dp[ind][target] = notTaken || taken;
-        }
+        } 
     }
 
     // The final result is stored in dp[n-1][k]

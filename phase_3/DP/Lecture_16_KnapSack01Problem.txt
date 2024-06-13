@@ -1,0 +1,79 @@
+#include <bits/stdc++.h> 
+
+int fun(int ind,int W,vector<int> &weight,vector<int> &value)
+{
+	if(ind == 0)
+	{
+		if(weight[0] <= W)
+		{
+			return value[0]; 
+		}
+		return 0; 
+	}
+
+	int nonPick = fun(ind-1,W,weight,value);
+	int pick = INT_MIN; 
+	if(weight[ind] <= W){
+		pick = value[ind] + fun(ind-1,W-weight[ind],weight,value);
+	}
+	return max(pick,nonPick);
+}
+
+
+int memo(int ind,int W,vector<int> &weight,vector<int> &value,vector<vector<int>> &dp)
+{
+	if(ind == 0)
+	{
+		if(weight[0] <= W)
+		{
+			return value[0]; 
+		}
+		return 0; 
+	}
+
+	if(dp[ind][W] != -1){
+		return dp[ind][W]; 
+	}
+
+	int nonPick = memo(ind-1,W,weight,value,dp);
+	int pick = INT_MIN; 
+	if(weight[ind] <= W){
+		pick = value[ind] + memo(ind-1,W-weight[ind],weight,value,dp);
+	}
+
+	dp[ind][W] = max(pick,nonPick); 
+	return max(pick,nonPick);
+}
+
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+{
+	// Write your code here
+	// using approach 1: using recursion 
+	// return fun(n-1,maxWeight,weight,value);
+
+	// using approach 2: using memomisation
+	// vector<vector<int>> dp(n,vector<int> (maxWeight+1,-1));  
+	// return memo(n-1,maxWeight,weight,value,dp);
+
+	// using approach 3: using tabulation 
+	// vector<vector<int>> dp(n,vector<int> (maxWeight+1,0));
+	// for(int W = weight[0]; W <= maxWeight; W ++)
+	// {
+	// 	dp[0][W] = value[0]; 
+	// } 
+
+	// for(int ind = 1; ind < n; ind ++)
+	// {
+	// 	for(int W = 0; W <= maxWeight; W ++){
+	// 		int nonTake = dp[ind-1][W];  
+	// 		int take = INT_MIN; 
+	// 		if(weight[ind] <= W){
+	// 			take = value[ind] + dp[ind-1][W-weight[ind]];
+	// 		}
+	// 		dp[ind][W] = max(take,nonTake); 
+	// 	}
+	// }
+
+	// return dp[n-1][maxWeight]; 
+}

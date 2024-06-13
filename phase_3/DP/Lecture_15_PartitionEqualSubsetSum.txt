@@ -1,0 +1,76 @@
+class Solution {
+public:
+    bool solve(vector<int> &nums,int maxi,int index,int sum){
+        if(sum == maxi){
+            return true; 
+        }
+
+        if(sum > maxi or index == nums.size()){
+            return false; 
+        }
+
+        sum += nums[index];
+        if(solve(nums,maxi,index+1,sum) == true){
+            return true; 
+        }
+        sum -= nums[index]; 
+        if(solve(nums,maxi,index+1,sum) == true){
+            return true; 
+        }
+        return false; 
+    }
+
+    bool getAns(vector<int> &nums,int tsum,int index,int sum,vector<vector<int>> &dp){
+        if(sum == tsum/2){
+            return true; 
+        }
+
+
+        if(index == 0){
+            return false; 
+        }
+
+        if (dp[index][sum] != -1) {
+            return dp[index][sum];
+        }
+
+        bool left = false; 
+        if(sum + nums[index-1] <= (tsum/2)){
+            left = getAns(nums,tsum,index-1,sum+nums[index-1],dp); 
+        }
+        bool right = getAns(nums,tsum,index-1,sum,dp); 
+
+        dp[index][sum] = (left or right); 
+        return (left or right);
+    }
+
+    bool canPartition(vector<int>& nums) {
+        // approach 1: using recursion 
+        // int totalSum = 0;
+        // for (int i=0;i<nums.size();i++)
+        //     totalSum += nums[i];
+    
+        // if (totalSum % 2 != 0)
+        //     return false;
+    
+        // int targetSum = totalSum / 2;
+
+        // return solve(nums,targetSum,0,0); 
+
+        // appraoch 2: using dynamic programming 
+        int sum = 0; 
+        for(auto it : nums){
+            sum += it; 
+        }
+
+        if(sum%2 == 1){
+            return false; 
+        }
+
+        vector<vector<int>> dp(nums.size() + 1, vector<int>(sum / 2 + 1, -1));
+        bool answer = getAns(nums,sum,nums.size(),0,dp); 
+        return answer; 
+
+        
+    }
+};

@@ -1,0 +1,128 @@
+
+class Solution {
+public:
+    void merge(vector<int>& nums,int start,int end){
+        int mid = start + (end-start)/2;
+        int len1 = mid-start+1; 
+        int len2 = end-mid;  
+        vector<int> nums1(len1,0); 
+        vector<int> nums2(len2,0);
+
+        int index = start; 
+        int ind = 0; 
+        while(ind < len1){
+            nums1[ind] = nums[index]; 
+            index ++; 
+            ind ++; 
+        }
+        index = mid+1; 
+        ind = 0; 
+        while(ind < len2){
+            nums2[ind] = nums[index]; 
+            index ++;  
+            ind ++; 
+        }
+
+        index = start; 
+        int start1 = 0,start2 = 0;
+        index = start;  
+        while(start1 < len1 and start2 < len2){
+            if(nums1[start1] > nums2[start2]){
+                nums[index] = nums2[start2]; 
+                start2 ++; 
+                index ++; 
+            }
+            else{
+                nums[index] = nums1[start1]; 
+                index ++; 
+                start1 ++; 
+            }
+        }
+
+        while(start1 < len1){
+            nums[index] = nums1[start1]; 
+            start1 ++; 
+            index ++; 
+        }
+
+        while(start2 < len2){
+            nums[index] = nums2[start2]; 
+            start2 ++; 
+            index ++; 
+        }
+    }
+
+    void solve(vector<int>& nums,int start,int end){
+        if(start >= end){
+            return; 
+        }
+
+        int mid = start + (end-start)/2; 
+        solve(nums,start,mid);
+        solve(nums,mid+1,end); 
+        merge(nums,start,end);  
+    }
+
+    int approach3(vector<int>& seats, vector<int>& students){
+        solve(seats,0,seats.size()-1);
+        solve(students,0,students.size()-1); 
+        int start2 = 0, start1 = 0; 
+        int moves = 0; 
+        while(start1 < students.size() and start2 < seats.size()){
+            moves += abs(students[start1] - seats[start2]); 
+            start1 ++; 
+            start2 ++; 
+        }
+        return moves; 
+    }
+
+    int approach2(vector<int>& seats, vector<int>& students){
+        sort(seats.begin(),seats.end()); 
+        sort(students.begin(),students.end()); 
+        int i = 0,j = 0; 
+        int moves = 0; 
+        while(i < seats.size() and j < students.size()){
+            moves += abs(seats[i]-students[j]); 
+            i ++; 
+            j ++; 
+        }
+        return moves;
+    }
+
+    int approach1(vector<int>& seats, vector<int>& students){
+        int moves = 0; 
+         priority_queue<int,vector<int>,greater<int>> pq1;
+         priority_queue<int,vector<int>,greater<int>> pq2;
+
+         for(auto it : seats){
+            pq1.push(it); 
+         }
+
+         for(auto it : students){
+            pq2.push(it); 
+         }
+
+         while(!pq2.empty() and !pq1.empty()){
+            int t1 = pq1.top();
+            int t2 = pq2.top();
+
+            pq1.pop();
+            pq2.pop();
+
+            moves += abs(t1-t2);
+         }
+
+         return moves;
+    }
+
+    int minMovesToSeat(vector<int>& seats, vector<int>& students) {
+        // approach 1: using min heap
+        // return approach1(seats,students);  
+
+        // approach 2: using brute force 
+        // return approach2(seats,students); 
+
+        // approach 3: using efficient sorting algorithm: O(nLogn)
+        // return approach3(seats,students);
+    }
+};
