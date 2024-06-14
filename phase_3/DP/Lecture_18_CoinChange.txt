@@ -1,0 +1,68 @@
+class Solution {
+public:
+    int solve(vector<int>& coins,int amount,int index){
+
+        if(amount == 0){
+            return 0; 
+        }
+
+        if(index < 0 or amount < 0){
+            return (INT_MAX-1); 
+        }
+
+        int nonTake = solve(coins,amount,index-1); 
+        int take = 1 + solve(coins,amount-coins[index],index); 
+        return min(nonTake,take); 
+    }
+
+    int solve1(vector<vector<int>> &dp,vector<int>& coins,int amount,int index){
+        if(amount == 0){
+            return 0; 
+        }
+        
+        if(index < 0 or amount < 0){
+            return (INT_MAX-1);
+        }
+
+        if(dp[index][amount] != -1){
+            return dp[index][amount]; 
+        }
+
+        int nontake = solve1(dp,coins,amount,index-1); 
+        int take = 1 + solve1(dp,coins,amount-coins[index],index); 
+        dp[index][amount] = min(take,nontake); 
+        return min(take,nontake); 
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+        // int ans =  solve(coins,amount,coins.size()-1); 
+        // return ans < INT_MAX-1 ? ans : -1;
+
+        // vector<vector<int>> dp(coins.size(),vector<int>(amount+1,-1)); 
+        // int ans =  solve1(dp,coins,amount,coins.size()-1);
+        // return (ans < INT_MAX-1) ? ans : -1;  
+
+        // using tabulation 
+        vector<vector<int>> dp(coins.size(), vector<int>(amount + 1, INT_MAX - 1));
+
+        // Initialize the first row
+        for (int j = 0; j <= amount; j++) {
+            if (j % coins[0] == 0) {
+                dp[0][j] = j / coins[0];
+            }
+        }
+
+        for (int i = 1; i < coins.size(); i++) {
+            for (int j = 0; j <= amount; j++) {
+                int nonTake = dp[i - 1][j];
+                int take = INT_MAX;
+                if (coins[i] <= j) {
+                    take = 1 + dp[i][j - coins[i]];
+                }
+                dp[i][j] = min(take, nonTake);
+            }
+        }
+        return (dp[coins.size() - 1][amount] < INT_MAX - 1) ? dp[coins.size() - 1][amount] : -1;
+ 
+    }
+};
