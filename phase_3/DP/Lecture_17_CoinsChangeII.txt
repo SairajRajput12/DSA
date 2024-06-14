@@ -1,0 +1,68 @@
+class Solution {
+public:
+
+    int solve(int amount,vector<int> &coins,int ind){
+        if(ind == 0){
+            return (amount%coins[0] == 0); 
+        }
+
+        int nonPick = solve(amount,coins,ind-1); 
+        int pick = 0; 
+        if(coins[ind] <= amount){
+            pick = solve(amount-coins[ind],coins,ind); 
+        }
+        return (pick + nonPick); 
+    }
+
+    int approach1(vector<vector<long>> &dp,int ind,vector<int>&coins,int amount){
+        if(ind == 0){
+            return (amount%coins[0] == 0); 
+        }
+
+        if(dp[ind][amount] != -1){
+            return dp[ind][amount]; 
+        }
+
+        int nonPick = approach1(dp,ind-1,coins,amount); 
+        int pick = 0; 
+        if(coins[ind] <= amount){
+            pick = approach1(dp,ind,coins,amount-coins[ind]); 
+        }
+        dp[ind][amount] = (pick + nonPick);
+        return dp[ind][amount]; 
+    }
+
+    int change(int amount, vector<int>& coins) {
+        // approach 1: using recursion 
+        // int n = coins.size(); 
+        // return solve(amount,coins,n-1); 
+
+        // approach 2: using memoisation 
+        // vector<vector<long>> dp(coins.size(),vector<long>(amount+1,-1)); 
+        // int n = coins.size(); 
+        // return approach1(dp,n-1,coins,amount);  
+
+        // approach 3: using tabulation 
+        vector<vector<int>> dp(coins.size(),vector<int>(amount+1,-1)); 
+        int n = coins.size(); 
+
+        for(int i = 0; i <= amount; i ++){
+            dp[0][i] = (i%coins[0] == 0); 
+        }
+
+        for(int i = 1; i < n; i ++){
+            for(int j = 0; j <= amount; j ++){
+                int nonPick = dp[i-1][j]; 
+                int pick = 0; 
+                if(coins[i] <= j){
+                    pick = dp[i][j-coins[i]];
+                } 
+
+                dp[i][j] = pick + nonPick; 
+            }
+        }
+        return dp[n-1][amount]; 
+
+        // it is called tabulation approach: O(N^2)
+    }
+};
