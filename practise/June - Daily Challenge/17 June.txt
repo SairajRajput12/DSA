@@ -1,0 +1,97 @@
+class Solution {
+public:
+
+    bool isItPerfectSquare(int num){
+        for(long i = 0; i <= num; i ++){
+            if(i*i == num){
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+    bool isItValid(int target,int start,int end){
+        if(start > end){
+            return false; 
+        }
+
+        long mid = start + (end - start)/2; 
+
+        if(mid*mid == target){
+            return true; 
+        }
+
+        if((mid*mid) > target){
+            // go to the left part 
+            return isItValid(target,start,mid-1);
+        }
+        return isItValid(target,mid+1,end);
+    }
+
+    bool judgeSquareSum(int c) {     
+        // for(long i = 0; (i*i) <= c; i ++){
+        //     for(long j = 0; (j*j) <= c; j ++){
+        //         if(pow(i,2) + pow(j,2) == c){
+        //             return true; 
+        //         }
+        //     }
+        // }
+        // return false; 
+
+        // TLE 
+
+        // for(long i = 0; i <= c; i ++){
+        //     int b = c - (int)(i*i); 
+        //     int m = 1, sum = 0; 
+
+        //     while(sum < b){
+        //         sum += m; 
+        //         m += 2; 
+        //     }
+
+        //     if(sum == b){
+        //         return true; 
+        //     }
+        // }
+
+        // return false;
+
+        // approach 3: using sqrt function  -> perfect square hona chahiye 
+
+        // another way of getting whether the number is perfect square or not
+        // for(long i = 0 ; (i*i) <= c; i ++){
+        //     double b = sqrt(c-i*i); 
+        //     if(b == (int)b){
+        //         return true; 
+        //     }
+        // } 
+
+        // return false; 
+
+
+        // approach 4: using binary search
+        // for(long i = 0; (i*i) <= c; i ++){
+        //     int another = c - (int)(i*i); 
+        //     if(isItValid(another,0,another)){
+        //         return true; 
+        //     }
+        // } 
+
+        // return false; 
+
+        // approach 5: using fermat theorem 
+        for (int i = 2; i * i <= c; i++) {
+            int count = 0;
+            if (c % i == 0) {
+                while (c % i == 0) {
+                    count++;
+                    c /= i;
+                }
+                if (i % 4 == 3 && count % 2 != 0)
+                    return false;
+            }
+        }
+        return c % 4 != 3;
+
+    }
+};

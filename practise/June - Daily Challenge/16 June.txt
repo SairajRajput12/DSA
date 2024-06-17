@@ -1,0 +1,127 @@
+class Solution {
+public:
+    int getAns(vector<int>& nums,set<int>& test,int n,int index,int sum){
+        if(index >= n){
+            return INT_MAX; 
+        }
+
+        if(test.size() == n){
+            // yes we got all sum array
+            return test.size() - nums.size(); 
+        }
+
+        if(sum <= n){
+            test.insert(sum); 
+        }
+
+        int pick = getAns(nums,test,n,index+1,sum);
+        int nonPick = 0;
+        for(int i = 1; i <= n; i ++){
+            if(find(nums.begin(),nums.end(),i) == nums.end()){
+                nums.push_back(i); 
+                getAllSum(nums,test,0,0);
+                nonPick = getAns(nums,test,n,index+1,sum+nums[index]); 
+            }
+        }
+
+        
+        return min(pick,nonPick);         
+    }
+    void getAllSum(vector<int>& nums, set<int>& sums, int index, int currentSum) {
+        if (index == nums.size()) {
+            sums.insert(currentSum);
+            return;
+        }
+
+        // Exclude the current element
+        getAllSum(nums, sums, index + 1, currentSum);
+
+        // Include the current element
+        getAllSum(nums, sums, index + 1, currentSum + nums[index]);
+    }
+
+
+    int minPatches(vector<int>& nums, int n) {
+        // you have an sorted array and elements between 1 to n. 
+        // you have to add the array such that inclusive can be formed by sum
+        // of some elements in the array. 
+        // return minimum number of the patches required. 
+        // [1,3] => [1] = 1,[3] = 3,[1,3] = 4.
+
+        // if we add 2 then we get sum as: 
+        // [1,2,3] => [1],[2],[3],[1,2],[2,3],[1,3],[1,2,3] => 
+        // 1,2,3,3,5,4,6 -> all sums are between 1 to 6.
+        // one patch is required
+
+
+        // [1,5,10] => [1,2,5,10] => 
+        // [1],[2],[5],[10],[1,5],[2,5],[1,10],[1,2],[5,10],[1,2,5],[1,2,10],[2,5,10],[1,2,5,10] => 
+        // 1,2,5,10,6,7,11,3,15,8,13,12,16 => 1,2,3,5,6,7,8,10,11,12,13,15,16
+        //  now we add 3 
+        // [1,2,3,5,10] => 
+        // [1],[2],[3],[5],[10],[1,2],[1,3],[1,5],[1,10],[2,3],[2,5],[2,10],
+        // [3,5],[3,10],[1,2,3],[1,2,5],[1,2,10],[2,3,5],[2,3,10],[3,5,10],
+        // [1,2,3,5],[1,2,3,10],[1,2,3,5,10] 
+        // 1,2,3,5,10,3,4,6,11,5,7,12,8,13,6,8,13,10,15,18,11,16,21 
+        // 21 is not proper so we will not add 3  
+
+        // we will add 4 
+        // [1,2,4,5,10]
+        // [1][2],[4],[5],[10],[1,2],[1,4],[1,5],[1,10],[2,4],[2,5],[2,10],
+        // [4,5],[4,10],[5,10],[1,2,4],[1,2,5],[1,2,10],[2,4,5],[2,4,10]. 
+        // [4,5,10],[1,2,4,5],[1,2,4,10],[2,4,5,10],[1,2,4,5,10] 
+
+        // 1,2,4,5,10,3,5,6,11,6,7,12,9,14,15,7,8,13,11,16,19,12,17,21,22
+        // 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+
+        // when something is missing then i have to add patch for it 
+        // higher number as a patch will result in the more number of the sum. 
+        // 
+
+        // set<int> test; 
+        // // for(int i = 0; i < nums.size(); i ++){
+        // //     test.insert(nums[i]); 
+        // // }
+
+        // return getAns(nums,test,n,0,0);
+
+        // thought process 
+        // {1,4} => n = 6, 
+        // 1 se 6 tak ka number lana hai. 
+        // [1,4] i can reach to 1,5,4 with 0 patch.
+        // [1,3,4] => let us work in 3 => we can reach to 1,3,4,5,7
+        // but we cannot get 2 and 6
+        // [1,2,4] => 1,2,3,4,5,6 
+
+        // so we can go for 2 as a good option. 
+
+        // one patch is needed. 
+
+        // max reach number ke age wala number ko lunga
+        // [1,5,10] , n = 20 
+        // 1st patch of 2 
+        // [1,2,5,10] , reach will be 1,2,3,5 we canno reach to 4
+        // add 3 now [ 1,2,4,5,10] -> 3 reachable hai 
+        // [1,2,4,5,10] => 1,2,3,4,5,6,7,8,9,10,11,12,...,22. 
+
+        // [1,2,4,5] mein 10 add kiya to reach 22 tak jayegi. 
+        // so we can make any amount of the sum 
+        // last number reachable + 1. is the solution 
+
+        // [1,5,10],n=20 
+        long long maxReach = 0; 
+        int patch = 0; 
+        int ind = 0; 
+        while(maxReach < n){
+            if(ind < nums.size() and nums[ind] <= maxReach+1){
+                maxReach += nums[ind]; 
+                ind ++; 
+            }
+            else{
+                maxReach += (maxReach+1); 
+                patch ++; 
+            }
+        }
+        return patch; 
+    }
+};
