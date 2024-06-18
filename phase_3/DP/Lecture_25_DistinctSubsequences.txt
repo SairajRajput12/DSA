@@ -1,0 +1,124 @@
+#define MOD 1000000000
+
+class Solution {
+public:
+    void solve(const string &x, unordered_set<string> &y, int index, string m) {
+        if (index >= x.size()) {
+            y.insert(m);
+            return;
+        }
+
+        solve(x, y, index + 1, m);
+        solve(x, y, index + 1, m + x[index]);
+    }
+
+    int approach2(string s,string t,int i,int j){
+        if(j < 0){
+            return 1; 
+        }
+
+        if(i < 0){
+            return 0; 
+        }
+
+        int cnt = 0; 
+        if(s[i] == t[j]){
+            cnt += approach2(s,t,i-1,j-1); 
+            cnt += approach2(s,t,i-1,j); 
+        }
+        else{
+            cnt += approach2(s,t,i-1,j); 
+        }
+        return cnt; 
+    }
+
+    int approach3(string s,string t,int i,int j,vector<vector<int>> &dp){
+        // if(j < 0){
+        //     return 1; 
+        // }
+
+        // after right shifting 
+        if(j == 0){
+            return 1; 
+        }
+
+        // if(i < 0){
+        //     return 0; 
+        // }
+
+        // code after right shifting 
+        if(i == 0){
+            return 0; 
+        }
+
+        if(dp[i][j] != -1){
+            return dp[i][j]; 
+        }
+
+        int cnt = 0; 
+        if(s[i-1] == t[j-1]){
+            cnt += approach3(s,t,i-1,j-1,dp); 
+            cnt += approach3(s,t,i-1,j,dp); 
+            
+        }
+        else{
+            cnt += approach3(s,t,i-1,j,dp); 
+        }
+        return dp[i][j] = cnt; 
+    }
+
+    int numDistinct(string s, string t) {
+        // Approach 1: First generate all subsequences of both strings and find common subsequences of s in the subsequences of t.
+        // unordered_set<string> first;
+        // unordered_set<string> another;
+
+        // solve(s, first, 0, "");
+        // solve(t, another, 0, "");
+        // int ans = 0;
+
+        // for (const auto& subseq : first) {
+        //     if (another.count(t) > 0) {
+        //         ans += 1;
+        //     }
+        // }
+
+        // return ans;
+
+
+        // approach 2: using recursion 
+        // return approach2(s,t,s.size()-1,t.size()-1); 
+
+        // approach 3: using memoisation 
+        // vector<vector<int>> dp(s.size(),vector<int>(t.size(),-1)); 
+        // return approach3(s,t,s.size()-1,t.size()-1,dp); 
+
+        // right shifting 
+        // vector<vector<int>> dp(s.size()+1,vector<int>(t.size()+1,-1)); 
+        // return approach3(s,t,s.size(),t.size(),dp); 
+
+        // approach 4: using tabulation 
+        vector<vector<double>> dp(s.size()+1,vector<double>(t.size()+1,0)); 
+
+        for(int i = 0; i <= s.size(); i ++){
+            dp[i][0] = 1; 
+        }
+
+        for(int i = 1; i <= t.size(); i++){ // mistake done
+            dp[0][i] = 0; 
+        }
+
+        for(int i = 1; i <= s.size(); i ++){
+            for(int j = 1; j <= t.size(); j ++){
+                if(s[i-1] == t[j-1]){
+                    dp[i][j] += dp[i-1][j-1]; 
+                    dp[i][j] += dp[i-1][j]; 
+                }
+                else{
+                    dp[i][j] += dp[i-1][j];
+                }
+            }
+        }
+
+        return (int)dp[s.size()][t.size()]; 
+    }
+};
