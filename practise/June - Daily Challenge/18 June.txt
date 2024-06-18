@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        // profit and difficulty are of the ith job 
+        // worker[j] is the ability of the jth worker.means the worker[j] can complete the job at the most difficulty of worker[j]. 
+        // return max profit can achieve after assigning the workers to the job. 
+
+        // int maxProfit = 0; 
+        // for(auto it : worker){
+        //     int capacity = it;
+
+        //     int i = 0; 
+        //     bool found = false; 
+        //     while(i < profit.size()){
+        //         if(capacity < difficulty[i]){
+        //             found = true; 
+        //             break; 
+        //         }
+        //         i ++; 
+        //     } 
+
+        //     cout << i << endl; 
+        //     maxProfit += (i == 0 ? 0 : profit[i-1]); 
+        // }
+        // return maxProfit; 
+    
+        vector<pair<int,int>> inp;
+        for(int i = 0; i < profit.size(); i ++){
+            inp.push_back({difficulty[i],profit[i]});
+        }
+
+        sort(inp.begin(),inp.end());
+        sort(worker.begin(),worker.end()); 
+        int ans = 0; 
+        for(auto it : worker){
+            int cap = it; 
+            int i = 0; 
+            int best = 0; 
+            while(i <= inp.size() and cap >= inp[i].first){
+                best = max(inp[i].second,best); 
+                i ++; 
+            }
+            ans += best; 
+        }
+        return ans; 
+    }
+};
