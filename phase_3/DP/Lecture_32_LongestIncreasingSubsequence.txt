@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int approach1(vector<int> &nums,int index,int prev_ind){
+        if(index == nums.size()){
+            return 0; 
+        }
+
+        int nonPick = approach1(nums,index+1,prev_ind); 
+        int pick = 0; 
+        if(prev_ind == -1 or nums[index] > nums[prev_ind]){
+            pick = 1 + approach1(nums,index+1,index); 
+        }
+
+        return max(pick,nonPick); 
+    }
+
+    int approach2(vector<int> &nums,int index,int prev_ind,vector<vector<int>> &dp){
+        if(index == nums.size()){
+            return 0; 
+        }
+
+        if(dp[index][prev_ind+1] != -1){
+            return dp[index][prev_ind+1]; 
+        }
+
+        int nonPick = approach2(nums,index+1,prev_ind,dp); 
+        int pick = 0; 
+        if(prev_ind == -1 or nums[index] > nums[prev_ind]){
+            pick = 1 + approach2(nums,index+1,index,dp); 
+        }
+        dp[index][prev_ind+1] = max(nonPick,pick); 
+        return dp[index][prev_ind+1]; 
+    }
+
+    int lengthOfLIS(vector<int>& nums) {
+        // i will use pick non pick appoach 
+        // return approach1(nums,0,-1); 
+
+        // approach 2: using memoisation 
+        // vector<vector<int>> dp(nums.size(),vector<int>(nums.size()+1,-1)); 
+        // return approach2(nums,0,-1,dp);
+
+        // approach 3: using tabulation
+        int n = nums.size(); 
+        vector<vector<int>> dp(n+1,vector<int> (n+1,0)); 
+
+        for(int i = (nums.size()-1); i >= 0; i --){
+            for(int j = (i - 1); j >= -1; j --){
+                int nonPick = dp[i+1][j+1]; 
+                int pick = 0;
+                if(j == -1 or nums[j] < nums[i]){
+                    pick = 1 + dp[i+1][i+1]; 
+                }
+                dp[i][j+1] = max(nonPick,pick); 
+            }
+        }
+
+        return dp[0][-1+1]; 
+    }
+};
