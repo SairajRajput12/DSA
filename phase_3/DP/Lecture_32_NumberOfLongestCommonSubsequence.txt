@@ -1,0 +1,35 @@
+class Solution {
+public:
+    pair<int,int> appraoch1(vector<int>&nums,vector<vector<pair<int,int>>>& dp,int index,int prevIndex){
+        if(index == nums.size()){
+            return {0,1}; 
+        }
+
+        if(dp[prevIndex+1][index].first != -1){
+            return dp[prevIndex+1][index]; 
+        }
+
+        pair<int,int> include; 
+        if(prevIndex == -1 or nums[index] > nums[prevIndex]){
+            include = appraoch1(nums,dp,index+1,index); 
+            include.first ++; 
+        }
+
+        pair<int,int> exclude = appraoch1(nums,dp,index+1,prevIndex); 
+
+        if(include.first == exclude.first){
+            dp[prevIndex+1][index] = {include.first,exclude.second + include.second}; 
+        }
+        else{
+            dp[prevIndex+1][index] = (include.first > exclude.first ? include : exclude);
+        }
+        return dp[prevIndex+1][index]; 
+    }
+
+    int findNumberOfLIS(vector<int>& nums) {
+        // approach 1: how i can get the longest common subsequence length ??? 
+        int n = nums.size(); 
+        vector<vector<pair<int, int>>> dp(nums.size()+1,vector<pair<int, int>>(nums.size()+1,make_pair(-1, -1)));
+        return appraoch1(nums,dp,0,-1).second;       
+    }
+};

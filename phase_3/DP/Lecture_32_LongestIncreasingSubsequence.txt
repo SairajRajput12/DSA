@@ -41,20 +41,36 @@ public:
         // return approach2(nums,0,-1,dp);
 
         // approach 3: using tabulation
-        int n = nums.size(); 
-        vector<vector<int>> dp(n+1,vector<int> (n+1,0)); 
+        // int n = nums.size(); 
+        // vector<vector<int>> dp(n+1,vector<int> (n+1,0)); 
 
-        for(int i = (nums.size()-1); i >= 0; i --){
-            for(int j = (i - 1); j >= -1; j --){
-                int nonPick = dp[i+1][j+1]; 
-                int pick = 0;
-                if(j == -1 or nums[j] < nums[i]){
-                    pick = 1 + dp[i+1][i+1]; 
-                }
-                dp[i][j+1] = max(nonPick,pick); 
+        // for(int i = (nums.size()-1); i >= 0; i --){
+        //     for(int j = (i - 1); j >= -1; j --){
+        //         int nonPick = dp[i+1][j+1]; 
+        //         int pick = 0;
+        //         if(j == -1 or nums[j] < nums[i]){
+        //             pick = 1 + dp[i+1][i+1]; 
+        //         }
+        //         dp[i][j+1] = max(nonPick,pick); 
+        //     }
+        // }
+
+        // return dp[0][-1+1]; 
+
+        // approach 4: using binary search:
+
+        vector<int> temp;
+        temp.push_back(nums[0]); 
+        for(int i = 1; i < nums.size(); i ++){
+            if(nums[i] > temp.back()){
+                temp.push_back(nums[i]);
+            }
+            else{
+                int ind = lower_bound(temp.begin(),temp.end(),nums[i]) - temp.begin(); 
+                temp[ind] = nums[i]; 
             }
         }
 
-        return dp[0][-1+1]; 
+        return temp.size();
     }
 };
