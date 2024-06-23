@@ -1,35 +1,71 @@
+typedef pair<int,int> p;
+
 class Solution {
 public:
-    pair<int,int> appraoch1(vector<int>&nums,vector<vector<pair<int,int>>>& dp,int index,int prevIndex){
+    pair<int,int> appraoch1(vector<int>&nums,vector<vector<p>>& dp,int index,int prevIndex){
         if(index == nums.size()){
             return {0,1}; 
         }
 
         if(dp[prevIndex+1][index].first != -1){
-            return dp[prevIndex+1][index]; 
+            return {0,1}; 
         }
+        p include; 
+        p exclude;  
 
-        pair<int,int> include; 
         if(prevIndex == -1 or nums[index] > nums[prevIndex]){
             include = appraoch1(nums,dp,index+1,index); 
-            include.first ++; 
+            include.first ++; // increment the length means i am adding the element 
         }
 
-        pair<int,int> exclude = appraoch1(nums,dp,index+1,prevIndex); 
+        exclude = appraoch1(nums,dp,index+1,prevIndex); 
 
         if(include.first == exclude.first){
-            dp[prevIndex+1][index] = {include.first,exclude.second + include.second}; 
+            // means when we got both of same length 
+            dp[prevIndex+1][index] = {include.first,include.second+exclude.second}; 
         }
         else{
-            dp[prevIndex+1][index] = (include.first > exclude.first ? include : exclude);
+            dp[prevIndex+1][index] = (include.first > exclude.first ? include : exclude); 
         }
+
         return dp[prevIndex+1][index]; 
     }
 
     int findNumberOfLIS(vector<int>& nums) {
         // approach 1: how i can get the longest common subsequence length ??? 
-        int n = nums.size(); 
-        vector<vector<pair<int, int>>> dp(nums.size()+1,vector<pair<int, int>>(nums.size()+1,make_pair(-1, -1)));
-        return appraoch1(nums,dp,0,-1).second;       
+        // int n = nums.size(); 
+        // vector<vector<p>> dp(nums.size()+1,vector<p>(nums.size()+1,make_pair(-1, -1)));
+        // return appraoch1(nums,dp,0,-1).second;   
+
+
+        // approach 2: using tabulation
+        int n = nums.size();
+        vector<int> lengths(n,1); 
+        vector<int> counts(n,1); 
+        int maxLen = 1; 
+
+        for(int i = 1; i < n; i ++){
+            for(int j = 0; j < i; j ++){
+                if(nums[i] > nums[j]){
+                    if((lengths[j]+1) > lengths[i]){
+                        // not include 
+                        lengths[i] = lengths[j] + 1; 
+                        counts[i] = counts[j]; // just copy
+                    }
+                    else if((lengths[j]+1) == lengths[i]){
+                        counts[i] += counts[j]; 
+                    }
+                }
+            }
+
+            maxLen = max(maxLen,lengths[i]); 
+        }
+        int answer = 0; 
+        for(int i = 0; i < n; i ++){
+            if(maxLen == lengths[i]){
+                answer += counts[i]; 
+            }
+        }
+        return answer; 
     }
 };
