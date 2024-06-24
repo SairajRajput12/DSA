@@ -10,7 +10,7 @@ class Node{
             data = key; 
             left = null; 
             right = null; 
-        }    
+  }    
 }
 
 public class  BinaryTreeRepresentation{
