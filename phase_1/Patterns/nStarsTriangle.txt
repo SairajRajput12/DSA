@@ -1,0 +1,30 @@
+void nStarTriangle(int n) {
+    // Write your code here.
+    // n = 3; 
+    //  * 
+    // *** 
+    // *****
+    // observations: 
+    // 1. in each row the stars are increased by 2. 
+    // 2. total number of stars at nth row will be => 1 + (n-1)*d
+    // 3. stars for 0th row =>  1 
+    // 4. space logic -> it will be printed as (n - row) times 
+
+    int row = 1; 
+    while(row <= n){
+        int numOfSpaces = n - row; 
+        while(numOfSpaces != 0){
+            cout << " "; 
+            numOfSpaces --; 
+        }
+
+        // now printing stars 
+        int numOfStars = 1 + (row-1)*2; 
+        while(numOfStars != 0){
+            cout << "*";
+            numOfStars --;
+        }
+        cout << endl; 
+        row ++; 
+    }
+}

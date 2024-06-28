@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int f(vector<int> &a,int i,int j){
+        if(i > j){
+            return 0; 
+        }
+
+        int maxi = INT_MIN; 
+        for(int k = i; k <= j; k ++){
+            int M = a[i-1]*a[k]*a[j+1] + f(a,i,k-1) + f(a,k+1,j); 
+            maxi = max(maxi,M); 
+        }
+
+        return maxi; 
+    }
+
+    int f1(vector<int> &a,int i,int n,vector<vector<int>> &dp){
+        if(i > n){
+            return 0; 
+        }
+
+        if(dp[i][n] != -1){
+            return dp[i][n]; 
+        }
+
+        int maxi = INT_MIN; 
+        for(int k = i; k <= n; k ++){
+            int co = a[i-1]*a[k]*a[n+1] + f1(a,i,k-1,dp) + f1(a,k+1,n,dp); 
+            maxi = max(maxi,co); 
+        }
+
+        dp[i][n] = maxi; 
+        return maxi; 
+    }
+
+    int maxCoins(vector<int>& nums) {
+        // int n = nums.size(); 
+        // nums.push_back(1); 
+        // nums.insert(nums.begin(),1); 
+        // return f(nums,1,n); 
+
+        // int n = nums.size(); 
+        // vector<vector<int>> dp(n+1,vector<int> (n+1,-1)); 
+        // nums.insert(nums.begin(),1); 
+        // nums.push_back(1); 
+        // return f1(nums,1,n,dp);
+
+        // using tabulation 
+        int n = nums.size(); 
+        vector<vector<int>> dp(n+2,vector<int> (n+2,0)); 
+        nums.push_back(1); 
+        nums.insert(nums.begin(),1); 
+
+        for(int i = n; i >= 1; i --){
+            for(int j = 1; j <= n; j ++){
+                if(i > j){
+                    continue; 
+                }
+                int maxi = INT_MIN; 
+                for(int k = i; k <= j; k ++){
+                    int co = nums[i-1]*nums[k]*nums[j+1] + dp[i][k-1] + dp[k+1][j]; 
+                    maxi = max(maxi,co); 
+                }
+
+                dp[i][j] = maxi; 
+            }
+        }
+        return dp[1][n];
+    }
+};

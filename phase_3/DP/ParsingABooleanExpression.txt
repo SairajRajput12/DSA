@@ -1,0 +1,81 @@
+// using stack
+
+class Solution {
+public:
+    bool getEvaluate(int opr,int &ind,bool ans,string e){
+        ans = e[ind]; 
+        if(opr == 0){
+            ans = !ans; 
+            return ans; 
+        } 
+        while((ind) < e.size()){
+            if(e[ind] == ','){
+                continue; 
+            }
+
+            if(e[ind] == ')' or e[ind] == '('){
+                break; 
+            }
+
+            
+
+            if(opr == 1){
+                ans = ans & ans; 
+            }
+
+            if(opr == 2){
+                ans = ans || ans; 
+            }
+
+            ind ++; 
+        }
+        return ans; 
+    }
+
+    bool parseBoolExpr(string e) {
+        stack<char> st; 
+        bool ans; 
+        for(int i = 0; i < e.size(); i ++){
+            if(e[i] == ','){
+                continue; 
+            }
+
+            if(e[i] == ')'){
+                vector<bool> res; 
+                while(st.top() != '&' and st.top() != '|' and st.top() != '!'){
+                    // operand ko nikalo
+                    res.push_back((st.top() == 't'));
+                    st.pop();  
+                }
+
+                char c = st.top();
+                st.pop();
+                if(c == '&'){
+                    bool mask = res[0]; 
+                    for(int i = 1; i < res.size(); i ++){
+                        mask &= res[i]; 
+                    }
+
+                    st.push((mask) ? 't' : 'f'); 
+                }
+                else if(c == '|'){
+                    bool mask = res[0]; 
+                    for(int i = 1; i < res.size(); i ++){
+                        mask |= res[i]; 
+                    }
+
+                    st.push((mask) ? 't' : 'f'); 
+                }
+                else if(c == '!'){
+                    st.push(res[0] ? 'f' : 't'); 
+                }
+            }
+            else if(e[i] != '('){
+                st.push(e[i]); 
+            }
+        }
+        return (st.top() =='t'); 
+    }
+};
+
+// using dp: 

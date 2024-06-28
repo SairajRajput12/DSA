@@ -1,0 +1,14 @@
+void nBinaryTriangle(int n) {
+    // Write your code here.
+    int row = 1; 
+    while(row <= n){
+        int currentDigit = row; 
+        while(currentDigit > 0){
+            int m = currentDigit%2; 
+            cout << m << " "; 
+            currentDigit --; 
+        }
+        row ++; 
+        cout << endl; 
+    }
+}

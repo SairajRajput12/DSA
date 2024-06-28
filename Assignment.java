@@ -11,11 +11,11 @@ class Player{
 
 
 
-    public Player(String name){
+    public Player(String name,int strength,int attack,int health){
         this.name = name; 
-        this.strength = 5; 
-        this.attack = 5; 
-        this.health = 100; 
+        this.strength = strength; 
+        this.attack = attack; 
+        this.health = health; 
         this.random = new Random();
     }
 
@@ -71,8 +71,8 @@ public class  Assignment{
             System.out.println("Enter the name of the second player"); 
             s2 = sc.nextLine(); 
             
-            Player p1 = new Player(s1); 
-            Player p2 = new Player(s2); 
+            Player p1 = new Player(s1,5,10,50); 
+            Player p2 = new Player(s2,10,5,100); 
             
             Player attacker = (Math.random() < 0.5) ? p1 : p2;
             Player defender = (attacker == p1) ? p2 : p1;

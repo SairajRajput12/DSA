@@ -1,0 +1,24 @@
+void nStarTriangle(int n) {
+    // Write your code here.
+    int row = 1; 
+    while(row <  n){
+        int cnt = 1; 
+        while(cnt <= row){
+            cout << "*"; 
+            cnt ++; 
+        }
+        cout << endl; 
+        row ++; 
+    }
+
+    // row --; 
+    while(row > 0){
+        int cnt = 1; 
+        while(cnt <= row){
+            cout << "*"; 
+            cnt ++; 
+        }
+        cout << endl; 
+        row --;
+    }
+}

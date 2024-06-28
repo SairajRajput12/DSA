@@ -1,0 +1,11 @@
+void nTriangle(int n) {
+	// Write your code here
+	for(int i = 1; i <= n; i ++){
+		int cnt = 1; 
+		for(int j = 0; j < i; j ++){
+	 		cout << cnt << " "; 
+			cnt ++; 
+	  }
+		cout << endl; 
+	}
+}

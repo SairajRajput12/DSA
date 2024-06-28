@@ -1,0 +1,36 @@
+void numberCrown(int n) {
+    // Write your code here.
+    // total number of the stars in base = 2*n
+    // space in initial level = 2*n - 2 
+    // space in second level = 2*n - 4 
+    int row = 1; 
+    while(row <= n){
+        int spaces = 2*(n-row); 
+        int cnt = 1; 
+        int intOcc = 2*n - spaces; 
+
+        int first = intOcc/2; 
+
+        while(first > 0){
+            cout << cnt << " "; 
+            cnt ++; 
+            first --; 
+        } 
+
+        cnt --; 
+        while(spaces > 0){
+            cout << " "; 
+            spaces --; 
+        }
+
+        first = intOcc/2;  
+        while(first >  0){
+            cout << cnt << " "; 
+            cnt --; 
+            first --; 
+        } 
+
+        row ++;
+        cout << endl;  
+    }
+}

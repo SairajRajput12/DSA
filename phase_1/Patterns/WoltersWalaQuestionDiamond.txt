@@ -1,0 +1,44 @@
+void nStarDiamond(int n) {
+    // Write your code here.
+    int row = 1; 
+    while(row <= n){
+        int numOfStars = 1 + (row-1)*2; 
+        int spaces = n-row;
+
+
+        while(spaces > 0){
+            cout << " ";
+            spaces --;  
+        }
+
+        while(numOfStars > 0){
+            cout << "*"; 
+            numOfStars --; 
+        }
+        cout << endl; 
+
+        row ++; 
+    }
+
+    row = n;
+    while(row > 0) {
+        int numOfStars = 1 + (row - 1) * 2; 
+        int spaces = n - row;
+
+        // Print spaces
+        while(spaces > 0) {
+            cout << " ";
+            spaces--;  
+        }
+
+        // Print stars
+        while(numOfStars > 0) {
+            cout << "*"; 
+            numOfStars--; 
+        }
+ 
+        cout << endl;
+        row--;
+    }
+
+}

@@ -1,0 +1,26 @@
+void alphaHill(int n) {
+    // Write your code here.
+    int row = 1; 
+    while(row <= n){
+        int numOfSpaces = n - row; 
+        while(numOfSpaces != 0){
+            cout << " "; 
+            numOfSpaces --; 
+        }
+
+        char c = 'A'; 
+
+        // now printing stars 
+        int numOfStars = 1 + (row-1)*2; 
+        int p = 1; 
+        int midPoint = (2*row+1)/2; 
+        while(p <= (numOfStars)){
+            char x = (p < midPoint ? (c++) : (c--)); 
+            cout << (x) << " ";
+            p ++;
+        }
+
+        cout << endl;          
+        row ++; 
+    }
+}
