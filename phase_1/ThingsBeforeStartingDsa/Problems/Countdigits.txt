@@ -1,0 +1,45 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h> 
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+public:
+    int evenlyDivides(int N){
+        //code here
+        int answer = 0;
+        int cnt = N; 
+        while(cnt != 0){
+            int digit = cnt%10; 
+            // cout << digit << endl; 
+            
+            if(digit == 0){
+                cnt = cnt/10; 
+                continue; 
+            }
+            
+            if(N%digit == 0){
+                answer ++; 
+            }
+            cnt = cnt/10; 
+        }
+        
+        return answer;
+    }
+};
+
+//{ Driver Code Starts.
+int main() 
+{ 
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int N;
+        cin>>N;
+        Solution ob;
+        cout << ob.evenlyDivides(N) << endl;
+    }
+    return 0; 
+}
+// } Driver Code Ends
