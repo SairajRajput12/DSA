@@ -1,0 +1,16 @@
+void alphaTriangle(int n) {
+    // Write your code here.
+    char c = 'A' + (n-1); 
+    int row = 1; 
+    while(row <= n){
+        int charcnt = 1; 
+        char x = c; 
+        while(charcnt <= row){
+            cout << x << " ";
+            charcnt ++; 
+            x --;  
+        }
+        cout << endl; 
+        row ++; 
+    }
+}

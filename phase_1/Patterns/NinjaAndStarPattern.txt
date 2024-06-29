@@ -1,0 +1,52 @@
+void getStarPattern(int n) {
+    // Write your code here.
+
+    if(n == 1){
+        cout << "*"; 
+        return; 
+    }
+
+    
+    int r = 1; 
+    while(r <= n){
+        cout << "*"; 
+        r ++; 
+    }
+    cout << endl; 
+
+    r = 1; 
+    int row = n - 2; 
+    while(r <= (row)){
+        int spaces =  n/2;
+        int stars = 1; 
+        int cnt = 1; 
+        while(cnt <= stars){
+            cout << "*"; 
+            cnt ++; 
+        }
+
+        cnt = 1; 
+        while(cnt <= spaces){
+            cout << " "; 
+            cnt ++; 
+        }
+
+        cnt = 1; 
+        while(cnt <= stars){
+            cout << "*"; 
+            cnt ++; 
+        }
+
+
+
+        r ++; 
+        cout << endl; 
+    }
+
+    r = 1; 
+    while(r <= n){
+        cout << "*"; 
+        r ++; 
+    }
+    cout << endl; 
+}

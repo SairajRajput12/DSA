@@ -1,0 +1,21 @@
+void getNumberPattern(int n) {
+    // Write your code here.
+    int row = 1; 
+    int numOfStars = 2*n; 
+    while(row < numOfStars){
+        int x = row > n ? (2*n-row) : (row); 
+        int j = 1; 
+        while( j < numOfStars){
+            int y = j > n ? 2*n-j : j; 
+            if(x > y){
+                cout << (n-y+1); 
+            }
+            else{
+                cout << (n-x+1); 
+            }
+            j ++; 
+        }
+        row ++; 
+        cout << endl; 
+    }
+}

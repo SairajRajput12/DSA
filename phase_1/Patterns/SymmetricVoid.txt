@@ -1,0 +1,129 @@
+#include <iostream>
+using namespace std;
+
+void symmetry(int n) {
+    int row = 1; 
+    int i = 0; 
+    while(row <= n){
+        int stars = n-(row-1); 
+        int r = 1; 
+
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+
+        r = 1; 
+        int spaces = 2*row-1; 
+        while(r  <= spaces){
+            cout << " "; 
+            r ++; 
+        }
+
+        r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+
+        cout << endl; 
+        row ++; 
+    }
+
+    row = 1; 
+    while(row <= n){
+        int stars = row; 
+        int spaces = n - (row-1); 
+
+        int r = 1; 
+
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+
+        r = 1; 
+        // spaces = 2*row-1; 
+        while(r  <= spaces){
+            cout << " "; 
+            r ++; 
+        }
+
+        r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+
+        cout << endl; 
+        row ++; 
+    }
+}
+
+
+/*
+#include <iostream>
+using namespace std;
+
+void symmetry(int n) {
+    int i = 0;
+    
+    // Top part of the pattern
+    while (i < n) {
+        int j = 0;
+        // Print first half stars
+        while (j < n - i) {
+            cout << "* ";
+            j++;
+        }
+        
+        j = 0;
+        // Print spaces
+        while (j < 2 * i) {
+            cout << "  ";
+            j++;
+        }
+        
+        j = 0;
+        // Print second half stars
+        while (j < n - i) {
+            cout << "* ";
+            j++;
+        }
+        
+        cout << endl;
+        i++;
+    }
+
+    i = 0;
+    
+    // Bottom part of the pattern
+    while (i < n) {
+        int j = 0;
+        // Print first half stars
+        while (j <= i) {
+            cout << "* ";
+            j++;
+        }
+        
+        j = 0;
+        // Print spaces
+        while (j < 2 * (n - i)) {
+            cout << "  ";
+            j++;
+        }
+        
+        j = 0;
+        // Print second half stars
+        while (j <= i) {
+            cout << "* ";
+            j++;
+        }
+        
+        cout << endl;
+        i++;
+    }
+}
+
+*/
+

@@ -1,0 +1,57 @@
+void symmetry(int n) {
+    // Write your code here.
+
+    
+
+    int row = 1; 
+    while(row <= n){
+        int stars = row; 
+        int spaces = 2*(n-row);
+
+        int r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        } 
+
+        r = 1; 
+        while(r <= spaces){
+            cout << " "; 
+            r ++; 
+        }
+
+        r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+        cout << endl; 
+        row ++; 
+    }
+
+    row = (n-1); 
+    while(row >= 1){
+        int stars = row; 
+        int spaces = 2*(n-row);
+
+        int r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        } 
+
+        r = 1; 
+        while(r <= spaces){
+            cout << " "; 
+            r ++; 
+        }
+
+        r = 1; 
+        while(r <= stars){
+            cout << "* "; 
+            r ++; 
+        }
+        cout << endl; 
+        row --;  
+    }
+}
