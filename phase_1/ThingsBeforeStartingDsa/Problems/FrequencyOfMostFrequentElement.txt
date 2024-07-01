@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int maxFrequency(vector<int>& nums, int k) {
+
+        // approach 1: using brute force approach -> throws TLE
+        // sort(nums.begin(), nums.end());
+
+        // int maxOperation = 1; 
+
+        // for(int i = 0; i < nums.size(); i ++){
+        //     int eleToMakeEqualTo = nums[i]; 
+        //     int givenOperationCount = k; 
+        //     int cnt = 1; 
+        //     for (int j = i - 1; j >= 0; --j) {
+        //         int neededOperations = eleToMakeEqualTo - nums[j];
+        //         if (givenOperationCount >= neededOperations) {
+        //             givenOperationCount -= neededOperations;
+        //             cnt++;
+        //         } else {
+        //             break; // No more operations can be performed
+        //         }
+        //     }
+        //     maxOperation = max(maxOperation,cnt); 
+        // }
+
+        // return maxOperation;
+
+        // approach 2: using another optimised approach called sliding window
+        sort(nums.begin(), nums.end()); 
+        int maxFrequency = 1; 
+        int start = 0; 
+        int end = 0; 
+        long windowSum = 0; 
+        for(int end = 0; end < nums.size(); end ++){
+            int windowSize = end - start + 1; 
+            windowSum += nums[end]; 
+
+            long target = nums[end]; 
+            // Reduce the window size if needed
+            while (target * windowSize - windowSum > k) {
+                windowSum -= nums[start]; 
+                start++; 
+                windowSize = end - start + 1;  
+            }
+
+
+            maxFrequency = max(maxFrequency,windowSize); 
+        }
+
+        return maxFrequency; 
+    }
+};

@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+bool isArmstrong(int num) {
+    // Write your code here
+    int numOfDigits = 0; 
+    int sample = num; 
+    while(sample != 0){
+        numOfDigits ++; 
+        sample = sample/10; 
+    }
+
+    sample = num; 
+    int answer = 0; 
+    while(sample != 0){
+        int digit = sample%10; 
+        answer = answer + pow(digit,numOfDigits); 
+        sample = sample/10; 
+    }
+
+    if(answer == num){
+        return true; 
+    }
+    return false;  
+}

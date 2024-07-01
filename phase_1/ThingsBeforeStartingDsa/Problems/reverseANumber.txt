@@ -1,0 +1,45 @@
+class Solution {
+public:
+
+    int getAns(int x,long long answer){
+        if(x == 0){
+            return answer; 
+        }
+
+        if (answer > INT_MAX || answer < INT_MIN) return 0; 
+        
+
+        int digit = x%10; 
+        answer = answer*10 + digit;
+
+        return getAns(x/10,answer);
+    }
+    
+    int reverse(int x) {
+    // approach 1: using while loop 
+        // long long answer = 0; 
+        // while(x != 0){
+        //     int digit = x%10; 
+        //     answer = (answer*10 + digit); 
+        //     if (answer >INT_MAX || answer < INT_MIN) return 0; 
+        //     x = x/10; 
+        // }
+        // return answer; 
+    
+    // approach 2: using goto statement 
+        // long long answer = 0; 
+        // start: 
+        //     if(x == 0){
+        //         return answer; 
+        //     }
+
+        //     int digit = x%10; 
+        //     answer = answer*10 + digit; 
+        //     if (answer > INT_MAX || answer < INT_MIN) return 0; 
+        //     x = x/10; 
+        // goto start;
+
+    // approach 3: using recursion 
+        return getAns(x,0);  
+    }
+};

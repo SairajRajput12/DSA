@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool threeConsecutiveOdds(vector<int>& arr) {
+
+        // appraoch 1: using sliding windows
+        // int cnt = 0; 
+        // for(int i = 0; i < arr.size(); i ++){
+        //     if(arr[i]%2 == 1){
+        //         cnt ++; 
+        //         if(cnt == 3){
+        //             return true; 
+        //         }
+        //     }
+        //     else{
+        //         cnt = 0; 
+        //     }
+        // }
+
+        // return false; 
+
+
+        // approach 2: using bit manipulation 
+        // for(int i = 0; i <= arr.size()-3; i ++){
+        //     if(arr[i]&1){
+        //         if(arr[i+1]&1){
+        //             if(arr[i+2]&1){
+        //                 return true; 
+        //             }
+        //         }
+        //     }
+        // }
+
+        // return false;
+
+
+        int n = arr.size();
+        // Loop through the array up to the third-to-last element
+        for (int i = 0; i < n - 2; i++) {
+            int product = arr[i] * arr[i + 1] * arr[i + 2];
+            // Check if the product is odd
+            if (product % 2 == 1) return true;
+        }
+        return false;
+
+    }
+};

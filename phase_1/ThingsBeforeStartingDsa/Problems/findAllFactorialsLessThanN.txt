@@ -1,0 +1,51 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function Template for C++
+class Solution {
+  public:
+    vector<long long> factorialNumbers(long long n) {
+        // Write Your Code here
+        /*
+        vector<long long> answer;
+        for(long long i = 1,j=2; i <= n;i*=j, j ++){
+            answer.push_back(i); 
+        }
+        return answer; 
+        */
+        // approach 2: 
+
+        vector<long long> answer; 
+        long long cnt = 1; 
+        long long p = 2; 
+    
+        while(cnt <= n){
+            answer.push_back(cnt); 
+            cnt = cnt*p; 
+            p ++; 
+        }
+        
+        return answer; 
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        long long N;
+        cin >> N;
+        Solution ob;
+        vector<long long> ans = ob.factorialNumbers(N);
+        for (auto num : ans) {
+            cout << num << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
