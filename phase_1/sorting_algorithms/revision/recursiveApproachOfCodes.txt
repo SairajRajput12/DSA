@@ -1,0 +1,100 @@
+//{ Driver Code Starts
+// Initial Template for C++
+
+// C program for implementation of Bubble sort
+#include <bits/stdc++.h>
+#include <stdio.h>
+using namespace std;
+
+// swapping the elements
+void swap(int *xp, int *yp) {
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    // Function to sort the array using bubble sort algorithm.
+    void sort(int nums[],int start,int end){
+        if(start >= end){
+            return; 
+        }
+        
+        for(int j = 0; j < (end-start); j ++){
+            if(nums[j] > nums[j+1]){
+                swap(nums[j],nums[j+1]); 
+            }
+        }
+        
+        sort(nums,start+1,end); 
+    }
+    
+    void sortI(int arr[],int start,int end){
+        if(start >= end){
+            return; 
+        }
+        
+        int j = start-1;
+        int temp = arr[start]; 
+        for(j = start-1; j >= 0; j --){
+            if(temp < arr[j]){
+                arr[j+1] = arr[j]; 
+            }
+            else{
+                break; 
+            }
+        }
+        
+        arr[j+1] = temp; 
+        sortI(arr,start+1,end); 
+    }
+    
+    
+    void bubbleSort(int arr[], int n) {
+        // Your code here
+        
+        // using bubble sort recursive version 
+        // sort(arr,1,n);  
+        
+        // using insertion sort recursive version 
+        sortI(arr,1,n); 
+    }
+};
+
+
+//{ Driver Code Starts.
+
+/* Function to print an array */
+void printArray(int arr[], int size) {
+    int i;
+    for (i = 0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+// Driver program to test above functions
+int main() {
+    int arr[1000], n, T, i;
+
+    scanf("%d", &T);
+
+    while (T--) {
+
+        scanf("%d", &n);
+
+        for (i = 0; i < n; i++)
+            scanf("%d", &arr[i]);
+
+        Solution ob;
+
+        ob.bubbleSort(arr, n);
+        printArray(arr, n);
+    }
+    return 0;
+}
+// } Driver Code Ends

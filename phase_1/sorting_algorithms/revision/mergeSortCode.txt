@@ -1,0 +1,263 @@
+// class Solution {
+
+//     int partition(vector<int> &arr,int start,int end){
+//         // step 1: get the pivot index of the element 
+//         int pivotIndex = 0; 
+//         for(int i = (start+1); i <= end; i ++){
+//             if(arr[start] >= arr[i]){
+//                 pivotIndex ++; 
+//             }
+//         }
+//         pivotIndex += start; 
+//         swap(arr[pivotIndex],arr[start]); 
+        
+//         int startp = start; 
+//         int endp = end; 
+//         while(startp < pivotIndex and endp > pivotIndex){
+//             while(arr[startp] < arr[pivotIndex]){
+//                 startp ++; 
+//             }
+
+//             while(arr[endp] > arr[pivotIndex]){
+//                 endp --; 
+//             }
+
+//             if(startp < pivotIndex and endp > pivotIndex){
+//                 swap(arr[startp],arr[endp]); 
+//                 startp ++; 
+//                 endp --; 
+//             }
+//         }
+
+//         // now return the pivotIndex 
+//         return pivotIndex; 
+//     }
+
+//     void quickSort(vector<int> &nums,int start,int end)
+//     {
+//         if(start >= end){
+//             // base case
+//             return; 
+//         }
+
+//         // get pivotIndex of the initial element 
+//         int pivotIndex = partition(nums,start,end); 
+//         // now create the partition's of the array from start to the pivotIndex-1 and pivotIndex+1 to end using 2 pointer approach 
+//         quickSort(nums,start,pivotIndex-1); 
+//         quickSort(nums,pivotIndex+1,end);
+//     }
+
+//     void sort(vector<int> &nums){
+//         quickSort(nums,0,nums.size()-1); 
+//     }
+// public:
+//     vector<int> sortArray(vector<int>& nums) {
+//         sort(nums); 
+//         return nums; 
+//     }
+// };
+
+
+
+class Solution {
+private: 
+    void heapify(vector<int> &nums,int i,int j){
+        int largest = i; 
+        int leftChild = 2*i + 1; 
+        int rightChild = 2*i + 2; 
+
+        if(leftChild < j and nums[largest] < nums[leftChild]){
+            largest = leftChild; 
+        }
+
+        if(rightChild < j and nums[largest] < nums[rightChild]){
+            largest = rightChild; 
+        }
+
+        if(largest != i){
+            swap(nums[largest],nums[i]); 
+            heapify(nums,largest,j); 
+        }
+    }
+
+    void merge(vector<int> &nums,int start,int end,int mid)
+    {
+        int len = end - start + 1; 
+        mid = (end + start)/2;
+        int arr1[mid-start+1]; 
+        int arr2[end-mid]; 
+
+        int j = 0;
+        int i = start;  
+        while(j < (mid-start+1))
+        {
+            arr1[j] = nums[i]; 
+            i ++; 
+            j ++; 
+        }
+        j = 0; 
+        i = mid+1; 
+        while(j < (end-mid))
+        {
+            arr2[j] = nums[i]; 
+            i ++; 
+            j ++; 
+        }
+
+        int begin1 = 0; 
+        int begin2 = 0; 
+        int index = start; 
+
+        while((begin1 < mid-start+1) and (begin2 < end-mid)){
+            if(arr1[begin1] < arr2[begin2]){
+                nums[index] = arr1[begin1]; 
+                index ++; 
+                begin1 ++; 
+            }       
+            else{
+                nums[index] = arr2[begin2]; 
+                begin2 ++; 
+                index ++; 
+            }
+        }
+         
+        while(begin1 < (mid-start+1)){
+            nums[index] = arr1[begin1]; 
+            begin1 ++; 
+            index ++; 
+        }
+
+        while(begin2 < (end-mid)){
+            nums[index] = arr2[begin2]; 
+            begin2 ++; 
+            index ++; 
+        }
+
+    }
+
+    void mergeSort(vector<int> &nums,int start,int end)
+    {
+        if(start >= end){
+            return; 
+        }
+
+        int mid = start + (end-start)/2; 
+        mergeSort(nums,start,mid); 
+        mergeSort(nums,mid+1,end); 
+        merge(nums,start,end,mid); 
+    }
+
+    void sortArra(vector<int> &nums){
+        int start = 0; 
+        int end = nums.size()-1; 
+        mergeSort(nums,start,end); 
+    }
+
+    void merge1(vector<int> &nums,int start,int end,int mid){
+        vector<int> n1; 
+        vector<int> n2; 
+
+        int ind = start; 
+        while(ind <= mid){
+            n1.push_back(nums[ind]);
+            ind ++;  
+        }
+        ind = mid+1; 
+        while(ind <= end){
+            n2.push_back(nums[ind]); 
+            ind ++; 
+        }
+
+        int index = start;
+        int start1 = 0, end1 = n1.size();
+        int start2 = 0, end2 = n2.size();
+        
+        // Merge the two subarrays back into the main array
+        while (start1 < end1 && start2 < end2) {
+            if (n1[start1] <= n2[start2]) {
+                nums[index] = n1[start1];
+                ++start1;
+            } else {
+                nums[index] = n2[start2];
+                ++start2;
+            }
+            ++index;
+        }
+
+
+        while (start1 < end1) {
+            nums[index] = n1[start1];
+            ++start1;
+            ++index;
+        }
+
+        // Copy the remaining elements of n2, if any
+        while (start2 < end2) {
+            nums[index] = n2[start2];
+            ++start2;
+            ++index;
+        }
+
+    }
+
+    void MS(vector<int> &nums,int start,int end){
+        if(start >= end){
+            return; 
+        }
+        int mid = start + (end-start)/2; 
+        MS(nums,start,mid); 
+        MS(nums,mid+1,end); 
+        merge1(nums,start,end,mid); 
+    }
+
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        // steps: 
+        // step 1: first check whether the size of given array is 0 or not 
+        // if yes then return array as it is 
+        // if(nums.size() == 0){
+        //     cerr << "you have entered the empty elemenet" << endl; 
+        //     return nums; 
+        // }
+
+        // // step 2: now convert the normal heap into the  max heap  
+        // int size = nums.size(); 
+        // for(int i = (size)/2; i >= 0; i --){
+        //     heapify(nums,i,size); 
+        // }
+
+        // // step 3: now swap the array with the last element and build max heap upto the index of that last element. 
+
+        // for(int i = nums.size()-1; i >= 0; i --){
+        //     swap(nums[i],nums[0]); 
+        //     heapify(nums,0,i); 
+        // }
+        
+        // return nums; 
+
+        // merge sort approach: 
+    
+        // insertion sort: 
+        // for(int i = 1; i < nums.size(); i ++){
+        //     int start = nums[i]; 
+        //     int j = i-1; 
+        //     // finding correct position
+        //     while (j >= 0 && start < nums[j]) {
+        //         nums[j + 1] = nums[j];
+        //         j--;
+        //     }
+
+        //     nums[j+1] = start; 
+        // }
+
+        // return nums; 
+        // sortArra(nums); 
+        // return nums; 
+
+
+        // revising insertion sort function 
+        MS(nums,0,nums.size()-1);
+        return nums; 
+    }
+
+};
