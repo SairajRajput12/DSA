@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int minDifference(vector<int>& nums) {
+        // you are given nums array 
+        // in one move you can change any value to any value. 
+        // return min difference between largest value and smallest value of nums after performing at most 3 moves. 
+
+        if (nums.size() <= 4) {
+            return 0;
+        }
+
+        // Sort the array to easily find the smallest and largest elements
+        sort(nums.begin(), nums.end());
+
+        int n = nums.size();
+        // We consider the minimum difference by changing at most 3 elements
+        int result = INT_MAX;
+
+        // Consider the first 3 largest elements and the first 3 smallest elements
+        for (int i = 0; i <= 3; ++i) {
+            result = min(result, nums[n - 4 + i] - nums[i]);
+        }
+
+        return result;
+ 
+    }
+};
+
+// approach 2: 

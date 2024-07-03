@@ -1,0 +1,65 @@
+#include <bits/stdc++.h> 
+int findSecondLargest(int n, vector<int> &arr)
+{
+    // Write your code here.
+
+    // set<int> st; 
+    // for(auto it : arr){
+    //     st.insert(it); 
+    // }
+
+    // vector<int> temp; 
+    // for(auto it : st){
+    //     temp.push_back(it); 
+    // }
+
+    // if(temp.size() == 1){
+    //     return -1; 
+    // }
+    // return temp[temp.size()-2]; 
+
+    // approach 2: 
+    // sort(arr.begin(),arr.end(),greater<int>()); 
+    // for(int i = 1; i < arr.size(); i ++){
+    //     if(arr[i] != arr[i-1]){
+    //         return arr[i]; 
+    //     }
+    // }
+
+    // return -1;
+
+    // approach 3: 
+
+    // logical correction i should first know largest element.
+    // int largest = INT_MIN, secondLargest = INT_MIN;
+
+    // // Find the largest element.
+    // for (int i = 0; i < n; i++) {
+    //     largest = max(largest, arr[i]);
+    // }
+
+    // for(int i = 0; i < arr.size(); i ++){
+    //     if(arr[i] != largest){
+    //         secondLargest = max(secondLargest,arr[i]); 
+    //     }
+    // }
+
+    // return (secondLargest == INT_MIN ? -1 : secondLargest); 
+
+
+    // approach 4: 
+    int largest = INT_MIN,secondLargest = INT_MIN; 
+    for(int i = 0; i < arr.size(); i ++){
+        if(arr[i] > largest){
+            secondLargest = largest; 
+            largest = arr[i]; 
+        }
+        else if(arr[i] > secondLargest and arr[i] != largest){
+            secondLargest = arr[i]; 
+        }
+    }
+
+    return (secondLargest == INT_MIN ? -1 : secondLargest); 
+
+    
+}
