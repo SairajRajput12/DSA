@@ -1,0 +1,57 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        // gives MLE: 
+        // if(nums.size() <= 1){
+        //     return; 
+        // }
+
+
+        // vector<int> answer; 
+        // for(int i = 0; i < nums.size(); i ++){
+        //     if(nums[i] != 0){
+        //         answer.push_back(nums[i]);
+        //     }
+        // }
+
+        // for(int i = 0; i < answer.size(); i ++){
+        //     cout << answer[i] << " "; 
+        // }
+
+        // for(int i = 0; i <= (nums.size()-answer.size()); i ++){
+        //     answer.push_back(0); 
+        // }
+
+        // nums = answer; 
+
+        // approach 2: TLE
+        // int ind = nums.size(); 
+        // for(int i = 0; i < nums.size(); i ++){
+        //     if(nums[i] == 0){
+        //         int j = (i+1); 
+        //         while(j < nums.size() and nums[j] == 0){
+        //             j ++; 
+        //         }
+
+        //         for(int i = 0; i < nums.size(); i ++){
+        //             cout << nums[i] << " "; 
+        //         }
+        //         cout << endl; 
+
+        //         if(j < nums.size()){
+        //             swap(nums[i],nums[j]); 
+        //         }
+        //     }
+        // }
+
+
+        // approach 3: 
+        int non_zero = 0; 
+        for(int i = 0; i < nums.size(); i ++){
+            if(nums[i] != 0){
+                swap(nums[i],nums[non_zero]); 
+                non_zero ++; 
+            }
+        }
+    }
+};
