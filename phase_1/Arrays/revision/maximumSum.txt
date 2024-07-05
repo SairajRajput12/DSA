@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& arr) {
+        // priority_queue<int> maxHeap; 
+        // int k = 3;
+        // // vector<int> arr = {1,2,6,4,3}; 
+        // for(int i = 0; i < arr.size(); i ++){
+        //     int sum = 0; 
+        //     for(int j = i; j < arr.size(); j ++){
+        //         sum += arr[j];  
+        //         maxHeap.push(sum); 
+        //         // cout << "max heap" << endl; 
+        //     }
+        // }
+
+        // return maxHeap.top(); 
+
+        // sliding window appraoch 
+        // we cannot use dynmaic programmign beacuse we have to find subarray not the subsequence 
+        // int maxi = INT_MIN; // maximum sum
+        // int n = arr.size();
+        // for (int i = 0; i < n; i++) {
+        //     int sum = 0;
+        //     for (int j = i; j < n; j++) {
+        //         // current subarray = arr[i.....j]
+
+        //         //add the current element arr[j]
+        //         // to the sum i.e. sum of arr[i...j-1]
+        //         sum += arr[j];
+
+        //         maxi = max(maxi, sum); // getting the maximum
+        //     }
+        // }
+
+        // return maxi;
+
+
+        long long maxi = INT_MIN; 
+        long long sum = 0; 
+        for(int i = 0; i < arr.size(); i ++){
+            sum += arr[i]; 
+
+            if(sum > maxi){
+                maxi = sum; 
+            }
+
+            if(sum < 0){
+                sum = 0; 
+            }
+        }
+        return maxi; 
+    }
+};
