@@ -1,0 +1,103 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+bool valid(string str);
+int main()
+{
+    int t;
+    cin>>t;
+    cin.ignore();
+    while(t--)
+    {
+        string str;
+        getline(cin,str);
+        cout<<valid(str)<<endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
+
+class Stack{
+public: 
+    int top; 
+    int size; 
+    char *arr; 
+    
+    Stack(int size){
+        this -> size = size; 
+        arr = new char[size]; 
+        this -> top = -1; 
+    }
+    
+    void push(char val){
+        if((size-top) > 1){
+            // means space is available
+            arr[++top] = val; 
+        }
+        else{
+            // cerr << "stack overflow has occured" << endl;
+        }
+    }
+    
+    void pop(){
+        if(top == -1){
+            // cerr << "Stack underflow has occured" << endl; 
+            return;  
+        }
+        
+        top --; 
+    }
+    
+    char peek(){
+        if(top == -1){
+            // cerr << "stack is empty" << endl;
+            return -1; 
+        }
+        else{
+            return arr[top]; 
+        }
+    }
+    
+    bool isEmpty(){
+        return (top == -1); 
+    }
+};
+
+
+bool valid(string s)
+{
+    // code here
+    int size = s.size(); 
+    Stack st(size);
+    
+    int start = 0; 
+    while(start < s.size()){
+        if(s[start] == '(' or s[start] == '[' or s[start] == '{')
+        {
+            st.push(s[start]); 
+        }
+        else if((s[start] == ')' and st.peek() == '(') or (s[start] == ']' and st.peek() == '[') or (s[start] == '}' and st.peek() == '{'))
+        {
+            st.pop();    
+        }
+        else{
+            return false; 
+        }
+        start ++; 
+    }
+    // cout << "outlsie " << endl;
+    
+    return (st.isEmpty());
+}
+
+
+
+
+
+
+
+
+
+
+
+

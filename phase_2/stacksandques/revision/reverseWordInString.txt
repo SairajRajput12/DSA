@@ -1,0 +1,179 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        // eht yks si eulb 
+        // blue is sky the 
+
+        //  olleh dlorw 
+        // world hello 
+
+
+        // appraoch 1: 
+        // 1. first reverse the each words 
+        // 2. reverse whole statement
+        
+        // if (s.empty()) {
+        //     return s;
+        // }
+
+
+        // int start = 0; 
+        // while(s[start] == ' '){
+        //     start ++; 
+        // }
+
+        // int end = s.size()-1; 
+
+        // while(s[end] == ' '){
+        //     end --; 
+        // }
+
+        // int length = end - start + 1; // calculating the length of the actual substring
+
+        // s = s.substr(start, length); // we got actual substring
+
+        // // means now the space wallah case is handled
+        // string ans = "";
+        // string word = "";
+        
+        // for (int i = 0; i < s.size(); i++) {
+        //     if (s[i] != ' ') {
+        //         word = s[i] + word;
+        //     } else {
+        //         ans += word + ' '; // stored actual string with spaces in new string
+        //         word = "";
+        //     }
+        // }
+
+        // // Append the last word
+        // ans += word;
+        // reverse(ans.begin(),ans.end()); 
+        
+
+        // // now do some processing 
+        // string ans1 = "";
+        // bool spaceEncountered = false;
+
+        // for (int i = 0; i < ans.size(); i++) {
+        //     if (ans[i] == ' ') {
+        //         if (!spaceEncountered) {
+        //             ans1 += ' ';
+        //             spaceEncountered = true;
+        //         }
+        //     } else {
+        //         ans1 += ans[i];
+        //         spaceEncountered = false;
+        //     }
+        // }
+
+        // return ans1;
+
+        // time complexity: O(N)
+        // space complexity: O(N)
+
+        if(s.size() == 0){
+            return s; 
+        }
+
+        int start = 0, end = s.size()-1; 
+        while(s[start] == ' '){
+            start ++; 
+        }
+
+        while(s[end] == ' '){
+            end --; 
+        }
+
+        int len = end - start + 1; 
+        s = s.substr(start,len); 
+        string ans = ""; 
+        string word = ""; 
+        for(char c : s){
+            if(c != ' '){
+                word = c + word; 
+            }
+            else{
+                ans += word; 
+                ans += ' '; 
+                word = ""; 
+            }
+        } 
+
+        ans += word; 
+        reverse(ans.begin(),ans.end()); 
+        string ans1 = ""; 
+        bool isSpaceEncounter = false; 
+        for(int i = 0; i < ans.size(); i ++){
+            if(ans[i] == ' '){
+                if(!isSpaceEncounter){
+                    ans1 += ' '; 
+                    isSpaceEncounter = true; 
+                }
+            }
+            else{
+                ans1 += ans[i];
+                isSpaceEncounter = false; 
+            }
+        }
+        return ans1; 
+    }
+};
+
+
+/*
+if (s.empty()) {
+            return s;
+        }
+
+
+        int start = 0; 
+        while(s[start] == ' '){
+            start ++; 
+        }
+
+        int end = s.size()-1; 
+
+        while(s[end] == ' '){
+            end --; 
+        }
+
+        int length = end - start + 1; // calculating the length of the actual substring
+
+        s = s.substr(start, length); // we got actual substring
+
+        // means now the space wallah case is handled
+        string ans = "";
+        string word = "";
+        
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] != ' ') {
+                word = s[i] + word;
+            } else {
+                ans += word + ' '; // stored actual string with spaces in new string
+                word = "";
+            }
+        }
+
+        // Append the last word
+        ans += word;
+        reverse(ans.begin(),ans.end()); 
+        
+
+        // now do some processing 
+        string ans1 = "";
+        bool spaceEncountered = false;
+
+        for (int i = 0; i < ans.size(); i++) {
+            if (ans[i] == ' ') {
+                if (!spaceEncountered) {
+                    ans1 += ' ';
+                    spaceEncountered = true;
+                }
+            } else {
+                ans1 += ans[i];
+                spaceEncountered = false;
+            }
+        }
+
+        return ans1;
+*/
