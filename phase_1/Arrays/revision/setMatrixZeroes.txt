@@ -1,0 +1,46 @@
+class Solution {
+public:
+    void solve(vector<vector<int>>& matrix,int row,int col){
+        int r = row,c = col; 
+        while(r >= 0){
+            matrix[r][col] = 0; 
+            r --; 
+        }
+
+        r = row; 
+        while(r < matrix.size()){
+            matrix[r][col] = 0; 
+            r ++; 
+        }
+
+        while(c >= 0){
+            matrix[row][c] = 0; 
+            c --; 
+        }
+
+        c = col;  
+        while(c < matrix[0].size()){
+            matrix[row][c] = 0; 
+            c ++; 
+        }
+
+    }
+
+
+    void setZeroes(vector<vector<int>>& M) {
+        queue<pair<int,int>> q; 
+        for(int i = 0; i < M.size(); i ++){
+            for(int j = 0; j < M[i].size(); j ++){
+                if(M[i][j] == 0){
+                    q.push({i,j}); 
+                }
+            }
+        }
+
+        while(!q.empty()){
+            auto f = q.front(); 
+            q.pop(); 
+            solve(M,f.first,f.second); 
+        }
+    }
+};

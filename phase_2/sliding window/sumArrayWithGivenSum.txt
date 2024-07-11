@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        // sort(nums.begin(),nums.end()); 
+        // int cnt = 0; 
+        // for(int i = 0; i < nums.size(); i ++){
+        //     int sum = nums[i]; 
+            
+        //     if(sum == k) 
+        //         cnt++;
+             
+        //     for(int j = (i+1);j < nums.size(); j ++){
+        //         sum += nums[j]; 
+        //         if(sum == k){
+        //             cnt ++; 
+        //         }
+        //     }
+        // }
+        // return cnt; 
+    
+        // approach 2: using stacks 
+        // stack<int> st; 
+        // for (int i = 0; i < nums.size(); ++i) {
+        //     st.push(i);
+        // }
+
+        // int cnt = 0;
+        // int remainingSum = k;
+
+        // // Process the stack
+        // while (!st.empty()) {
+        //     if (remainingSum == 0) {
+        //         ++cnt;
+        //         remainingSum = k;
+        //     } else if (remainingSum < 0) {
+        //         remainingSum = k;
+        //     } else {
+        //         remainingSum -= nums[st.top()];
+        //         st.pop();
+        //     }
+        // }
+
+        // return cnt;
+    
+        // appraoch 3: using hashtable 
+        int count = 0, sum = 0; 
+        int n = nums.size();
+        unordered_map<int,int> mp; 
+        for(int i = 0; i < n; i ++){
+            sum += nums[i]; 
+
+            if(sum == k){
+                count ++; 
+            }
+            if(mp.find(sum-k) != mp.end()){
+                count += mp[sum-k]; 
+            }
+
+            mp[sum] ++; 
+        }
+
+        return count;
+    }
+}; 
+

@@ -1,0 +1,88 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution{
+    public:
+    int lenOfLongSubarr(int A[],  int N, int K) 
+    { 
+        // Complete the function
+        // 10 , 5 , 2 , 7 , 1 , 9 
+        // sum = 10 , maxLen = 0. um = {{10,0}}
+        // sum = 15 , maxLen = 2. um = {{10,0},{15,1}}. 
+        // sum = 17 , maxLen = 2. um = {{10,0},{15,1},{17,2}}.  
+        // sum = 24 , maxLen = 2. um = {{10,0},{15,1},{17,2},{24,3}}. 
+        // sum = 25 , maxLen = 2. um = {{10,0},{15,1},{17,2},{24,3},{25,4}}.
+        // now diff = 25 - 15 = 10 found. maxLen = 4 - 0 = 4. 
+        // sum = 34 , maxLen = 4, um = {{10,0},{15,1},{17,2},{24,3},{25,4},{34,5}} 
+        // now diff = 34 - 15 = 19. 
+        // 10 15 17 24 25 34
+        
+        // answer is 19. 
+        
+        // algorithm 
+        // store all the sum of the map with sum and index pair. 
+        // if the remaining element from sum and k is found then compare in map than return the index. 
+        // else add in map. 
+        
+        // unordered_map<int,int> mp; 
+        // long long sum = 0,maxLen = 0; 
+        // for(int i = 0; i < N; i ++){
+        //     sum += A[i]; 
+        //     if(mp.find(sum) == mp.end()){
+        //         mp[sum] = i; 
+        //     }
+            
+        //     if(sum == K){
+        //         maxLen = (i+1); 
+        //     }
+            
+        //     if(mp.find(sum-K) != mp.end()){
+        //         maxLen = max(maxLen,(i-mp[sum-K])); 
+        //     }
+        // }
+        // return maxLen;
+        
+        int i = 0, j = 0, ans = 0, sum = 0; 
+        while(j < N){
+            sum += A[j]; 
+            
+            while (sum > K && i <= j) {
+                sum -= A[i];
+                i++;
+            }
+            
+            if(sum == K){
+                ans = max(ans,j-i+1); 
+            }
+            
+            j ++; 
+        }
+        return ans; 
+    } 
+};
+
+//{ Driver Code Starts.
+
+int main() {
+	//code
+	
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n, k;
+	    cin>> n >> k;
+	    int a[n];
+	    
+	    for(int i=0;i<n;i++)
+	        cin>>a[i];
+	   Solution ob;
+	   cout << ob.lenOfLongSubarr(a, n , k)<< endl;
+	    
+	}
+	
+	return 0;
+}
+// } Driver Code Ends

@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        // from time complexity i will require to use the binary search approach 
+        // 0 1 2 3 4 5 6 7 8 
+        // 1,1,2,3,3,4,4,8,8
+        int left = 0, high = nums.size()-1;
+        while(left < high){
+            int mid = (left + high)/2; 
+            if(mid%2 == 1){
+                mid --; 
+            }
+
+            if(nums[mid] == nums[mid+1]){
+                left = mid + 2; 
+            }
+            else{
+                high = mid; 
+            }
+        }
+
+        return nums[left]; 
+    }
+};

@@ -1,0 +1,71 @@
+//{ Driver Code Starts
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+pair<int, int> getFloorAndCeil(int arr[], int n, int x);
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, x;
+        cin >> n >> x;
+        int arr[n];
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+        auto ans = getFloorAndCeil(arr, n, x);
+        cout << ans.first << " " << ans.second << "\n";
+    }
+    return 0;
+}
+
+// } Driver Code Ends
+
+
+pair<int, int> getFloorAndCeil(int arr[], int n, int x) {
+    // code here
+    // int mini= INT_MIN, maxi=INT_MAX;
+    // for(int i=0;i<n;i++){
+    //     if(arr[i]<=x){
+    //         mini= max(mini,arr[i]);
+    //     }
+    //     if(arr[i]>=x){
+    //         maxi= min(maxi,arr[i]);
+    //     }
+        
+    // }
+    
+    // if(mini==INT_MIN) mini=-1;
+    // if(maxi==INT_MAX) maxi=-1;
+    // return {mini,maxi};
+    int left = 0, right = n-1, ans1 = -1; 
+    sort(arr,arr+n);
+    while(left <= right){
+        int mid = left + (right - left)/2; 
+        if(arr[mid] <= x){
+            ans1 = arr[mid]; 
+            left = mid + 1; 
+        }
+        else{
+            right = mid - 1; 
+        }
+    }
+    
+    left = 0, right = n-1;
+    int ans2 = -1;
+    while(left <= right){
+        int mid = left + (right-left)/2; 
+        if(arr[mid] >= x){
+            ans2 = arr[mid]; 
+            right = mid - 1; 
+        }
+        else{
+            left = mid + 1; 
+        }
+    }
+    
+    return {ans1,ans2};
+}

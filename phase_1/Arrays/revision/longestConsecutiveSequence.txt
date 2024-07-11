@@ -1,0 +1,31 @@
+class Solution {
+public:
+int n; 
+int answer; 
+int cnt; 
+    int longestConsecutive(vector<int>& nums) {
+        // algorithm: 
+        n = nums.size();
+        if(n == 0){
+            return 0; 
+        }
+        sort(nums.begin(),nums.end()); 
+        cnt = 1; 
+        answer = 1; 
+        for(int i = 1; i < n; i ++){
+            int diff = nums[i] - nums[i-1]; 
+            if(diff == 1){
+                cnt ++; 
+            }
+            else if(diff == 0){
+                continue; 
+            }
+            else{
+                cnt = 1; 
+            }
+
+            answer = max(cnt,answer);
+        }
+        return answer; 
+    }
+};

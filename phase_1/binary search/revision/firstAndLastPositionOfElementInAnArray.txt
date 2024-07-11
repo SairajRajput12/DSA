@@ -1,0 +1,86 @@
+class Solution {
+    int firstIndex(vector<int> nums,int target,int start,int end,int l){
+        if(start > end){
+            return l; 
+        }
+        int mid = start + (end - start)/2; 
+        if(nums[mid] == target){
+            l = mid; 
+            return firstIndex(nums,target,start,mid-1,l); 
+        }
+
+        else if(nums[mid] > target){
+            return firstIndex(nums,target,start,mid-1,l); 
+        }
+        else{
+            return firstIndex(nums,target,mid+1,end,l); 
+        }
+        
+        return l; 
+    }
+
+    int lastIndex(vector<int>& nums, int low,int high,int target,int r){
+        if(low>high){
+            return r;
+        }
+        int mid=low+(high-low)/2;
+        if (nums[mid]==target){
+            r=mid;             
+            return lastIndex(nums,mid+1,high,target,r);    
+        }
+        else if(nums[mid]<target){
+            return lastIndex(nums,mid+1,high,target,r);
+        }
+        else{
+            return lastIndex(nums,low,mid-1,target,r);
+            
+        }
+        
+        return r;
+    }
+
+
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        // int start=0;
+        // int end=nums.size()-1;
+        // int l=-1,r=-1;
+        // l= firstIndex(nums,target,start,end,l);
+        // r= lastIndex(nums,start,end,target,r);
+        // return {l,r};
+
+        int n = nums.size(); 
+        int left = 0, right = nums.size()-1;
+        int first = -1,last = -1; 
+        while(left <= right){
+            int mid = left + (right - left)/2; 
+            if(nums[mid] == target){
+                first = mid; 
+                right = mid - 1; 
+            }
+            else if(nums[mid] > target){
+                right = mid - 1;
+            }
+            else{
+                left = mid + 1; 
+            }
+        }
+
+
+        left = 0, right = n-1; 
+        while(left <= right){
+            int mid = left + (right-left)/2; 
+            if(nums[mid] == target){
+                last = mid; 
+                left = mid + 1; 
+            }
+            else if(nums[mid] > target){
+                right = mid - 1; 
+            }
+            else{
+                left = mid + 1; 
+            }
+        }
+        return {first,last}; 
+    }
+};

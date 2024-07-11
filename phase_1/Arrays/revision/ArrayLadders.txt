@@ -1,0 +1,122 @@
+//{ Driver Code Starts
+// C++ program to remove recurring digits from
+// a given number
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+
+
+class Solution {
+    // Function to find the leaders in the array.
+  public:
+    vector<int> leaders(int n, int arr[]) {
+        // Code here
+        // vector<int> answer;
+        // for(int i = 0; i < n; i ++){
+        //     bool shouldPush = true; 
+        //     for(int j = (i+1); j < n ; j ++){
+        //         if(arr[j] > arr[i]){
+        //             shouldPush = false; 
+        //         }
+        //     }
+            
+        //     if(shouldPush){
+        //         answer.push_back(arr[i]);
+        //     }
+        // }
+        
+        // return answer;
+        
+        
+        // approach 2: using map 
+        // map<int,int> mp; 
+        // vector<int> answer; 
+        // int index = 0; 
+        // for(int i = 0; i < n; i ++){
+        //     mp[arr[i]] = i; 
+        // }
+        
+        // index = 0; 
+        // for(int i = 0; i < n; i ++){
+        //     int element = arr[i]; 
+        //     auto it1 = mp.rbegin();
+        //     if(it1 -> first <= element){
+        //         answer.push_back(element); 
+        //     }
+            
+            
+        //     // erasing the elements
+        //     auto it2 = mp.find(element); 
+        //     if(it2 != mp.end() and it2 -> second == i){
+        //         mp.erase(it2); 
+        //     }
+            
+        // }
+        // return answer; 
+
+        
+        // int mx=arr[n-1];
+        // vector<int> ans; 
+        // ans.push_back(mx); 
+        
+        // for(int i = n-2; i  >= 0; i --){
+        //     if(arr[i] < mx){
+        //         continue; 
+        //     }
+            
+        //     mx = arr[i]; 
+        //     ans.push_back(mx); 
+        // }
+        
+        // reverse(ans.begin(),ans.end());
+        // return ans;
+        
+        stack<int> st; 
+        st.push(arr[n-1]); 
+        vector<int> answer;
+        answer.push_back(st.top()); 
+        for(int i = (n-2); i >= 0; i --){
+            if(st.top() > arr[i]){
+                continue; 
+            }
+            
+            st.push(arr[i]); 
+            answer.push_back(arr[i]); 
+        }
+        
+        reverse(answer.begin(),answer.end()); 
+        return answer; 
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    long long t;
+    cin >> t; // testcases
+    while (t--) {
+        long long n;
+        cin >> n; // total size of array
+
+        int arr[n];
+
+        // inserting elements in the array
+        for (long long i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+        Solution obj;
+        // calling leaders() function
+        vector<int> v = obj.leaders(n, arr);
+
+        // printing elements of the vector
+        for (auto it = v.begin(); it != v.end(); it++) {
+            cout << *it << " ";
+        }
+
+        cout << endl;
+    }
+}
+
+// } Driver Code Ends
