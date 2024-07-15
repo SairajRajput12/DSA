@@ -1,0 +1,154 @@
+class Solution {
+public:
+
+    void merge(vector<int>& nums,int start,int end){
+        int mid = start + (end-start)/2;
+        int len1 = mid-start+1; 
+        int len2 = end-mid;  
+        vector<int> nums1(len1,0); 
+        vector<int> nums2(len2,0);
+
+        int index = start; 
+        int ind = 0; 
+        while(ind < len1){
+            nums1[ind] = nums[index]; 
+            index ++; 
+            ind ++; 
+        }
+        index = mid+1; 
+        ind = 0; 
+        while(ind < len2){
+            nums2[ind] = nums[index]; 
+            index ++;  
+            ind ++; 
+        }
+
+        index = start; 
+        int start1 = 0,start2 = 0;
+        index = start;  
+        while(start1 < len1 and start2 < len2){
+            if(nums1[start1] > nums2[start2]){
+                nums[index] = nums2[start2]; 
+                start2 ++; 
+                index ++; 
+            }
+            else{
+                nums[index] = nums1[start1]; 
+                index ++; 
+                start1 ++; 
+            }
+        }
+
+        while(start1 < len1){
+            nums[index] = nums1[start1]; 
+            start1 ++; 
+            index ++; 
+        }
+
+        while(start2 < len2){
+            nums[index] = nums2[start2]; 
+            start2 ++; 
+            index ++; 
+        }
+    }
+
+    void solve(vector<int>& nums,int start,int end){
+        if(start >= end){
+            return; 
+        }
+
+        int mid = start + (end-start)/2; 
+        solve(nums,start,mid);
+        solve(nums,mid+1,end); 
+        merge(nums,start,end);  
+    }
+
+    int partition(vector<int> &arr,int low,int end){
+        int cnt = 0;
+        int pivot = arr[low];
+
+        for (int i = low + 1; i <= end; i++) {  // Start from low + 1
+            if (pivot >= arr[i]) {
+                cnt++;
+            }
+        }
+        int pivotIndex = cnt + low;
+        swap(arr[pivotIndex], arr[low]);
+
+        int i = low;
+        int j = end;
+
+        while (i < pivotIndex && j > pivotIndex) {
+            while (i < pivotIndex && arr[i] <= pivot) {  // Compare with pivot
+                i++;
+            }
+
+            while (j > pivotIndex && arr[j] > pivot) {   // Compare with pivot
+                j--;
+            }
+
+            if (i < pivotIndex && j > pivotIndex) {
+                swap(arr[i], arr[j]);
+            }
+        }
+        return pivotIndex;
+    }
+
+
+    void quickSolve(vector<int> &nums,int start,int end){
+        if(start >= end){
+            return; 
+        }
+
+        int p = partition(nums,start,end); 
+        quickSolve(nums,start,p-1); 
+        quickSolve(nums,(p+1),end); 
+    }
+
+
+    void sortColors(vector<int>& nums) {
+        int n = nums.size(); 
+        // selection sort
+        // for(int i = 0; i < nums.size(); i ++){
+        //     int first = i; 
+        //     for(int j = (i+1); j < nums.size(); j ++){
+        //         if(nums[first] > nums[j]){
+        //             int temp = nums[first];
+        //             nums[first] = nums[j]; 
+        //             nums[j] = temp;  
+        //         }
+        //     }
+        // }
+
+
+        // bubble sort 
+        // for(int i = 1; i < n; i ++){
+        //     for(int j = 0; j < (n-i); j ++){
+        //         if(nums[j] > nums[j+1]){
+        //             int temp = nums[j]; 
+        //             nums[j] = nums[j+1]; 
+        //             nums[j+1] = temp; 
+        //         }
+        //     }
+        // }
+
+        // using insertion sort
+        // int i = 0,j  = 0; 
+        // for(i = 0; i < n; i ++){
+        //     int key = nums[i]; 
+        //     for(j = (i-1); j >= 0; j --){
+        //         if(key > nums[j]){
+        //             break; 
+        //         }
+        //         nums[j+1] = nums[j]; 
+        //     }
+        //     nums[j+1] = key; 
+        // }
+
+        // using merge sort
+        // solve(nums,0,n-1); 
+
+        // using quick sort 
+        quickSolve(nums,0,n-1);
+    }
+};

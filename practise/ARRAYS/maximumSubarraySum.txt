@@ -1,0 +1,69 @@
+class Solution {
+public:
+    int getAns(vector<int>& arr,int left,int right){
+        if(left > right){
+            return INT_MIN; 
+        }
+
+        int mid = left + (right - left)/2; 
+
+        int ml = 0,mr = 0; 
+        int lmax = getAns(arr,left,mid-1); 
+        int rmax = getAns(arr,mid+1,right); 
+        int sum = 0; 
+        for(int i = (mid-1); i >= left; i --){
+            sum += arr[i]; 
+            ml = max(sum,ml); 
+        }
+        sum = 0; 
+        for(int i = (mid+1); i <= right; i ++){
+            sum += arr[i]; 
+            mr = max(mr,sum); 
+        }
+
+        return (max(lmax,rmax),ml+mr+arr[mid]); 
+    }
+
+    int maxSubArray(vector<int>& arr) {
+        // approach 1: brute force approach  
+        // priority_queue<int> maxHeap; 
+        // for(int i = 0; i < arr.size(); i ++){
+        //     int sum = 0; 
+        //     for(int j = i; j < arr.size(); j ++){
+        //         sum += arr[j];  
+        //         maxHeap.push(sum); 
+        //         // cout << "max heap" << endl; 
+        //     }
+        // }
+
+        // return maxHeap.top();
+        // SC: O(N^2) 
+        // TC: O(N^2) 
+
+        // approach 2: using dynamic programming 
+        // long long maxi = INT_MIN; 
+        // long long sum = 0; 
+        // int ind = 0; 
+        // while(ind < arr.size()){
+        //     sum += arr[ind];
+
+        //     if(sum > maxi){
+        //         maxi = sum; 
+        //     }
+
+        //     if(sum < 0){
+        //         sum = 0; 
+        //     }
+
+        //     ind ++; 
+        // }
+
+        // return (maxi == INT_MIN ? -1 : maxi);
+
+        // approach 3: using divide and conqueor 
+        return getAns(arr,0,arr.size()-1); 
+
+        
+         
+    }
+};

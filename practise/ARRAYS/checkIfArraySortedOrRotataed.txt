@@ -1,0 +1,89 @@
+class Solution {
+public:
+    bool check(vector<int>& n) {
+        // my algorithm: 
+        // first find the smallest element 
+        // rotate the nums to the opposite direction until smallest element arrives at it's correct place 
+        // check whether it is sorted or not 
+        // There may be duplicates in the original array. 
+
+        // int maxi = INT_MIN; 
+        // int maxIndex = 0; 
+
+        // for(int i = 0 ; i < n.size(); i ++){
+        //     if(maxi < n[i]){
+        //         maxi = n[i]; 
+        //         maxIndex = i; 
+        //     }
+        // }
+
+        // if(maxIndex == (n.size()-1)){
+        //     for(int i = 1; i < n.size(); i ++){
+        //         if(n[i] < n[i-1]){
+        //             return false; 
+        //         }
+        //     }
+
+        //     return true; 
+        // }
+
+        // int k = (maxIndex); 
+        // k = k%n.size(); 
+        // vector<int> rotated;  
+        // for(int i = (n.size()-k); i < n.size(); i ++){
+        //     rotated.push_back(n[i]); 
+        // }
+
+
+        // for(int i = 0; i < (n.size()-k); i ++){
+        //     rotated.push_back(n[i]); 
+        // }
+
+        // for(int i = 0; i < n.size(); i ++){
+        //     cout << rotated[i] << " "; 
+        // }
+        // cout << endl; 
+
+        // for(int i = 1; i < n.size(); i ++){
+        //     if(rotated[i] < rotated[i-1]){
+        //         return false; 
+        //     }
+        // }
+        // return true;
+
+        // int size = n.size();
+        // int min = INT_MAX, minIndex = 0;
+        // for(int i = 0; i < size; i++){
+        //     if(min > n[i]){
+        //         min = n[i];
+        //         minIndex = i;
+        //     }
+        // }
+
+        // if(minIndex == 0){
+        //     return true;
+        // }
+
+        // int prev = n[minIndex];
+        // for(int i = (minIndex+1); i != minIndex; i = (i+1) % size){
+        //     if(prev > n[i]){
+        //         return false;
+        //     }
+        //     cout << prev << " " << n[i] << endl;
+        //     prev = n[i];
+        // }
+        // return true;
+
+        // break point ka logic lagana chahiye tha gadhe kahike 
+        int size = n.size(); 
+        int cnt = 0; 
+        for(int i = 0; i < size; i ++){
+            if(n[i] > n[(i+1)%size]){
+                cnt ++; 
+            }
+        }
+
+        return (cnt <= 1); 
+
+    }
+};
