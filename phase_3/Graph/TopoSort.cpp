@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#include <bits/stdc++.h> 
-
 
 void solve(int node,int visited[],stack<int> &st,vector<int> arr[]){
     visited[node] = 1; 
