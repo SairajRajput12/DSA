@@ -1,0 +1,58 @@
+class Solution {
+    int solve(vector<int>& nums,int target,int ans,int start,int end){
+        if(start >= end){
+            return nums[start] >= target ? start : start+ 1; 
+        }
+
+        int mid = start + (end - start)/2; 
+        if(nums[mid] > target){
+            return solve(nums,target,ans,start,mid-1); 
+        }
+        else{
+            ans = mid; 
+            return solve(nums,target,ans,mid+1,end); 
+        }
+        return ans; 
+    }
+
+    int recursivePractise(vector<int> nums,int target,int ans,int start,int end){
+        if(start >= end){
+            return nums[start] >= target ? start : start+ 1; 
+        }
+        int mid = start + (end-start)/2; 
+        if(nums[mid] > target){
+            return recursivePractise(nums,target,ans,start,mid-1); 
+        }
+        else{
+            ans = mid; 
+            return recursivePractise(nums,target,ans,mid+1,end); 
+        } 
+        return ans; 
+    }
+
+    int practise(vector<int> &nums,int target,int start,int end){
+        int mid = start + (end-start)/2; 
+        int answer = 0; 
+        while(start <= end){
+            mid = start + (end-start)/2; 
+            if(target > nums[mid]){
+                start = mid + 1; 
+            }
+            else if(target == nums[mid]){
+                return mid;  
+            }
+            else{
+                end = mid-1; 
+            }
+        }
+        return start; 
+    }
+
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        // return solve(nums,target,0,0,nums.size()-1); 
+        // return lower_bound(nums.begin(), nums.end(), target) - nums.begin();
+        // return practise(nums,target,0,nums.size()-1); 
+        return recursivePractise(nums,target,0,0,nums.size()-1); 
+    }
+};

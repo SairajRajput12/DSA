@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void solve(vector<vector<int>>& matrix,int row,int col){
+        int r = row,c = col; 
+        while(r >= 0){
+            matrix[r][col] = 0; 
+            r --; 
+        }
+
+        r = row; 
+        while(r < matrix.size()){
+            matrix[r][col] = 0; 
+            r ++; 
+        }
+
+        while(c >= 0){
+            matrix[row][c] = 0; 
+            c --; 
+        }
+
+        c = col;  
+        while(c < matrix[0].size()){
+            matrix[row][c] = 0; 
+            c ++; 
+        }
+
+    }
+
+
+    void makeIt(int r,int c,vector<vector<int>>& m){
+        int rc = r; 
+        int cc = c; 
+
+        // making zero to the right 
+        while(cc < m[0].size()){
+            m[rc][cc] = 0; 
+            cc ++; 
+        }
+
+        cc = c; 
+        while(cc >= 0){
+            m[rc][cc] = 0; 
+            cc --; 
+        }
+
+        cc = c; 
+        while(rc < m.size()){
+            m[rc][cc] = 0; 
+            rc ++; 
+        }
+        rc = r; 
+        while(rc >= 0){
+            m[rc][cc] = 0; 
+            rc --; 
+        }
+    }
+
+    void setZeroes(vector<vector<int>>& M) {
+        queue<pair<int,int>> q; 
+        for(int i = 0; i < M.size(); i ++){
+            for(int j = 0; j < M[0].size(); j ++){
+                if(M[i][j] == 0){
+                    q.push({i,j}); 
+                }
+            }
+        }
+
+        while(!q.empty()){
+            auto it = q.front(); 
+            q.pop();
+            makeIt(it.first,it.second,M);
+        }
+    }
+};

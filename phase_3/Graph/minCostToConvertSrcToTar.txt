@@ -1,0 +1,119 @@
+class Solution {
+public:
+    void FloydWarshall(vector<vector<long long>> &adj,vector<char> org,vector<char> &chng,vector<int> cost){
+        // first fill the matrix 
+        for(int i = 0; i < org.size(); i ++){
+            char from = org[i]; 
+            char to = chng[i]; 
+            adj[from-'a'][to-'a'] = min((long long)cost[i],adj[from-'a'][to-'a']); 
+        }
+
+        // now apply floyd warshal algorithm
+        for(int k = 0; k < 26; k ++){
+            for(int i = 0; i < 26; i ++){
+                for(int j = 0; j < 26; j ++){
+                    adj[i][j] = min(adj[i][j],adj[i][k]+adj[k][j]); 
+                }
+            }
+        }
+    }
+
+    void djktras(char ch,unordered_map<char,vector<pair<char,int>>> &adj,vector<vector<int>> &costMatrix){
+        priority_queue<pair<int,char>,vector<pair<int,char>>,greater<pair<int,char>>> pq;
+        pq.push({0,ch}); 
+        while(!pq.empty()){
+            int d        = pq.top().first;
+            char adjNode = pq.top().second;
+            pq.pop();
+
+            for(auto &it : adj[adjNode]) {
+                char adjNode = it.first;
+                int cost      = it.second;
+
+                if(costMatrix[ch - 'a'][adjNode - 'a'] > d + cost) {
+                    costMatrix[ch - 'a'][adjNode - 'a'] = d + cost;
+                    pq.push({d + cost, adjNode});
+                }
+            }
+
+        } 
+    }
+
+    long long minimumCost(string src, string tar, vector<char>& org, vector<char>& chng, vector<int>& cost) {
+        // long long ans=0;
+        // int n=org.size(),m=src.size();
+        
+        // vector<vector<long long>>dis(26,vector<long long>(26,LLONG_MAX));
+        
+        // for(int i=0;i<n;++i){
+        //     dis[org[i]-'a'][chng[i]-'a']=min(1LL*cost[i],dis[org[i]-'a'][chng[i]-'a']);
+        // }
+        
+        // for(int i=0;i<26;++i){
+        //     dis[i][i]=0LL;
+        // }
+        
+        
+        // for(int via=0;via<26;++via){
+        //     for(int i=0;i<26;++i){
+        //         for(int j=0;j<26;++j){
+        //             if(dis[i][via]!=LLONG_MAX and dis[via][j]!=LLONG_MAX){
+                    
+        //             dis[i][j]=min(dis[i][j],dis[i][via]+dis[via][j]);
+        //         }
+        //     }
+        //     }
+        // }
+         
+        
+        // for(int i=0;i<m;++i){
+        //     if(src[i]==tar[i])continue;
+        //     if(dis[src[i]-'a'][tar[i]-'a']==LLONG_MAX)return -1;
+        //     ans+=dis[src[i]-'a'][tar[i]-'a'];
+        // }
+        // return ans;
+        // vector<vector<long long>> adj(26,vector<long long> (26,INT_MAX)); 
+        // FloydWarshall(adj,org,chng,cost); 
+        // long long ans = 0; 
+        // for(int i = 0; i < src.size(); i ++){
+        //     if(src[i] == tar[i]){
+        //         continue; 
+        //     }
+
+        //     if(adj[src[i]-'a'][tar[i]-'a'] == INT_MAX){
+        //         return -1; 
+        //     }
+
+        //     ans += adj[src[i]-'a'][tar[i]-'a']; 
+        // }
+            
+        // return ans;
+
+        unordered_map<char,vector<pair<char,int>>> mp; 
+        for(int i = 0; i < org.size(); i ++){
+            char from = org[i]; 
+            char to = chng[i]; 
+            mp[from].push_back({to,cost[i]}); 
+        }
+
+        vector<vector<int>> costMatrix(26,vector<int>(26,INT_MAX)); 
+        for(int i = 0; i < src.size(); i ++){
+            char ch = src[i]; 
+            djktras(ch,mp,costMatrix); 
+
+        }
+        long long ans = 0; 
+        for(int i = 0; i < src.size(); i ++){
+            if(src[i] == tar[i]){
+                continue; 
+            }
+
+            if(costMatrix[src[i]-'a'][tar[i]-'a'] == INT_MAX){
+                return -1; 
+            }
+
+            ans += costMatrix[src[i]-'a'][tar[i]-'a']; 
+        }
+        return ans; 
+    }
+};
