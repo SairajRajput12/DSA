@@ -1,0 +1,109 @@
+class Solution {
+public:
+    bool isValid(vector<int> &ds){
+        // Check if the triplet is either strictly increasing or strictly decreasing
+        return (ds[0] < ds[1] && ds[1] < ds[2]) || (ds[0] > ds[1] && ds[1] > ds[2]);
+    }
+
+     string createKey(int ind, vector<int> &ds) {
+        string key = to_string(ind) + ":";
+        for (int num : ds) {
+            key += to_string(num) + ",";
+        }
+        return key;
+    }
+
+    // using recursion 
+    int solve(vector<int> &rating,int ind,vector<int> &ds,unordered_map<string,int> &memo){
+        if(ds.size() == 3){
+            if(isValid(ds)){
+                return 1; 
+            }
+            return 0; 
+        }
+
+        if(ind >= rating.size()){
+            return 0; 
+        }
+
+        string key = createKey(ind, ds);
+        if (memo.find(key) != memo.end()) {
+            return memo[key];
+        }
+
+        
+
+        int ans = 0; 
+        ds.push_back(rating[ind]); 
+        ans += solve(rating,ind+1,ds,memo); 
+        ds.pop_back(); 
+        ans += solve(rating,ind+1,ds,memo);
+        memo[key] = ans;  
+        return ans; 
+    }
+    
+    int solvei(int i,int prev,vector<int>&rating,int k){
+        if(k==0)return 1;
+        if(i<0)return 0;
+        int left=0;
+        int right=0;
+        if(prev==-1 || rating[i]>rating[prev]){
+            left = solvei(i-1,i,rating,k-1);
+        }
+        right=solvei(i-1,prev,rating,k);
+    
+        return left+right;
+    
+    }
+
+
+    int numTeams(vector<int>& rating) {
+        // there are n soldiers in a line. 
+        // each soldier is assigned a unique rating. 
+        // for a team of 3 soldiers amongst them under the following rules: 
+        // 1. choose 3 soldiers with the index i,j,k with rating (rating[i],rating[j],rating[k]). 
+        // 2. a team is valid if rating[i] < rating[j] < rating[k] or rating[i] > rating[j] > rating[k] where 0 <= i < j < k < n. 
+        // return the number of the teams you can form at the given conditions.
+        // vector<int> ds;  
+        // unordered_map<string,int> mp; 
+        // return solve(rating,0,ds,mp);
+        // int n = rating.size(); 
+        // int ans = solvei(n-1,-1,rating,3);
+        // reverse(rating.begin(),rating.end());
+        // ans += solvei(n-1,-1,rating,3);
+        // return ans;
+
+        int n = rating.size(); 
+        int teams = 0;
+        for(int i = 1; i < n; i ++){
+            int countSmallerLeft = 0;
+            int countLargerLeft  = 0;
+            int countSmallerRight = 0;
+            int countLargerRight = 0;
+
+            for(int j = 0; j < i; j ++){
+                if(rating[j] < rating[i]){
+                    countSmallerLeft ++; 
+                }
+
+                if(rating[j] > rating[i]){
+                    countLargerLeft ++; 
+                }
+            }
+
+            for(int j = (i+1); j < n; j ++){
+                if(rating[j] < rating[i]){
+                    countSmallerRight ++; 
+                }
+
+                if(rating[j] > rating[i]){
+                    countLargerRight ++; 
+                }
+            }
+
+            teams += (countSmallerRight * countLargerLeft) + (countLargerRight * countSmallerLeft);
+        }
+
+        return teams;  
+    }
+};
