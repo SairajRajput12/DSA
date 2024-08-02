@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        // the observations i made: 
+        // array will be divided into the two part both of these are increasing form. 
+        // if the mid element is less than the ending element then we are in the incresing part means we will move to the left or remain in that range. 
+        // if the mid element is greater than the ending element then we are in the right part. 
+        int left = 0, right = nums.size()-1; 
+        while(left < right){
+            int mid = left + (right-left)/2;
+            if(nums[mid] < nums[right]){
+                right = mid; 
+            }
+            else{
+                left = mid + 1; 
+            }
+        }
+        return nums[left]; 
+
+    }
+};

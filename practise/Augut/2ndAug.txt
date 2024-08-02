@@ -1,0 +1,64 @@
+class Solution {
+public:
+    int minSwaps(vector<int>& nums) {
+        // int op1 = minSwapHelper(nums,0); 
+        // int op2 = minSwapHelper(nums,1);
+        // return min(op1,op2);
+
+        int n = nums.size(); 
+        vector<int> temp; 
+        for(int i = 0; i < 2*n; i ++){
+            temp.push_back(nums[i%n]); 
+        } 
+
+        int countOnes = accumulate(begin(nums), end(nums), 0); 
+        int i = 0; 
+        int j = 0; 
+        int currCount = 0; 
+        int maxCount = 0; 
+
+        while(j < 2*n){
+            if(temp[j] == 1){
+                currCount ++; 
+            }
+
+            if(j-i+1 > countOnes){
+                currCount -= temp[i]; 
+                i ++; 
+            }
+
+            maxCount = max(currCount,maxCount); 
+            j ++;
+        }
+
+        return countOnes-maxCount;
+
+        /*
+        int n = nums.size();
+
+        int countOnes = accumulate(begin(nums), end(nums), 0);
+
+        int i = 0;
+        int j = 0;
+        int currCount = 0;
+        int maxCount = 0;
+
+        while(j < 2*n) {
+            if(nums[j%n] == 1) {
+                currCount++;
+            }
+
+            if(j-i+1 > countOnes) {
+                currCount -= nums[i%n];
+                i++;
+            }
+
+            maxCount = max(maxCount, currCount);
+            j++;
+        }
+
+        return countOnes - maxCount;
+
+        */ 
+    }
+};

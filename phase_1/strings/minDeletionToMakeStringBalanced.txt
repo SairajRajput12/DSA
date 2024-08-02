@@ -1,0 +1,82 @@
+class Solution {
+public:
+    int minimumDeletions(string s) {
+        // left side mein a ana chahiye and right side mein b hona chahiye. 
+        // stack<char> st; 
+        // int cnt = 0; 
+        // for(int i = 0; i < s.size(); i ++){
+        //     char c = s[i]; 
+        //     if(!st.empty() and c == 'a' and st.top() == 'b'){
+        //         st.pop(); 
+        //         cnt ++; 
+        //     }
+        //     else{
+        //         st.push(s[i]); 
+        //     }
+        // }
+
+        // return (cnt);
+
+        // approach 2: another approach 
+        // int n = s.length();
+        
+        // vector<int> left_b(n, 0);
+        // vector<int> right_a(n, 0);
+
+        // int countb = 0;
+        // for(int i = 0; i < n; i++) {
+        //     left_b[i] = countb;
+        //     if(s[i] == 'b')
+        //         countb++;
+        // }
+
+        // int counta = 0;
+        // for(int i = n-1; i >= 0; i--) {
+        //     right_a[i] = counta;
+        //     if(s[i] == 'a')
+        //         counta++;
+        // }
+
+        // int count = INT_MAX;
+        // for(int i = 0; i < n; i++) {
+        //     count = min(count, left_b[i] + right_a[i]);
+        // }
+
+        // for(int i = 0; i < left_b.size(); i ++){
+        //     cout << left_b[i] << " "; 
+        // }
+
+        // cout << endl; 
+
+        // for(int i = 0; i < right_a.size(); i ++){
+        //     cout << right_a[i] << " "; 
+        // }
+        // cout << endl;
+
+        // return count;
+
+        int n = s.length();
+
+        
+        int counta = 0;
+        for(int i = n-1; i >= 0; i--) {
+            if(s[i] == 'a')
+                counta++;
+        }
+
+        int count = INT_MAX;
+        int countb = 0;
+
+        for(int i = 0; i < n; i++) {
+            if(s[i] == 'a')
+                counta--;
+            count = min(count, countb + counta);
+
+            if(s[i] == 'b')
+                countb++;
+        }
+
+        return count;
+
+    }
+};
