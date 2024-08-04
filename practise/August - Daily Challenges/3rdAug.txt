@@ -1,0 +1,45 @@
+class Solution {
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) {
+        // vector<int> freq(1001,0); 
+        // vector<int> freq1(1001,0); 
+
+        // for(auto it : arr){
+        //     freq[it] ++; 
+        // }
+
+        // for(auto it : target){
+        //     freq1[it] ++; 
+        // }
+
+        // for(int i = 0; i < 1001; i ++){
+        //     if(freq1[i] != freq[i]){
+        //         return false; 
+        //     }
+            
+        // }
+        // return true; 
+
+        // sort(arr.begin(), arr.end());
+        // sort(target.begin(), target.end());
+        // for (int i = 0; i < arr.size(); i++) {
+        //     if (arr[i] != target[i]) return false;
+        // }
+        // return true;
+
+        // approach 3: using xor 
+        // int pq = 0,pq2 = 0; 
+        // for(auto it : arr){
+        //     pq = pq ^ it; 
+        // }
+
+        // for(auto it : target)
+        // {
+        //     pq2 = pq2 ^ it; 
+        // }
+
+        // return (pq == pq2); 
+
+        
+    }
+};

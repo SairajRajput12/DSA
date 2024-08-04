@@ -1,0 +1,136 @@
+typedef struct {
+    int key; 
+    int data; 
+} pair; 
+
+typedef struct {
+    int size; 
+    int capacity; 
+    pair *arr;  
+} pairHeap; 
+
+void swap(pair *a, pair *b) {
+    pair temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void heapify(pairHeap *p, int index) {
+    int smallest = index; 
+    int left = 2 * index + 1; 
+    int right = 2 * index + 2; 
+
+    if (left < p->size && p->arr[left].key < p->arr[smallest].key) {
+        smallest = left; 
+    }
+
+    if (right < p->size && p->arr[right].key < p->arr[smallest].key) {
+        smallest = right; 
+    }
+
+    if (smallest != index) {
+        swap(&p->arr[smallest], &p->arr[index]); 
+        heapify(p, smallest); 
+    }
+}
+
+pairHeap* createPairHeap(int capacity) {
+    pairHeap *heap = (pairHeap *)malloc(sizeof(pairHeap));
+    heap->capacity = capacity;
+    heap->size = 0;
+    heap->arr = (pair *)malloc(capacity * sizeof(pair));
+    return heap;
+}
+
+void insertHeap(pairHeap *p, pair val) {
+    if (p->size == p->capacity) {
+        printf("Cannot insert any more elements into heap\n"); 
+        return;
+    }
+
+    int index = p->size++; 
+    p->arr[index] = val; 
+    int parent = (index - 1) / 2; 
+
+    while (index != 0 && p->arr[index].key < p->arr[parent].key) {
+        swap(&p->arr[index], &p->arr[parent]); 
+        index = (index - 1) / 2; 
+        parent = (index - 1) / 2; 
+    }
+}
+
+pair top(pairHeap* p) {
+    if (p->size == 0) {
+        printf("The heap is empty\n"); 
+        pair l = {-1, -1}; 
+        return l; 
+    }
+
+    return p->arr[0]; 
+}
+
+void pop(pairHeap* p) {
+    if (p->size == 0) {
+        printf("The heap is empty\n"); 
+        return; 
+    }
+
+    p->arr[0] = p->arr[--p->size]; // Replace root with the last element
+    heapify(p, 0); // Heapify to maintain the heap property
+}
+
+int rangeSum(int* nums, int numsSize, int n, int left, int right) {
+    pairHeap *heap = createPairHeap(1001);
+    for (int i = 0; i < n; i++) {
+        insertHeap(heap, (pair){nums[i], i+1});
+    }
+
+    int ans = 0, mod = 1e9 + 7; 
+    for (int i = 1; i <= right; i++) {
+        pair t = top(heap); 
+        pop(heap); 
+
+        if (i >= left) {
+            ans = (ans + t.key) % mod; 
+        }
+
+        if (t.data < n) {
+            t.key += nums[t.data++]; 
+            insertHeap(heap, t); 
+        }
+    }
+
+    // Free allocated memory
+    free(heap->arr);
+    free(heap);
+
+    return ans; 
+}
+
+c++ 
+class Solution {
+public:
+    int rangeSum(vector<int>& nums, int n, int left, int right) {
+        // approach 1: by storing the sum: 
+        // the first min elements will be the array of elements 
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> mqueue;
+        for (int i=0; i<n; i++)
+            mqueue.push({nums[i], i+1});
+
+        int ans = 0,mod = 1e9+7; 
+        for(int i = 1; i <= right; i ++){
+            auto p = mqueue.top(); 
+            mqueue.pop(); 
+
+            if(i >= left){
+                ans = (ans + p.first)%mod; 
+            }
+
+            if(p.second < n){
+                p.first += nums[p.second++]; 
+                mqueue.push(p); 
+            }
+        }
+        return ans; 
+    }
+};
